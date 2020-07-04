@@ -15,6 +15,7 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('doctortype_id');
             $table->string('name');
             $table->string('bmdc_number');
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
@@ -36,6 +37,8 @@ class CreateDoctorsTable extends Migration
             $table->string('device_ids')->nullable(true);
             $table->string('password');
             $table->timestamps();
+
+            $table->foreign('doctortype_id')->references('id')->on('doctors');
         });
     }
 

@@ -17,6 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->integer('type')->default(0); // 0 for debit, 1 for credit
+            $table->string('code');
             $table->double('amount');
             $table->double('agent_commission')->default(0.0);
 

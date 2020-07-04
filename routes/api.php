@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+Route::apiResource('users', 'Api\UserController');
+
+Route::apiResource('admins', 'Api\AdminController');
+Route::apiResource('adminpermissions', 'Api\AdminpermissionController');
+Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
+Route::apiResource('checkuptransactions', 'Api\CheckuptransactionController');
+Route::apiResource('doctorappointments', 'Api\DoctorappointmentController');
+Route::apiResource('doctors', 'Api\DoctorController');
+Route::apiResource('doctortypes', 'Api\DoctortypeController');
+Route::apiResource('patientcheckups', 'Api\PatientcheckupController');
+Route::apiResource('patients', 'Api\PatientController');
+Route::apiResource('patientprescriptions', 'Api\PatientprescriptionController');
+Route::apiResource('permissions', 'Api\PermissionController');
+Route::apiResource('transactions', 'Api\TransactionController');

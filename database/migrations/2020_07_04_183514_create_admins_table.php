@@ -17,7 +17,7 @@ class CreateAdminsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('mobile');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('code');
             $table->string('password');
             $table->dateTime('approved_at')->nullable();
