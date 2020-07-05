@@ -17,7 +17,7 @@ class CreateDoctorsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('doctortype_id');
             $table->string('name');
-            $table->string('bmdc_number');
+            $table->string('bmdc_number')->unique();
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
             $table->integer('status')->default(0); //0 available, 1 busy, 2 in call
             $table->double('rate');
@@ -26,7 +26,7 @@ class CreateDoctorsTable extends Migration
             $table->dateTime('end_time')->nullable();
             $table->integer('max_appointments_per_day')->nullable();
             $table->integer('gender'); // 0 => male, 1 => female
-            $table->string('mobile');
+            $table->string('mobile')->unique();
             $table->string('email');
             $table->string('workplace')->nullable();
             $table->string('designation')->nullable();

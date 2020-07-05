@@ -30,7 +30,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'mobile' => 'required| min:11| max: 14',
+            'mobile' => 'required| unique:users| min:11| max: 14',
         ]);
 
         $newUser = new User();
