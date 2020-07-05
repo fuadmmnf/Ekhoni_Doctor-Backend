@@ -14,4 +14,7 @@ class Doctor extends Authenticatable
     protected $fillable = [
         'name', 'mobile', 'bmdc_number', 'email', 'password',
     ];
+    protected $hidden = [
+        'password',
+    ];
 }

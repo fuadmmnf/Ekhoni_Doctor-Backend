@@ -11,63 +11,37 @@ class DoctortypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $doctorTypes = Doctortype::all();
+        return response()->json($doctorTypes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required| min:1',
+            'specialization' => 'required| min:1',
+        ]);
+        $newDoctorType = new Doctortype();
+        $newDoctorType->name = $request->name;
+        $newDoctorType->specialization = $request->specialization;
+        $newDoctorType->save();
+
+        return response()->json($newDoctorType, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Doctortype  $doctortype
-     * @return \Illuminate\Http\Response
-     */
     public function show(Doctortype $doctortype)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Doctortype  $doctortype
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Doctortype $doctortype)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Doctortype  $doctortype
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Doctortype $doctortype)
     {
         //

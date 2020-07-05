@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('mobile')->unique();
             $table->string('code')->unique();
+            $table->integer('status')->default(0); // 0 => not in call; 1 => in call
             $table->boolean('is_agent')->default(false);
             $table->double('agent_percentage')->default(0.0);
             $table->double('balance')->default(0.0);
