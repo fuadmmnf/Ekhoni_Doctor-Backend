@@ -7,6 +7,7 @@ use App\Doctortype;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DoctorController extends Controller
 {
@@ -54,6 +55,13 @@ class DoctorController extends Controller
 
         $newDoctor = new Doctor();
         $newDoctor->name = $request->name;
+        do
+        {
+            $code = Str::random(16);
+            $doctor_code = Doctor::where('code', $code)->first();
+        }
+        while($doctor_code);
+        $newDoctor->code = $code;
         $newDoctor->bmdc_number = $request->bmdc_number;
         $newDoctor->rate = $request->rate;
         //activation_status check by admin role
@@ -103,13 +111,36 @@ class DoctorController extends Controller
             'offer_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
-            'medical_college' => 'required',
             'others_training' => 'required',
             'start_time' => 'sometimes',
             'end_time' => 'sometimes',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
+        //edit activation status
+        if($request->has('workplace')){
+            $doctor->workplace = $request->workplace;
+        }
+        if($request->has('designation')){
+            $doctor->designation = $request->designation;
+        }
+        if($request->has('others_training')){
+            $doctor->others_training = $request->others_training;
+        }
+        if($request->has('starting_time') && $request->has('ending_time')){
+            //cancel all appointments in between these times
+
+            $doctor->starting_time = Carbon::parse($request->starting_time);
+            $doctor->end_time = Carbon::parse($request->end_time);
+        }
+        if($request->has('max_appointments_per_day')) {
+            $doctor->max_appointments_per_day = $request->max_appointments_per_day;
+        }
+        $doctor->save();
+
+        return response()->noContent();
     }
+
+
 
     /**
      * Remove the specified resource from storage.

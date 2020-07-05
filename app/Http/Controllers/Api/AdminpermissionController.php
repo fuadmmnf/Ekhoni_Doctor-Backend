@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Admin;
 use App\Adminpermission;
 use App\Http\Controllers\Controller;
+use App\Permission;
 use Illuminate\Http\Request;
 
 class AdminpermissionController extends Controller
@@ -18,6 +20,10 @@ class AdminpermissionController extends Controller
         //
     }
 
+    public function loadAllAdminPermissions(Admin $admin){
+        return response()->json($admin->permissions);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,15 +34,24 @@ class AdminpermissionController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'admin_id' => 'required| numeric',
+            'permission_ids' => 'required',
+        ]);
+        $admin = Admin::findOrFail($request->admin_id);
+        if($request->admin->isSuperAdmin){
+            foreach ($request->permission_ids as $permission_id) {
+                $permission = Permission::findOrFail($permission_id);
+                $newAdminPermission = new Adminpermission();
+                $newAdminPermission->admin_id = $admin->id;
+                $newAdminPermission->permission_id = $permission->id;
+                $newAdminPermission->save();
+            }
+            return response()->noContent(201);
+        }
+        return  response()->json('must be super admin for this route', 403);
     }
 
     /**
@@ -61,16 +76,27 @@ class AdminpermissionController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Adminpermission  $adminpermission
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Adminpermission $adminpermission)
     {
-        //
+        $this->validate($request, [
+            'admin_id' => 'required| numeric',
+            'permission_ids' => 'required',
+        ]);
+
+        $admin = Admin::findOrFail($request->admin_id);
+        $adminPermissions = $admin->adminpermissions();
+        if($request->admin->isSuperAdmin){
+            foreach ($request->permission_ids as $permission_id) {
+                //check for deleted permissions
+                $permission = Permission::findOrFail($permission_id);
+                $newAdminPermission = new Adminpermission();
+                $newAdminPermission->admin_id = $admin->id;
+                $newAdminPermission->permission_id = $permission->id;
+                $newAdminPermission->save();
+            }
+            return response()->noContent();
+        }
+        return  response()->json('must be super admin for this route', 403);
     }
 
     /**

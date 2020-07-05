@@ -17,6 +17,7 @@ class CreateDoctorsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('doctortype_id');
             $table->string('name');
+            $table->string('code');
             $table->string('bmdc_number')->unique();
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
             $table->integer('status')->default(0); //0 available, 1 busy, 2 in call
