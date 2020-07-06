@@ -23,4 +23,21 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+
+    public function permissions(){
+        return $this->belongsToMany('App\Permission');
+    }
+
+    public function isSuperAdmin(){
+        return $this->permissions()->count() == Permission::count();
+    }
+
+    public function hasPermission($permission){
+        foreach ($this->permissions() as $perm){
+            if($perm->name == $permission->name)
+                return true;
+        }
+        return false;
+    }
 }

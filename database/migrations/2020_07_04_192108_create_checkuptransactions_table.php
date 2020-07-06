@@ -17,6 +17,7 @@ class CreateCheckuptransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('patientcheckup_id');
+            $table->string('code');
             $table->timestamps();
         });
     }

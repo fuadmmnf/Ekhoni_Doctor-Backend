@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Admin;
+use App\Adminpermission;
 use App\Http\Controllers\Controller;
 use App\Permission;
 use Illuminate\Http\Request;
@@ -23,12 +25,28 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required| unique:permissions',
         ]);
+
+        $admins = Admin::withCount('permissions')->get();
+
 
         $newPermission = new Permission();
         $newPermission->name = $request->name;
         $newPermission->save();
+
+        $numPermissions = Permission::count();
+        foreach ($admins as $admin){
+            if($admin->permissions_count == $numPermissions){
+                $newAdminPermission = new Adminpermission();
+                $newAdminPermission->admin_id = $admin->id;
+                $newAdminPermission->permission_id = $newPermission->id;
+                $newAdminPermission->save();
+            }
+        }
+
+
+
         return response()->json($newPermission, 201);
     }
 

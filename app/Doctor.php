@@ -17,4 +17,16 @@ class Doctor extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function doctortype(){
+        return $this->belongsTo('App\Doctortype');
+    }
+
+    public function patientcheckups(){
+        return $this->hasMany('App\Patientcheckup');
+    }
+
+    public function doctorappointments(){
+        return $this->hasMany('App\Doctorappointment');
+    }
 }
