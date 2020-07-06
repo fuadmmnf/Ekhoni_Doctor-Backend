@@ -34,6 +34,8 @@ class AdminpermissionController extends Controller
         //
     }
 
+
+
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -41,15 +43,23 @@ class AdminpermissionController extends Controller
             'permission_ids' => 'required',
         ]);
         $admin = Admin::findOrFail($request->admin_id);
+        $adminPermissions = array();
+
+
         if($request->admin->isSuperAdmin){
             foreach ($request->permission_ids as $permission_id) {
                 $permission = Permission::findOrFail($permission_id);
                 $newAdminPermission = new Adminpermission();
                 $newAdminPermission->admin_id = $admin->id;
                 $newAdminPermission->permission_id = $permission->id;
-                $newAdminPermission->save();
+                $adminPermissions[] = $newAdminPermission;
             }
-            return response()->noContent(201);
+
+            foreach ($adminPermissions as $adminPermission){
+                $adminPermission->save();
+            }
+
+            return response()->json("admin permissions set successfully", 201);
         }
         return  response()->json('must be super admin for this route', 403);
     }
@@ -84,17 +94,23 @@ class AdminpermissionController extends Controller
         ]);
 
         $admin = Admin::findOrFail($request->admin_id);
-        $adminPermissions = $admin->adminpermissions();
+        $adminPermissions = array();
+
+
         if($request->admin->isSuperAdmin){
             foreach ($request->permission_ids as $permission_id) {
-                //check for deleted permissions
                 $permission = Permission::findOrFail($permission_id);
                 $newAdminPermission = new Adminpermission();
                 $newAdminPermission->admin_id = $admin->id;
                 $newAdminPermission->permission_id = $permission->id;
-                $newAdminPermission->save();
+                $adminPermissions[] = $newAdminPermission;
             }
-            return response()->noContent();
+
+            foreach ($adminPermissions as $adminPermission){
+                $adminPermission->save();
+            }
+
+            return response()->json("admin permissions updated successfully", 201);
         }
         return  response()->json('must be super admin for this route', 403);
     }

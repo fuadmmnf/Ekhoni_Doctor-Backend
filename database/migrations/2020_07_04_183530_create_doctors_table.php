@@ -19,6 +19,7 @@ class CreateDoctorsTable extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('bmdc_number')->unique();
+            $table->boolean('payment_style')->default(0); // 0 => paid by customer transactions, 1 => paid by organization
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
             $table->integer('status')->default(0); //0 available, 1 busy, 2 in call
             $table->double('rate');
@@ -36,6 +37,7 @@ class CreateDoctorsTable extends Migration
             $table->string('others_training')->nullable();
 
             $table->string('device_ids')->nullable(true);
+            $table->dateTime('booking_start_time')->nullable(); // null => available, dateTime => booking process starting_time
             $table->string('password');
             $table->timestamps();
 

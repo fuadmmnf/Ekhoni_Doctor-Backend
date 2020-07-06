@@ -20,6 +20,13 @@ class DoctorController extends Controller
     {
     }
 
+    public function getAvailableDoctorsByDoctorType(Doctortype $doctortype){
+        $availableDoctorsByType = Doctor::where('doctortype_id', $doctortype->id)
+            ->where('status', 0)->get();
+
+        return response()->json($availableDoctorsByType);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -47,6 +54,7 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'others_training' => 'required',
             'start_time' => 'sometimes',
+            'payment_style' => 'sometimes',
             'end_time' => 'sometimes',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
@@ -62,6 +70,8 @@ class DoctorController extends Controller
         }
         while($doctor_code);
         $newDoctor->code = $code;
+        //check for admin permission in payment_style
+        if($request->has('payment_style')) $newDoctor->payment_style = $request->payment_style;
         $newDoctor->bmdc_number = $request->bmdc_number;
         $newDoctor->rate = $request->rate;
         //activation_status check by admin role
@@ -117,6 +127,10 @@ class DoctorController extends Controller
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
         //edit activation status
+        if($request->has('payment_style')){
+            $doctor->payment_style = $request->payment_style;
+        }
+
         if($request->has('workplace')){
             $doctor->workplace = $request->workplace;
         }
@@ -140,7 +154,13 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
-
+    public function changeDoctorBookingStatus(Request $request, Doctor $doctor){
+        $this->validate($request, [
+           'booking_start_time' => 'present| nullable',
+        ]);
+        $doctor->booking_start_time = ($request->booking_start_time == null)? null: Carbon::parse($request->booking_start_time);
+        $doctor->save();
+    }
 
     /**
      * Remove the specified resource from storage.
