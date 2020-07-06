@@ -7,6 +7,7 @@ use App\Doctortype;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DoctorController extends Controller
@@ -86,6 +87,7 @@ class DoctorController extends Controller
         $newDoctor->starting_time = ($request->has('starting_time'))? Carbon::parse($request->starting_time): null;
         $newDoctor->end_time = ($request->has('end_time'))? Carbon::parse($request->end_time): null;
         $newDoctor->max_appointments_per_day = ($request->has('max_appointments_per_day'))? $request->max_appointments_per_day: null;
+        $newDoctor->password = Hash::make($newDoctor->mobile. $newDoctor->code);
         $newDoctor->save();
 
         return response()->json($newDoctor, 201);
@@ -126,7 +128,7 @@ class DoctorController extends Controller
             'end_time' => 'sometimes',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-        //edit activation status
+        //edit activation status by admin
         if($request->has('payment_style')){
             $doctor->payment_style = $request->payment_style;
         }

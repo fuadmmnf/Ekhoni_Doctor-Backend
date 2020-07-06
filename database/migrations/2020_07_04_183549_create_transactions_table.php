@@ -16,7 +16,8 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->integer('type')->default(0); // 0 for debit, 1 for credit
+            $table->integer('type'); // 0 for debit, 1 for credit
+            $table->integer('status')->default(0); // 0 => initialized and registered, 1 => trasaction complete
             $table->string('code');
             $table->double('amount');
             $table->double('agent_commission')->default(0.0);

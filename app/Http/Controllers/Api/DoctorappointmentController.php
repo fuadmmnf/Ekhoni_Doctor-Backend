@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Patientcheckup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DoctorappointmentController extends Controller
 {
@@ -50,6 +51,13 @@ class DoctorappointmentController extends Controller
         $newDoctorAppointment = new Doctorappointment();
         $newDoctorAppointment->doctor_id = $doctor->id;
         $newDoctorAppointment->patientcheckup_id = $patientCheckup->id;
+        do
+        {
+            $code = Str::random(16);
+            $doctorAppointment = Doctorappointment::where('code', $code)->first();
+        }
+        while($doctorAppointment);
+        $newDoctorAppointment->code = $code;
         $newDoctorAppointment->start_time = Carbon::parse($request->start_time);
         $newDoctorAppointment->end_time = Carbon::parse($request->end_time);
         $newDoctorAppointment->save();

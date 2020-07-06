@@ -9,6 +9,7 @@ use App\Patientcheckup;
 use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PatientcheckupController extends Controller
 {
@@ -57,6 +58,12 @@ class PatientcheckupController extends Controller
             $newPatientcheckup = new Patientcheckup();
             $newPatientcheckup->patient_id = $patient->id;
             $newPatientcheckup->doctor_id = $doctor->id;
+            do
+            {
+                $code = Str::random(16);
+                $patientCheckup = Patientcheckup::where('code', $code)->first();
+            }
+            while($patientCheckup);
             $newPatientcheckup->start_time = ($request->start_time == null)? null: Carbon::parse($request->start_time);
             $newPatientcheckup->end_time = ($request->end_time == null)? null: Carbon::parse($request->end_time);
             $newPatientcheckup->save();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Checkuptransaction;
 use App\Http\Controllers\Controller;
+use App\Patientcheckup;
+use App\Transaction;
 use Illuminate\Http\Request;
 
 class CheckuptransactionController extends Controller
@@ -28,15 +30,22 @@ class CheckuptransactionController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+           'transaction_id' => 'required| numeric',
+            'patientcheckup_id' => 'required| numeric',
+        ]);
+
+        $transaction = Transaction::findOrFail($request->transaction_id);
+        $patientcheckup = Patientcheckup::findOrFail($request->patientcheckup_id);
+
+        $newCheckupTransaction = new Checkuptransaction();
+        $newCheckupTransaction->transaction_id = $transaction->id;
+        $newCheckupTransaction->patientcheckup_id = $patientcheckup->id;
+        $newCheckupTransaction->save();
+
+        return response()->json($newCheckupTransaction, 201);
     }
 
     /**
