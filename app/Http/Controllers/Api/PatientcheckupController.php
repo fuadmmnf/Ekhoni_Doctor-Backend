@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Patient;
 use App\Patientcheckup;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class PatientcheckupController extends Controller
@@ -46,20 +47,25 @@ class PatientcheckupController extends Controller
         $this->validate($request, [
            'patient_id' => 'required| numeric',
            'doctor_id' => 'required| numeric',
-           'start_time' => 'required',
-           'end_time' => 'required',
+           'start_time' => 'present| nullable',
+           'end_time' => 'present| nullable',
         ]);
 
         $patient = Patient::findOrFail($request->patient_id);
         $doctor = Doctor::findOrFail($request->doctor_id);
-        $newPatientcheckup = new Patientcheckup();
-        $newPatientcheckup->patient_id = $patient->id;
-        $newPatientcheckup->doctor_id = $doctor->id;
-        $newPatientcheckup->start_time = Carbon::parse($request->start_time);
-        $newPatientcheckup->end_time = Carbon::parse($request->end_time);
-        $newPatientcheckup->save();
+        if($patient->user->amount > 0){
+            $newPatientcheckup = new Patientcheckup();
+            $newPatientcheckup->patient_id = $patient->id;
+            $newPatientcheckup->doctor_id = $doctor->id;
+            $newPatientcheckup->start_time = ($request->start_time == null)? null: Carbon::parse($request->start_time);
+            $newPatientcheckup->end_time = ($request->end_time == null)? null: Carbon::parse($request->end_time);
+            $newPatientcheckup->save();
+            return response()->json($newPatientcheckup, 201);
+        } else{
+            return response()->json("insufficient user balance", 400);
+        }
 
-        return response()->json($newPatientcheckup, 201);
+
     }
 
     /**
@@ -93,7 +99,15 @@ class PatientcheckupController extends Controller
      */
     public function update(Request $request, Patientcheckup $patientcheckup)
     {
-        //
+        $this->validate($request, [
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ]);
+
+        $patientcheckup->start_time = Carbon::parse($request->start_time);
+        $patientcheckup->end_time = Carbon::parse($request->end_time);
+        $patientcheckup->save();
+        return response()->noContent();
     }
 
     /**
