@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Doctor;
 use App\Doctortype;
-use App\Http\Controllers\Auth\TokenUserHandler;
+use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,7 +62,9 @@ class DoctorController extends Controller
         ]);
 
         $tokenUserHandler = new TokenUserHandler();
-        $user = $tokenUserHandler->createUser($request->mobile, ['doctor']);
+        $user = $tokenUserHandler->createUser($request->mobile);
+        $user->assignRole('doctor');
+
         $doctorType = Doctortype::findOrFail($request->doctortype_id);
 
         $newDoctor = new Doctor();

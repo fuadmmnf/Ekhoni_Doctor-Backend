@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Auth\TokenUserHandler;
+use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
@@ -31,14 +31,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'mobile' => 'required| unique:users| min:11| max: 14',
+            'mobile' => 'required| min:11| max: 14',
         ]);
 
+        $user = User::where('mobile', $request->mobile)->first();
         $tokenUserHandler = new TokenUserHandler();
-        $newUser = $tokenUserHandler->createUser($request->mobile, []);
-        if(!$newUser){
-            return response()->json("bad request", 400);
+
+        if($user){
+            $token = $tokenUserHandler->regenerateUserToken($user);
+            return response()->json($token, 200);
         }
+
+        $newUser = $tokenUserHandler->createUser($request->mobile);
+        $newUser->assignRole('patient');
 
         return response()->json($newUser, 201);
     }

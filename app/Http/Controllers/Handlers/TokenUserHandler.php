@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Handlers;
 
 
 use App\User;
@@ -11,8 +11,9 @@ use Illuminate\Support\Str;
 class TokenUserHandler
 {
 
-    public function createUser($mobile, $scope): User {
+    public function createUser($mobile): User {
         $newUser = new User();
+
 
         $newUser->mobile = $mobile;
         do
@@ -25,8 +26,17 @@ class TokenUserHandler
         $newUser->code = $code;
         $newUser->password = Hash::make($newUser->mobile. $newUser->code);
         $newUser->save();
-        $newUser->token = $newUser->createToken($newUser->mobile . $newUser->code, $scope)->plainTextToken;
+        $newUser->token = $newUser->createToken($newUser->mobile . $newUser->code)->plainTextToken;
 
         return $newUser;
     }
+
+
+    public function regenerateUserToken($user){
+        $user->tokens()->delete();
+        return $user->createToken($user->mobile . $user->code)->plainTextToken;
+    }
+
+
+
 }

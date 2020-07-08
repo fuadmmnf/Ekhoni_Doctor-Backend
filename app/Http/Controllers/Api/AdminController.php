@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Admin;
-use App\Http\Controllers\Auth\TokenUserHandler;
+use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
@@ -12,11 +12,6 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
@@ -39,14 +34,12 @@ class AdminController extends Controller
         ]);
 
         $user = User::where('mobile', $request->mobile)->first();
-        $admin = $user->admin();
-
-        if(!$admin || Hash::check($request->password, $admin->password)){
+        $admin = $user->admin;
+        if(!$admin || !Hash::check($request->password, $admin->password)){
             return response()->json('invalid credentials', 401);
         }
-        $user->tokens()->delete();
-        $user->token = $admin->createToken($admin->mobile . $admin->name)->plainTextToken;
-        return response()->json($admin, 200);
+        $tokenUserHandler = new TokenUserHandler();
+        return response()->json($tokenUserHandler->regenerateUserToken($user), 200);
     }
 
     public function store(Request $request)
@@ -56,21 +49,20 @@ class AdminController extends Controller
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
             'password' => 'required| min: 6',
-            'permissions' => 'required',
         ]);
-        $scopes = $request->permissions;
-        $scopes[] = 'admin';
+
+
 
         $tokenUserHandler = new TokenUserHandler();
-        $user = $tokenUserHandler->createUser($request->mobile, $scopes);
-
-
+        $user = $tokenUserHandler->createUser($request->mobile);
+        $user->assignRole('super_admin');
         $newAdmin = new Admin();
         $newAdmin->user_id = $user->id;
         $newAdmin->name = $request->name;
         $newAdmin->email = $request->email;
         $newAdmin->password = Hash::make($request->password);
         $newAdmin->save();
+        $newAdmin->token = $user->token;
 
         return response()->json($newAdmin, 201);
     }
