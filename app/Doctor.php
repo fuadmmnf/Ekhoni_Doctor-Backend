@@ -5,11 +5,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-class Doctor extends Authenticatable
+class Doctor extends Model
 {
-    use HasApiTokens, Notifiable;
+    use Notifiable;
 
     protected $fillable = [
         'name', 'mobile', 'bmdc_number', 'email', 'password',
@@ -17,6 +16,10 @@ class Doctor extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
 
     public function doctortype(){
         return $this->belongsTo('App\Doctortype');

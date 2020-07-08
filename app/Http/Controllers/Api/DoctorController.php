@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Doctor;
 use App\Doctortype;
+use App\Http\Controllers\Auth\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -60,17 +61,14 @@ class DoctorController extends Controller
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
 
+        $tokenUserHandler = new TokenUserHandler();
+        $user = $tokenUserHandler->createUser($request->mobile, ['doctor']);
         $doctorType = Doctortype::findOrFail($request->doctortype_id);
 
         $newDoctor = new Doctor();
+        $newDoctor->user_id = $user->id;
+        $newDoctor->doctortype_id = $doctorType->id;
         $newDoctor->name = $request->name;
-        do
-        {
-            $code = Str::random(16);
-            $doctor_code = Doctor::where('code', $code)->first();
-        }
-        while($doctor_code);
-        $newDoctor->code = $code;
         //check for admin permission in payment_style
         if($request->has('payment_style')) $newDoctor->payment_style = $request->payment_style;
         $newDoctor->bmdc_number = $request->bmdc_number;
@@ -78,7 +76,6 @@ class DoctorController extends Controller
         //activation_status check by admin role
         $newDoctor->offer_rate = ($request->has('offer_rate'))? $request->offer_rate: $request->rate;
         $newDoctor->gender = $request->gender;
-        $newDoctor->mobile = $request->mobile;
         $newDoctor->email = $request->email;
         $newDoctor->workplace = $request->workplace;
         $newDoctor->designation = $request->designation;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Admin;
-use App\Adminpermission;
+use App\Userpermission;
 use App\Http\Controllers\Controller;
 use App\Permission;
 use Illuminate\Http\Request;
@@ -38,7 +38,7 @@ class PermissionController extends Controller
         $numPermissions = Permission::count();
         foreach ($admins as $admin){
             if($admin->permissions_count == $numPermissions){
-                $newAdminPermission = new Adminpermission();
+                $newAdminPermission = new Userpermission();
                 $newAdminPermission->admin_id = $admin->id;
                 $newAdminPermission->permission_id = $newPermission->id;
                 $newAdminPermission->save();

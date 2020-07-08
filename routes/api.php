@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('users', 'Api\UserController');
 
 Route::apiResource('admins', 'Api\AdminController');
+Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
+Route::get('admin', function (Request $request){
+    return response()->json($request->user()->admin());
+})->middleware('auth:api');
+
 Route::apiResource('adminpermissions', 'Api\AdminpermissionController');
 Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
 Route::apiResource('checkuptransactions', 'Api\CheckuptransactionController');

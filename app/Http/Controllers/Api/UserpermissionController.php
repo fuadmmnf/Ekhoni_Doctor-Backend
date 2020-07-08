@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Admin;
-use App\Adminpermission;
+use App\User;
+use App\Userpermission;
 use App\Http\Controllers\Controller;
 use App\Permission;
 use Illuminate\Http\Request;
 
-class AdminpermissionController extends Controller
+class UserpermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,8 +20,8 @@ class AdminpermissionController extends Controller
         //
     }
 
-    public function loadAllAdminPermissions(Admin $admin){
-        return response()->json($admin->permissions);
+    public function loadAllUserPermissions(User $user){
+        return response()->json($user->permissions);
     }
 
     /**
@@ -39,27 +39,27 @@ class AdminpermissionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'admin_id' => 'required| numeric',
+            'user_id' => 'required| numeric',
             'permission_ids' => 'required',
         ]);
-        $admin = Admin::findOrFail($request->admin_id);
-        $adminPermissions = array();
+        $user = User::findOrFail($request->user_id);
+        $userPermissions = array();
 
 
-        if($request->admin->isSuperAdmin){
+        if($user->isSuperAdmin){
             foreach ($request->permission_ids as $permission_id) {
                 $permission = Permission::findOrFail($permission_id);
-                $newAdminPermission = new Adminpermission();
-                $newAdminPermission->admin_id = $admin->id;
+                $newAdminPermission = new Userpermission();
+                $newAdminPermission->user_id = $user->id;
                 $newAdminPermission->permission_id = $permission->id;
-                $adminPermissions[] = $newAdminPermission;
+                $userPermissions[] = $newAdminPermission;
             }
 
-            foreach ($adminPermissions as $adminPermission){
-                $adminPermission->save();
+            foreach ($userPermissions as $userPermission){
+                $userPermission->save();
             }
 
-            return response()->json("admin permissions set successfully", 201);
+            return response()->json("user permissions set successfully", 201);
         }
         return  response()->json('must be super admin for this route', 403);
     }
@@ -67,10 +67,10 @@ class AdminpermissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Adminpermission  $adminpermission
+     * @param  \App\Userpermission  $adminpermission
      * @return \Illuminate\Http\Response
      */
-    public function show(Adminpermission $adminpermission)
+    public function show(Userpermission $adminpermission)
     {
         //
     }
@@ -78,39 +78,39 @@ class AdminpermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Adminpermission  $adminpermission
+     * @param  \App\Userpermission  $adminpermission
      * @return \Illuminate\Http\Response
      */
-    public function edit(Adminpermission $adminpermission)
+    public function edit(Userpermission $adminpermission)
     {
         //
     }
 
-    public function update(Request $request, Adminpermission $adminpermission)
+    public function update(Request $request, Userpermission $adminpermission)
     {
         $this->validate($request, [
-            'admin_id' => 'required| numeric',
+            'user_id' => 'required| numeric',
             'permission_ids' => 'required',
         ]);
 
-        $admin = Admin::findOrFail($request->admin_id);
-        $adminPermissions = array();
+        $user = User::findOrFail($request->user_id);
+        $userPermissions = array();
 
 
-        if($request->admin->isSuperAdmin){
+        if($user->isSuperAdmin){
             foreach ($request->permission_ids as $permission_id) {
                 $permission = Permission::findOrFail($permission_id);
-                $newAdminPermission = new Adminpermission();
-                $newAdminPermission->admin_id = $admin->id;
+                $newAdminPermission = new Userpermission();
+                $newAdminPermission->user_id = $user->id;
                 $newAdminPermission->permission_id = $permission->id;
-                $adminPermissions[] = $newAdminPermission;
+                $userPermissions[] = $newAdminPermission;
             }
 
-            foreach ($adminPermissions as $adminPermission){
-                $adminPermission->save();
+            foreach ($userPermissions as $userPermission){
+                $userPermission->save();
             }
 
-            return response()->json("admin permissions updated successfully", 201);
+            return response()->json("user permissions updated successfully", 201);
         }
         return  response()->json('must be super admin for this route', 403);
     }
@@ -118,10 +118,10 @@ class AdminpermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Adminpermission  $adminpermission
+     * @param  \App\Userpermission  $adminpermission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Adminpermission $adminpermission)
+    public function destroy(Userpermission $adminpermission)
     {
         //
     }

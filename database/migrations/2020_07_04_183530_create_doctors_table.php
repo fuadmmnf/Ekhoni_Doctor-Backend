@@ -15,9 +15,9 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('doctortype_id');
             $table->string('name');
-            $table->string('code');
             $table->string('bmdc_number')->unique();
             $table->boolean('payment_style')->default(0); // 0 => paid by customer transactions, 1 => paid by organization
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
@@ -28,7 +28,6 @@ class CreateDoctorsTable extends Migration
             $table->dateTime('end_time')->nullable();
             $table->integer('max_appointments_per_day')->nullable();
             $table->integer('gender'); // 0 => male, 1 => female
-            $table->string('mobile')->unique();
             $table->string('email');
             $table->string('workplace')->nullable();
             $table->string('designation')->nullable();
@@ -41,6 +40,7 @@ class CreateDoctorsTable extends Migration
             $table->string('password');
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('doctortype_id')->references('id')->on('doctors');
         });
     }

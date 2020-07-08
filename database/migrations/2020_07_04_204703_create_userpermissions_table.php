@@ -13,11 +13,11 @@ class CreateAdminpermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('adminpermissions', function (Blueprint $table) {
+        Schema::create('userpermissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('admin_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('permission_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('permission_id')->references('id')->on('permissions');
             $table->timestamps();
         });

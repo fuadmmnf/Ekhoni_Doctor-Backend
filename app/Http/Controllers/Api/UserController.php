@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Auth\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
@@ -33,26 +34,12 @@ class UserController extends Controller
             'mobile' => 'required| unique:users| min:11| max: 14',
         ]);
 
-        $newUser = new User();
-
-        $newUser->mobile = $request->mobile;
-
-        do
-        {
-            $code = Str::random(16);
-
-            $user_code = User::where('code', $code)->first();
+        $tokenUserHandler = new TokenUserHandler();
+        $newUser = $tokenUserHandler->createUser($request->mobile, []);
+        if(!$newUser){
+            return response()->json("bad request", 400);
         }
-        while($user_code);
-        $newUser->code = $code;
-        $newUser->password = Hash::make($newUser->mobile. $newUser->code);
-        $newUser->save();
 
-
-
-
-
-        $newUser->token = $newUser->createToken($newUser->mobile)->plainTextToken;
         return response()->json($newUser, 201);
     }
 

@@ -5,11 +5,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Authenticatable
+class Admin extends Model
 {
-    use HasApiTokens, Notifiable;
+    use  Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,20 +23,8 @@ class Admin extends Authenticatable
         'password',
     ];
 
-
-    public function permissions(){
-        return $this->belongsToMany('App\Permission');
+    public function user(){
+        return $this->belongsTo('App\User');
     }
 
-    public function isSuperAdmin(){
-        return $this->permissions()->count() == Permission::count();
-    }
-
-    public function hasPermission($permission){
-        foreach ($this->permissions() as $perm){
-            if($perm->name == $permission->name)
-                return true;
-        }
-        return false;
-    }
 }

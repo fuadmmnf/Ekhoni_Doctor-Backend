@@ -38,7 +38,34 @@ class User extends Authenticatable
 //        'email_verified_at' => 'datetime',
 //    ];
 
+    public function admin(){
+        return $this->hasOne('App\Admin');
+    }
+
+    public function doctor(){
+        return $this->hasOne('App\Doctor');
+    }
+
+
     public function patients(){
         return $this->hasMany('App\Patient');
+    }
+
+
+
+    public function permissions(){
+        return $this->belongsToMany('App\Permission');
+    }
+
+    public function isSuperAdmin(){
+        return $this->permissions()->count() == Permission::count();
+    }
+
+    public function hasPermission($permission){
+        foreach ($this->permissions() as $perm){
+            if($perm->name == $permission->name)
+                return true;
+        }
+        return false;
     }
 }
