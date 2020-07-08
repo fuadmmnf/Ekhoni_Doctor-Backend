@@ -8,10 +8,21 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+
+
+    /**
+     * AdminController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'role:super_admin']);
+    }
+
     public function index()
     {
         //
@@ -44,13 +55,15 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
             'password' => 'required| min: 6',
         ]);
-
+        if($validator->fails()){
+            return response()->json('validation error', 400);
+        }
 
 
         $tokenUserHandler = new TokenUserHandler();
