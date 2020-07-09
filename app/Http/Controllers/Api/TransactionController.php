@@ -20,6 +20,11 @@ class TransactionController extends Controller
         //
     }
 
+    public function loadAllUserTransactions(User $user){
+        $userCompletedTransactions = Transaction::where('user_id', $user->id)
+            ->where('status', 1)->paginate(10);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

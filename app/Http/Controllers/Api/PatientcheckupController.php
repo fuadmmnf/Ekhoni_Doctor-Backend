@@ -91,13 +91,25 @@ class PatientcheckupController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Patientcheckup $patientcheckup
-     * @return \Illuminate\Http\Response
-     */
+
+
+    public function submitCheckupRatings(Request $request, Patientcheckup $patientcheckup){
+        $this->validate($request, [
+            'doctor_rating' => 'sometimes| numeric| between: 0,5',
+            'patient_rating' => 'sometimes| numeric| between: 0,5',
+        ]);
+
+        if($request->has('doctor_rating') || $request->has('patient_rating')){
+            $patientcheckup->doctor_rating = min($request->doctor_rating, 5);
+            $patientcheckup->patient_rating = min($request->patient_rating, 5);
+            $patientcheckup->save();
+        } else{
+            return response()->json('no content provided', 422);
+        }
+
+        return response()->noContent();
+    }
+
     public function update(Request $request, Patientcheckup $patientcheckup)
     {
         $this->validate($request, [

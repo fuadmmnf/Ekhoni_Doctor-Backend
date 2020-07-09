@@ -7,10 +7,18 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'role:super_admin|admin:user'])->only('changeUserAgentPermission');
+        $this->middleware(['auth:sanctum'])->except('store');
+
+    }
 
     public function index()
     {
@@ -26,6 +34,7 @@ class UserController extends Controller
     {
         //
     }
+
 
 
     public function store(Request $request)
@@ -70,25 +79,26 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        $this->validate($request, [
-            'is_agent' => 'sometimes',
-        ]);
 
-        if($request->has('is-agent')){
-            $user->is_agent = $request->is_agent;
+    public function changeUserAgentPermission(Request $request, User $user){
+        $validator = Validator::make($request->all(), [
+            'is_agent' => 'required',
+            'agent_percentage' => 'required| numeric| between: 0,100',
+        ]);
+        if($validator->fails()){
+            return response()->json('validation error', 400);
         }
 
+        $user->is_agent = $request->is_agent;
+        $user->agent_percentage = $request->agent_percentage;
         $user->save();
+
         return response()->noContent();
+    }
+
+    public function update(Request $request, User $user)
+    {
+
     }
 
     /**

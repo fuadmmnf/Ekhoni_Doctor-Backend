@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Doctor;
+use App\Doctorappointment;
 use App\Doctortype;
+use App\Http\Controllers\Handlers\AppointmentHandler;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -16,7 +18,7 @@ class DoctorController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'role:admin'])->only('evaluateDoctorJoiningRequest');
+        $this->middleware(['auth:sanctum', 'role:super_admin|admin:doctor'])->only('evaluateDoctorJoiningRequest');
     }
     /**
      * Display a listing of the resource.
@@ -29,9 +31,17 @@ class DoctorController extends Controller
 
     public function getAvailableDoctorsByDoctorType(Doctortype $doctortype){
         $availableDoctorsByType = Doctor::where('doctortype_id', $doctortype->id)
-            ->where('status', 0)->get();
+            ->where('activation_status', 1)
+            ->where('status', 0)->paginate(10);
 
         return response()->json($availableDoctorsByType);
+    }
+
+    public function getAllPendingDoctorRequest(){
+        $pendingDoctorRequests = Doctor::where('activation_status', 0)
+            ->paginate(10);
+
+        return response()->json($pendingDoctorRequests);
     }
 
     /**
@@ -80,7 +90,6 @@ class DoctorController extends Controller
         if($request->has('payment_style')) $newDoctor->payment_style = $request->payment_style;
         $newDoctor->bmdc_number = $request->bmdc_number;
         $newDoctor->rate = $request->rate;
-        //activation_status check by admin role
         $newDoctor->offer_rate = ($request->has('offer_rate'))? $request->offer_rate: $request->rate;
         $newDoctor->gender = $request->gender;
         $newDoctor->email = $request->email;
@@ -120,23 +129,34 @@ class DoctorController extends Controller
     }
 
 
-    public function evaluateDoctorJoiningRequest(){
+    public function evaluateDoctorJoiningRequest(Request $request, Doctor $doctor){
+        $this->validate($request, [
+            'activation_status' => 'required| integer| between: 0,1',
+            ]);
 
+        $doctor->activation_status = $request->activation_status;
+        $doctor->save();
+
+        return response()->noContent();
     }
+
+
 
     public function update(Request $request, Doctor $doctor)
     {
         $this->validate($request, [
-            'rate' => 'sometimes| numeric',
-            'offer_rate' => 'sometimes| numeric',
+            'rate' => 'required| numeric',
+            'offer_rate' => 'required| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
-            'others_training' => 'required',
+            'others_training' => 'sometimes',
             'start_time' => 'sometimes',
             'end_time' => 'sometimes',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-        //edit activation status by admin
+        $doctor->rate = $request->rate;
+        $doctor->offer_rate = $request->offer_rate;
+
         if($request->has('payment_style')){
             $doctor->payment_style = $request->payment_style;
         }
@@ -152,8 +172,10 @@ class DoctorController extends Controller
         }
         if($request->has('starting_time') && $request->has('ending_time')){
             //cancel all appointments in between these times
+            $appointmentHandler = new AppointmentHandler();
+            $appointmentHandler->cancelAppointmentBetweenTimeRange($doctor, $request->start_time, $request->end_time);
 
-            $doctor->starting_time = Carbon::parse($request->starting_time);
+            $doctor->start_time = Carbon::parse($request->start_time);
             $doctor->end_time = Carbon::parse($request->end_time);
         }
         if($request->has('max_appointments_per_day')) {

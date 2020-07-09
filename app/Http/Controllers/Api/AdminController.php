@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -28,6 +29,12 @@ class AdminController extends Controller
         //
     }
 
+    public function loadAllAdminRoles()
+    {
+        $adminRoles = Role::whereNotIn('name', ['super_admin', 'doctor', 'patient'])->get();
+        return response()->json($adminRoles);;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -38,7 +45,8 @@ class AdminController extends Controller
         //
     }
 
-    public function authenticateAdmin(Request $request){
+    public function authenticateAdmin(Request $request)
+    {
         $this->validate($request, [
             'mobile' => 'required| min: 11| max: 14',
             'password' => 'required| min: 6',
@@ -46,7 +54,7 @@ class AdminController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         $admin = $user->admin;
-        if(!$admin || !Hash::check($request->password, $admin->password)){
+        if (!$admin || !Hash::check($request->password, $admin->password)) {
             return response()->json('invalid credentials', 401);
         }
         $tokenUserHandler = new TokenUserHandler();
@@ -60,15 +68,15 @@ class AdminController extends Controller
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
             'password' => 'required| min: 6',
+            'roles' => 'required'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json('validation error', 400);
         }
 
-
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($request->mobile);
-        $user->assignRole('super_admin');
+        $user->assignRole($request->roles);
         $newAdmin = new Admin();
         $newAdmin->user_id = $user->id;
         $newAdmin->name = $request->name;
