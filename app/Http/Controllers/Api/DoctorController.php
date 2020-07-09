@@ -13,6 +13,11 @@ use Illuminate\Support\Str;
 
 class DoctorController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'role:admin'])->only('evaluateDoctorJoiningRequest');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -115,6 +120,10 @@ class DoctorController extends Controller
     }
 
 
+    public function evaluateDoctorJoiningRequest(){
+
+    }
+
     public function update(Request $request, Doctor $doctor)
     {
         $this->validate($request, [
@@ -153,6 +162,10 @@ class DoctorController extends Controller
         $doctor->save();
 
         return response()->noContent();
+    }
+
+    public function getLastDoctorBookingStartTime(Doctor $doctor){
+        return response()->json($doctor->booking_start_time, 200);
     }
 
     public function changeDoctorBookingStatus(Request $request, Doctor $doctor){

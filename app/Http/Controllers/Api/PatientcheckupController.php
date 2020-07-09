@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Doctor;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handlers\CheckupTransactionHandler;
 use App\Patient;
 use App\Patientcheckup;
 use Carbon\Carbon;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -24,15 +24,18 @@ class PatientcheckupController extends Controller
     }
 
 
-    public function getPatentCheckupsByPatient(Patient $patient){
+    public function getPatentCheckupsByPatient(Patient $patient)
+    {
         $checkupsByPatient = Patientcheckup::where('patient_id', $patient->id)->get();
         return response()->json($checkupsByPatient);
     }
 
-    public function getPatentCheckupsByDoctor(Doctor $doctor){
+    public function getPatentCheckupsByDoctor(Doctor $doctor)
+    {
         $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->get();
         return response()->json($checkupsByDoctor);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -46,31 +49,22 @@ class PatientcheckupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-           'patient_id' => 'required| numeric',
-           'doctor_id' => 'required| numeric',
-           'start_time' => 'present| nullable',
-           'end_time' => 'present| nullable',
+            'patient_id' => 'required| numeric',
+            'doctor_id' => 'required| numeric',
+            'start_time' => 'required',
+            'end_time' => 'required',
         ]);
 
         $patient = Patient::findOrFail($request->patient_id);
         $doctor = Doctor::findOrFail($request->doctor_id);
-        if($patient->user->amount > 0){
-            $newPatientcheckup = new Patientcheckup();
-            $newPatientcheckup->patient_id = $patient->id;
-            $newPatientcheckup->doctor_id = $doctor->id;
-            do
-            {
-                $code = Str::random(16);
-                $patientCheckup = Patientcheckup::where('code', $code)->first();
-            }
-            while($patientCheckup);
-            $newPatientcheckup->start_time = ($request->start_time == null)? null: Carbon::parse($request->start_time);
-            $newPatientcheckup->end_time = ($request->end_time == null)? null: Carbon::parse($request->end_time);
-            $newPatientcheckup->save();
-            return response()->json($newPatientcheckup, 201);
-        } else{
-            return response()->json("insufficient user balance", 400);
+        $checkupTransactionHandler = new CheckupTransactionHandler();
+
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, Carbon::parse($request->start_time), Carbon::parse($request->end_time));
+        if(!$newPatientCheckup){
+            return response()->json('Insufficient Balance', 400);
         }
+
+        return response()->json($newPatientCheckup, 201);
 
 
     }
@@ -78,7 +72,7 @@ class PatientcheckupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Patientcheckup  $patientcheckup
+     * @param \App\Patientcheckup $patientcheckup
      * @return \Illuminate\Http\Response
      */
     public function show(Patientcheckup $patientcheckup)
@@ -89,7 +83,7 @@ class PatientcheckupController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Patientcheckup  $patientcheckup
+     * @param \App\Patientcheckup $patientcheckup
      * @return \Illuminate\Http\Response
      */
     public function edit(Patientcheckup $patientcheckup)
@@ -100,8 +94,8 @@ class PatientcheckupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Patientcheckup  $patientcheckup
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Patientcheckup $patientcheckup
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Patientcheckup $patientcheckup)
@@ -120,7 +114,7 @@ class PatientcheckupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Patientcheckup  $patientcheckup
+     * @param \App\Patientcheckup $patientcheckup
      * @return \Illuminate\Http\Response
      */
     public function destroy(Patientcheckup $patientcheckup)
