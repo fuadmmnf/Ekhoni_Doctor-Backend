@@ -11,14 +11,39 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
+/**
+ * @group  Doctor management
+ *
+ * APIs related to Doctor
+ */
 class DoctorController extends Controller
 {
-
-    public function __construct()
+    protected $user;
+    public function __construct(Request $request)
     {
-        $this->middleware(['auth:sanctum', 'role:super_admin|admin:doctor'])->only('evaluateDoctorJoiningRequest');
+        $publicMethods = ['getAvailableDoctorsByDoctorType', 'store'];
+        $adminMethods = ['getAllPendingDoctorRequest', 'evaluateDoctorJoiningRequest', 'update'];
+        $patientMethods = ['changeDoctorBookingStatus'];
+        $doctorMethods = ['update'];
+        $requestMethod = explode('@', Route::currentRouteAction())[1];
+
+        $this->middleware('auth:sanctum')->except($publicMethods);
+        if(!in_array($requestMethod, $publicMethods)){
+            $this->user = $request->user('sanctum');
+
+            if($this->user->hasRole('patient')){
+                $this->middleware('role:patient')->only($patientMethods);
+            }
+            if($this->user->hasRole('doctor')){
+                $this->middleware('role:doctor')->only($doctorMethods);
+            }
+            if($this->user->hasRole('super_admin') || $this->user->hasRole('admin:doctor')){
+                $this->middleware('role:super_admin|admin:doctor')->only($adminMethods);
+            }
+        }
     }
     /**
      * Display a listing of the resource.
@@ -28,6 +53,7 @@ class DoctorController extends Controller
     public function index()
     {
     }
+
 
     public function getAvailableDoctorsByDoctorType(Doctortype $doctortype){
         $availableDoctorsByType = Doctor::where('doctortype_id', $doctortype->id)
@@ -198,16 +224,20 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
-    public function getLastDoctorBookingStartTime(Doctor $doctor){
-        return response()->json($doctor->booking_start_time, 200);
-    }
-
-    public function changeDoctorBookingStatus(Request $request, Doctor $doctor){
+       public function changeDoctorBookingStatus(Request $request, Doctor $doctor){
         $this->validate($request, [
            'booking_start_time' => 'present| nullable',
         ]);
-        $doctor->booking_start_time = ($request->booking_start_time == null)? null: Carbon::parse($request->booking_start_time);
-        $doctor->save();
+
+        $booking_time = Carbon::parse($request->booking_start_time);
+        if($request->booking_start_time == null || $booking_time->diffInMinutes($doctor->booking_start_time) > 30){
+            $doctor->booking_start_time = $booking_time;
+            $doctor->save();
+        } else{
+            return response()->json('another user is currently setting appointment', 400);
+        }
+
+        return response()->noContent();
     }
 
     /**

@@ -79,6 +79,10 @@ class DoctorappointmentController extends Controller
         $newDoctorAppointment->code = $code;
         $newDoctorAppointment->save();
 
+        $doctor->booking_start_time = null;
+        $doctor->save();
+
+
         return response()->json($newDoctorAppointment, 201);
     }
 
