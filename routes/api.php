@@ -43,8 +43,14 @@ Route::get('doctortypes', 'Api\DoctortypeController@index');
 Route::post('doctortypes', 'Api\DoctortypeController@store');
 
 
-Route::apiResource('patientcheckups', 'Api\PatientcheckupController');
-Route::apiResource('patients', 'Api\PatientController');
+Route::post('patientcheckups', 'Api\PatientcheckupController@store');
+
+
+Route::post('patients', 'Api\PatientController@store');
+Route::put('patients/{patient}', 'Api\PatientController@update');
+
+
+
 Route::apiResource('patientprescriptions', 'Api\PatientprescriptionController');
 
 

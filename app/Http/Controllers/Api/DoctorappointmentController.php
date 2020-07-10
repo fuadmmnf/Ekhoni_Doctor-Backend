@@ -61,7 +61,7 @@ class DoctorappointmentController extends Controller
 
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, Carbon::parse($request->start_time), Carbon::parse($request->end_time));
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
         if(!$newPatientCheckup){
             return response()->json('Insufficient Balance', 400);
         }
