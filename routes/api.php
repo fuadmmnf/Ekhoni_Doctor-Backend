@@ -28,8 +28,13 @@ Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
 Route::apiResource('doctorappointments', 'Api\DoctorappointmentController');
 
 
+Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
+Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
+Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
 Route::post('doctors', 'Api\DoctorController@store');
-Route::post('admin/doctors', 'Api\DoctorController@createApprovedDoctor');
+Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');
+Route::put('doctors/status', 'Api\DoctorController@changeActiveStatus');
+Route::put('doctors/{doctor}/approve', 'Api\DoctorController@evaluateDoctorJoiningRequest');
 
 
 Route::get('doctortypes', 'Api\DoctortypeController@index');

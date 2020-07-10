@@ -22,8 +22,8 @@ class DoctortypeController extends Controller
         $requestMethod = explode('@', Route::currentRouteAction())[1];
 
         $this->middleware('auth:sanctum')->except($publicMethods);
-        if (!in_array($requestMethod, $publicMethods)) {
-            $this->user = $request->user('sanctum');
+        $this->user = $request->user('sanctum');
+        if ($this->user && !in_array($requestMethod, $publicMethods)) {
             if ($this->user->hasRole('super_admin') || $this->user->hasRole('admin:doctor')) {
                 $this->middleware('role:super_admin|admin:doctor')->only($adminMethods);
             }

@@ -25,26 +25,7 @@ class DoctorController extends Controller
 
     public function __construct(Request $request)
     {
-        $publicMethods = ['getAvailableDoctorsByDoctorType', 'store'];
-        $adminMethods = ['createApprovedDoctor', 'getAllPendingDoctorRequest', 'evaluateDoctorJoiningRequest', 'update'];
-        $patientMethods = ['changeDoctorBookingStatus'];
-        $doctorMethods = ['update', 'changeActiveStatus'];
-        $requestMethod = explode('@', Route::currentRouteAction())[1];
-
-        $this->middleware('auth:sanctum')->except($publicMethods);
-        if (!in_array($requestMethod, $publicMethods)) {
-            $this->user = $request->user('sanctum');
-
-            if ($this->user->hasRole('patient')) {
-                $this->middleware('role:patient')->only($patientMethods);
-            }
-            if ($this->user->hasRole('doctor')) {
-                $this->middleware('role:doctor')->only($doctorMethods);
-            }
-            if ($this->user->hasRole('super_admin') || $this->user->hasRole('admin:doctor')) {
-                $this->middleware('role:super_admin|admin:doctor')->only($adminMethods);
-            }
-        }
+        $this->user = $request->user('sanctum');
     }
 
     /**
@@ -58,21 +39,55 @@ class DoctorController extends Controller
 
 
     /**
-     * Fetch Available doctors by doctortype
+     * Fetch Paginated Active Doctors By Doctortype
      *
-     * Fetch doctor types list.
+     * Fetch active doctors, paginated response of doctor instances.
      *
-     * @response  [
+     * @urlParam  doctortype required The Doctortype ID of doctors.
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
      * {
-     * "id": 1,
-     * "type": 0,
-     * "specialization": "cardiology",
-     * "created_at": "2020-07-10T10:09:17.000000Z",
-     * "updated_at": "2020-07-10T10:09:17.000000Z"
+     * "id": 6,
+     * "user_id": 12,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000002",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 1,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "start_time": null,
+     * "end_time": null,
+     * "max_appointments_per_day": null,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "device_ids": null,
+     * "booking_start_time": null,
+     * "created_at": "2020-07-10T15:49:23.000000Z",
+     * "updated_at": "2020-07-10T16:03:21.000000Z"
      * }
-     * ]
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/2/doctors/active?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/2/doctors/active?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctortypes/2/doctors/active",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
      */
-    public function getAvailableDoctorsByDoctorType(Doctortype $doctortype)
+    public function getActiveDoctorsByDoctorType(Doctortype $doctortype)
     {
         $availableDoctorsByType = Doctor::where('doctortype_id', $doctortype->id)
             ->where('activation_status', 1)
@@ -82,14 +97,119 @@ class DoctorController extends Controller
     }
 
 
+    /**
+     * Fetch Paginated Approved Doctors
+     *
+     * Fetch approved doctors, paginated response of doctor instances.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 4,
+     * "user_id": 10,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000001",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "start_time": null,
+     * "end_time": null,
+     * "max_appointments_per_day": null,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "device_ids": null,
+     * "booking_start_time": null,
+     * "created_at": "2020-07-10T14:57:19.000000Z",
+     * "updated_at": "2020-07-10T14:57:19.000000Z"
+     * },
+     * ...
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctors/approved?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctors/approved?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctors/approved",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 2,
+     * "total": 2
+     * }
+     */
     public function getAllApprovedDoctors()
     {
         $approvedDoctors = Doctor::where('activation_status', 1)->paginate(10);
         return response()->json($approvedDoctors);
     }
 
+
+    /**
+     * Fetch Paginated Doctors Requests
+     *
+     * Fetch pending doctor joining requests, paginated response of doctor instances.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 2,
+     * "user_id": 8,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000000",
+     * "payment_style": 0,
+     * "activation_status": 0,
+     * "status": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "start_time": null,
+     * "end_time": null,
+     * "max_appointments_per_day": null,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "device_ids": null,
+     * "booking_start_time": null,
+     * "created_at": "2020-07-10T14:19:24.000000Z",
+     * "updated_at": "2020-07-10T14:19:24.000000Z"
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctors/pending?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctors/pending?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctors/pending",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
+
     public function getAllPendingDoctorRequest()
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $pendingDoctorRequests = Doctor::where('activation_status', 0)
             ->paginate(10);
 
@@ -127,6 +247,8 @@ class DoctorController extends Controller
         $newDoctor->workplace = $doctorRequest->workplace;
         $newDoctor->designation = $doctorRequest->designation;
         $newDoctor->medical_college = $doctorRequest->medical_college;
+        $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
+        $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->others_training = $doctorRequest->others_training;
 
         if ($doctorRequest->has('start_time') &&
@@ -158,6 +280,7 @@ class DoctorController extends Controller
      * @bodyParam  workplace string required The workplace of doctor.
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  medical_college string required The graduation college of doctor.
+     * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  others_training string required Other degrees of doctor [can be blank].
      * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
      * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
@@ -176,6 +299,7 @@ class DoctorController extends Controller
      * "workplace": "dmc",
      * "designation": "trainee doctor",
      * "medical_college": "dmc",
+     * "postgrad": "dmc",
      * "others_training": "sdaosdmoaismdioasmdioas",
      * "updated_at": "2020-07-10T14:19:24.000000Z",
      * "created_at": "2020-07-10T14:19:24.000000Z",
@@ -196,7 +320,8 @@ class DoctorController extends Controller
             'workplace' => 'required',
             'designation' => 'required',
             'medical_college' => 'required',
-            'others_training' => 'present',
+            'postgrad' => 'present| nullable',
+            'others_training' => 'present| nullable',
             'start_time' => 'sometimes| date_format:H:i',
             'end_time' => 'sometimes| date_format:H:i',
             'max_appointments_per_day' => 'sometimes| numeric',
@@ -222,6 +347,7 @@ class DoctorController extends Controller
      * @bodyParam  workplace string required The workplace of doctor.
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  medical_college string required The graduation college of doctor.
+     * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  others_training string required Other degrees of doctor [can be blank].
      * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
      * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
@@ -241,6 +367,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "medical_college": "dmc",
      * "others_training": "sdaosdmoaismdioasmdioas",
+     * "postgrad": "dmc",
      * "updated_at": "2020-07-10T14:57:19.000000Z",
      * "created_at": "2020-07-10T14:57:19.000000Z",
      * "id": 4,
@@ -250,6 +377,13 @@ class DoctorController extends Controller
      */
     public function createApprovedDoctor(Request $request)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+
         $this->validate($request, [
             'doctortype_id' => 'required| numeric',
             'payment_style' => 'required| numeric',
@@ -263,7 +397,8 @@ class DoctorController extends Controller
             'workplace' => 'required',
             'designation' => 'required',
             'medical_college' => 'required',
-            'others_training' => 'required',
+            'postgrad' => 'present| nullable',
+            'others_training' => 'present| nullable',
             'start_time' => 'sometimes| date_format:H:i',
             'end_time' => 'sometimes| date_format:H:i',
             'max_appointments_per_day' => 'sometimes| numeric',
@@ -276,31 +411,26 @@ class DoctorController extends Controller
         return response()->json($newDoctor, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Doctor $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Doctor $doctor)
-    {
-        //
-    }
 
     /**
-     * Show the form for editing the specified resource.
+     * _Approve Doctor By Admin_
      *
-     * @param \App\Doctor $doctor
-     * @return \Illuminate\Http\Response
+     * Update doctor activation_status. !! token required| super_admin, admin:doctor
+     *
+     * @urlParam  doctor required The ID of doctor.
+
+     * @bodyParam activation_status int required The activation indicatior. 0 => not approved, 1 => approved
+     *
+     * @response  204
      */
-    public function edit(Doctor $doctor)
-    {
-        //
-    }
-
-
     public function evaluateDoctorJoiningRequest(Request $request, Doctor $doctor)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $this->validate($request, [
             'activation_status' => 'required| integer| between: 0,1',
         ]);
@@ -311,18 +441,45 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
-    public function changeActiveStatus(Request $request, Doctor $doctor)
+
+    /**
+     * _Create Doctor Active Status_
+     *
+     * Doctor update active status endpoint used by doctor.!! token required | doctor
+     *
+     * @bodyParam  status int required The doctor active status. 0 => inactive, 1 => active
+     *
+     *
+     * @response  204 ""
+     */
+    public function changeActiveStatus(Request $request)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $this->validate($request, [
             'status' => 'required| numeric',
         ]);
+        $doctor = $request->user('sanctum')->doctor;
         $doctor->status = $request->status;
         $doctor->save();
         return response()->noContent();
     }
 
+
+
+    //needs testing after setting doctor appointment
     public function update(Request $request, Doctor $doctor)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('doctor')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
         $this->validate($request, [
             'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
@@ -382,6 +539,14 @@ class DoctorController extends Controller
 
     public function changeDoctorBookingStatus(Request $request, Doctor $doctor)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('patient') &&
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor')
+
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
         $this->validate($request, [
             'booking_start_time' => 'present| nullable',
         ]);

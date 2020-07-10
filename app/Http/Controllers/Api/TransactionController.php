@@ -39,7 +39,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * _Fetch paginated user completed transactions_
+     * _Fetch Paginated User Completed Transactions_
      *
      * Fetch completed transaction of user, paginated response. !! token required | super_admin, admin:transaction, patient
      *

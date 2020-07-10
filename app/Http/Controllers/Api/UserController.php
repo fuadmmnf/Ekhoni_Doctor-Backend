@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -20,9 +21,9 @@ class UserController extends Controller
 
     public function __construct(Request $request)
     {
+        $requestMethod = explode('@', Route::currentRouteAction())[1];
         $this->middleware(['auth:sanctum'])->except('store');
-
-        if($request->method() == 'changeUserAgentPermission'){
+        if($requestMethod == 'changeUserAgentPermission'){
             $this->middleware(['auth:sanctum', 'role:super_admin|admin:user'])->only('changeUserAgentPermission');
         }
 
