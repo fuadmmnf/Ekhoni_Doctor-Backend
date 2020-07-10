@@ -23,6 +23,7 @@ class CreatePatientcheckupsTable extends Migration
             $table->dateTime('end_time')->nullable();
             $table->double('doctor_rating')->nullable();
             $table->double('patient_rating')->nullable();
+
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('id')->on('transactions');

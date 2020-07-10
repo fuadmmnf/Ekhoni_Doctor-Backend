@@ -20,7 +20,6 @@ class CreateTransactionsTable extends Migration
             $table->integer('status')->default(0); // 0 => initialized and registered, 1 => trasaction complete
             $table->string('code');
             $table->double('amount');
-            $table->double('agent_commission')->default(0.0);
 
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');

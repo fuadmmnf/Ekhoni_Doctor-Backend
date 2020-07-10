@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
+/**
+ * @group  Admin management
+ *
+ * APIs related to Admin
+ */
 class AdminController extends Controller
 {
 
@@ -21,7 +26,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'role:super_admin']);
+        $this->middleware(['auth:sanctum', 'role:super_admin'])->except('authenticateAdmin');
     }
 
     public function index()
@@ -29,22 +34,45 @@ class AdminController extends Controller
         //
     }
 
+    /**
+     * _Fetch admin roles_
+     *
+     * Fetch admin roles list related to sectors of resource in admin panel. !! token required | super_admin
+     *
+     * @response  [
+     * {
+     * "id": 2,
+     * "name": "admin:doctor",
+     * "guard_name": "web",
+     * "created_at": "2020-07-09T18:23:36.000000Z",
+     * "updated_at": "2020-07-09T18:23:36.000000Z"
+     * },
+     * ]
+     */
     public function loadAllAdminRoles()
     {
         $adminRoles = Role::whereNotIn('name', ['super_admin', 'doctor', 'patient'])->get();
-        return response()->json($adminRoles);;
+        return response()->json($adminRoles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
     }
 
+    /**
+     * Authenticate Admin
+     *
+     * Admin login endpoint, returns access_token for admin user
+     *
+     *
+     * @bodyParam mobile string required The mobile of the user. Example: 01955555555
+     * @bodyParam  password string required The password. Example: secret123
+     *
+     *
+     * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
+     */
     public function authenticateAdmin(Request $request)
     {
         $this->validate($request, [
@@ -61,6 +89,29 @@ class AdminController extends Controller
         return response()->json($tokenUserHandler->regenerateUserToken($user), 200);
     }
 
+    /**
+     * _Create Admin_
+     *
+     * Admin store endpoint, returns admin instance along with access_token. !! token required | super_admin
+     *
+     *
+     * @bodyParam name string required The name of the admin. Example: fuad
+     * @bodyParam  mobile string required The mobile required to create user object. Example: 01955555555
+     * @bodyParam  email string required The email. Example: fuad@gmail.com
+     * @bodyParam  password string required The password. Example: secret123
+     * @bodyParam  roles array required The list of strings defining the roles of the admin. Example: ['admin:doctor', 'admin:yser]
+     *
+     *
+     * @response  {
+     * "user_id": 2,
+     * "name": "fuad",
+     * "email": "fuad@gmail.com",
+     * "updated_at": "2020-07-09T20:12:00.000000Z",
+     * "created_at": "2020-07-09T20:12:00.000000Z",
+     * "id": 2,
+     * "token": "5|4k8uIbvxTsdGkL2KF2yA6IA4BL3SkqwBcyWXxYN6C7U9p2sfXzkuDMnmQFwAvh0BpwTHWFpg9I4vI0Hb"
+     * }
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -76,13 +127,13 @@ class AdminController extends Controller
 
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($request->mobile);
-        $user->assignRole($request->roles);
         $newAdmin = new Admin();
         $newAdmin->user_id = $user->id;
         $newAdmin->name = $request->name;
         $newAdmin->email = $request->email;
         $newAdmin->password = Hash::make($request->password);
         $newAdmin->save();
+        $user->assignRole($request->roles);
         $newAdmin->token = $user->token;
 
         return response()->json($newAdmin, 201);

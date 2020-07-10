@@ -129,6 +129,8 @@ class DoctorController extends Controller
     }
 
 
+
+
     public function evaluateDoctorJoiningRequest(Request $request, Doctor $doctor){
         $this->validate($request, [
             'activation_status' => 'required| integer| between: 0,1',
@@ -145,8 +147,9 @@ class DoctorController extends Controller
     public function update(Request $request, Doctor $doctor)
     {
         $this->validate($request, [
-            'rate' => 'required| numeric',
-            'offer_rate' => 'required| numeric',
+            'status' => 'required| numeric',
+            'rate' => 'sometimes| numeric',
+            'offer_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
             'others_training' => 'sometimes',
@@ -154,8 +157,17 @@ class DoctorController extends Controller
             'end_time' => 'sometimes',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-        $doctor->rate = $request->rate;
-        $doctor->offer_rate = $request->offer_rate;
+
+        $doctor->status = $request->status;
+
+        if($request->has('rate')){
+            $doctor->rate = $request->rate;
+            $doctor->offer_rate = $request->rate;
+        }
+
+        if($request->has('offer_rate')){
+            $doctor->offer_rate = $request->offer_rate;
+        }
 
         if($request->has('payment_style')){
             $doctor->payment_style = $request->payment_style;

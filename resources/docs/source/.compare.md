@@ -20,6 +20,320 @@ Welcome to the generated API reference.
 
 <!-- END_INFO -->
 
+#Admin management
+
+
+APIs related to Admin
+<!-- START_5d4f8024543e5e5cd4c65294b566be08 -->
+## _Create Admin_
+
+Admin store endpoint, returns admin instance along with access_token. !! token required | super_admin
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/admins" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"fuad","mobile":"01955555555","email":"fuad@gmail.com","password":"secret123","roles":"['admin:doctor', 'admin:yser]"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/admins"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "fuad",
+    "mobile": "01955555555",
+    "email": "fuad@gmail.com",
+    "password": "secret123",
+    "roles": "['admin:doctor', 'admin:yser]"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "user_id": 2,
+    "name": "fuad",
+    "email": "fuad@gmail.com",
+    "updated_at": "2020-07-09T20:12:00.000000Z",
+    "created_at": "2020-07-09T20:12:00.000000Z",
+    "id": 2,
+    "token": "5|4k8uIbvxTsdGkL2KF2yA6IA4BL3SkqwBcyWXxYN6C7U9p2sfXzkuDMnmQFwAvh0BpwTHWFpg9I4vI0Hb"
+}
+```
+
+### HTTP Request
+`POST api/admins`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | The name of the admin.
+        `mobile` | string |  required  | The mobile required to create user object.
+        `email` | string |  required  | The email.
+        `password` | string |  required  | The password.
+        `roles` | array |  required  | The list of strings defining the roles of the admin.
+    
+<!-- END_5d4f8024543e5e5cd4c65294b566be08 -->
+
+<!-- START_b3389b14b63a2158bac9354cf37a6ed3 -->
+## _Fetch admin roles_
+
+Fetch admin roles list related to sectors of resource in admin panel. !! token required | super_admin
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/admins/roles/load" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/admins/roles/load"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+null
+```
+
+### HTTP Request
+`GET api/admins/roles/load`
+
+
+<!-- END_b3389b14b63a2158bac9354cf37a6ed3 -->
+
+<!-- START_666eaa38dc66273f9516ea93ebb6ad94 -->
+## Authenticate Admin
+
+Admin login endpoint, returns access_token for admin user
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/admins/authenticate" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"mobile":"01955555555","password":"secret123"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/admins/authenticate"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "mobile": "01955555555",
+    "password": "secret123"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+"4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
+```
+
+### HTTP Request
+`POST api/admins/authenticate`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `mobile` | string |  required  | The mobile of the user.
+        `password` | string |  required  | The password.
+    
+<!-- END_666eaa38dc66273f9516ea93ebb6ad94 -->
+
+#User management
+
+Admin
+APIs related to User
+<!-- START_12e37982cc5398c7100e59625ebb5514 -->
+## Create/Retrieve User
+
+Get User object using mobile| create new if not present
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/users" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"mobile":"01955555555"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "mobile": "01955555555"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+"4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
+```
+> Example response (201):
+
+```json
+{
+    "mobile": "01955555555",
+    "code": "mxH8SeGHt4cjWr8R",
+    "updated_at": "2020-07-09T20:44:33.000000Z",
+    "created_at": "2020-07-09T20:44:33.000000Z",
+    "id": 6,
+    "token": "10|gTlkf0Qy4vXkwT51g0BEUqehYEadWonfsKsKPrSnYh7YISkZPFW9DRNZUH0tljrvKAozJTCPgrdtVBnB"
+}
+```
+
+### HTTP Request
+`POST api/users`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `mobile` | string |  required  | The mobile of the user.
+    
+<!-- END_12e37982cc5398c7100e59625ebb5514 -->
+
+<!-- START_3155db40d08d4838a8141f823bbe5c22 -->
+## _Alter User Agent permission_
+
+Change the user object to modify the is_agent & agent_percentage field. !! token required | super_admin, admin:user
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/users/1/agent" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"is_agent":true,"agent_percentage":2.5}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/users/1/agent"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "is_agent": true,
+    "agent_percentage": 2.5
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (400):
+
+```json
+"validation error"
+```
+> Example response (204):
+
+```json
+{}
+```
+
+### HTTP Request
+`PUT api/users/{user}/agent`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `is_agent` | boolean |  required  | Whether user is agent.
+        `agent_percentage` | float |  required  | Agent commission percentage for each call.
+    
+<!-- END_3155db40d08d4838a8141f823bbe5c22 -->
+
 #general
 
 
@@ -60,603 +374,6 @@ fetch(url, {
 
 
 <!-- END_4dfafe7f87ec132be3c8990dd1fa9078 -->
-
-<!-- START_fc1e4f6a697e3c48257de845299b71d5 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/users" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/users"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/users`
-
-
-<!-- END_fc1e4f6a697e3c48257de845299b71d5 -->
-
-<!-- START_12e37982cc5398c7100e59625ebb5514 -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/users" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/users"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/users`
-
-
-<!-- END_12e37982cc5398c7100e59625ebb5514 -->
-
-<!-- START_8653614346cb0e3d444d164579a0a0a2 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/users/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/users/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/users/{user}`
-
-
-<!-- END_8653614346cb0e3d444d164579a0a0a2 -->
-
-<!-- START_48a3115be98493a3c866eb0e23347262 -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/users/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/users/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/users/{user}`
-
-`PATCH api/users/{user}`
-
-
-<!-- END_48a3115be98493a3c866eb0e23347262 -->
-
-<!-- START_d2db7a9fe3abd141d5adbc367a88e969 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/users/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/users/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/users/{user}`
-
-
-<!-- END_d2db7a9fe3abd141d5adbc367a88e969 -->
-
-<!-- START_1c5034e53bb42c7e8872e0749e880ff1 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/admins" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/admins"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/admins`
-
-
-<!-- END_1c5034e53bb42c7e8872e0749e880ff1 -->
-
-<!-- START_5d4f8024543e5e5cd4c65294b566be08 -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/admins" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/admins"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/admins`
-
-
-<!-- END_5d4f8024543e5e5cd4c65294b566be08 -->
-
-<!-- START_37f538aa83d67494cdbacbe2e7dedf6b -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/admins/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/admins/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/admins/{admin}`
-
-
-<!-- END_37f538aa83d67494cdbacbe2e7dedf6b -->
-
-<!-- START_44c71e5796225e711c412961d6211b0f -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/admins/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/admins/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/admins/{admin}`
-
-`PATCH api/admins/{admin}`
-
-
-<!-- END_44c71e5796225e711c412961d6211b0f -->
-
-<!-- START_31c5826230dbb67675efd76b6e55b2a5 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/admins/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/admins/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/admins/{admin}`
-
-
-<!-- END_31c5826230dbb67675efd76b6e55b2a5 -->
-
-<!-- START_e385362a2affe7c7585f9831916f0ccd -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/adminpermissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/adminpermissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/adminpermissions`
-
-
-<!-- END_e385362a2affe7c7585f9831916f0ccd -->
-
-<!-- START_6db5b5aaca8495d29a6fcacdf0674548 -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/adminpermissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/adminpermissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/adminpermissions`
-
-
-<!-- END_6db5b5aaca8495d29a6fcacdf0674548 -->
-
-<!-- START_39b5efc92db470ffcaee57c0a80ac3e0 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/adminpermissions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/adminpermissions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/adminpermissions/{adminpermission}`
-
-
-<!-- END_39b5efc92db470ffcaee57c0a80ac3e0 -->
-
-<!-- START_28089783a8120a306bdc7eb7047e3395 -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/adminpermissions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/adminpermissions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/adminpermissions/{adminpermission}`
-
-`PATCH api/adminpermissions/{adminpermission}`
-
-
-<!-- END_28089783a8120a306bdc7eb7047e3395 -->
-
-<!-- START_f60147ddb3ac27ac64e5593994fd85b1 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/adminpermissions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/adminpermissions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/adminpermissions/{adminpermission}`
-
-
-<!-- END_f60147ddb3ac27ac64e5593994fd85b1 -->
 
 <!-- START_30afa3387c5c241054df472ff81d21f7 -->
 ## Display a listing of the resource.
@@ -765,11 +482,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Checkupprescription] 1"
 }
 ```
 
@@ -857,205 +574,6 @@ fetch(url, {
 
 <!-- END_ac6a70d7e3d89a93a5d400712372ea26 -->
 
-<!-- START_3acc71aef8a5eef7638d027745971a68 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/checkuptransactions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkuptransactions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/checkuptransactions`
-
-
-<!-- END_3acc71aef8a5eef7638d027745971a68 -->
-
-<!-- START_6b58b39f981f119e6790122ddf157833 -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/checkuptransactions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkuptransactions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/checkuptransactions`
-
-
-<!-- END_6b58b39f981f119e6790122ddf157833 -->
-
-<!-- START_b9062e57eba7350eed3e9f55d1f1301d -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/checkuptransactions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkuptransactions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/checkuptransactions/{checkuptransaction}`
-
-
-<!-- END_b9062e57eba7350eed3e9f55d1f1301d -->
-
-<!-- START_4c55eddb7e166538b6189a4b0f5b66fa -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/checkuptransactions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkuptransactions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/checkuptransactions/{checkuptransaction}`
-
-`PATCH api/checkuptransactions/{checkuptransaction}`
-
-
-<!-- END_4c55eddb7e166538b6189a4b0f5b66fa -->
-
-<!-- START_6096be5a88d7da038d16e3378217ac45 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/checkuptransactions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkuptransactions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/checkuptransactions/{checkuptransaction}`
-
-
-<!-- END_6096be5a88d7da038d16e3378217ac45 -->
-
 <!-- START_af273bdbdf88160f7fbb041368468d89 -->
 ## Display a listing of the resource.
 
@@ -1095,8 +613,7 @@ fetch(url, {
 <!-- END_af273bdbdf88160f7fbb041368468d89 -->
 
 <!-- START_a15b397fc9298594c22a99092feb385b -->
-## Store a newly created resource in storage.
-
+## api/doctorappointments
 > Example request:
 
 ```bash
@@ -1163,11 +680,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Doctorappointment] 1"
 }
 ```
 
@@ -1178,8 +695,7 @@ fetch(url, {
 <!-- END_2fbae4792f0a1cd7e7a6c81876caba5a -->
 
 <!-- START_e057691c24e7d5ef846fee1a9cd7ea1d -->
-## Update the specified resource in storage.
-
+## api/doctorappointments/{doctorappointment}
 > Example request:
 
 ```bash
@@ -1294,8 +810,7 @@ fetch(url, {
 <!-- END_774744abc65e28e4368f69ef4798a8f7 -->
 
 <!-- START_f20841b754b603033ecdbc3f8d10b993 -->
-## Store a newly created resource in storage.
-
+## api/doctors
 > Example request:
 
 ```bash
@@ -1362,11 +877,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Doctor] 1"
 }
 ```
 
@@ -1377,8 +892,7 @@ fetch(url, {
 <!-- END_d2e6f599a5874844f4a0830deeeaef34 -->
 
 <!-- START_44694ba1eafc9d8c78e26c3f52fd7ef6 -->
-## Update the specified resource in storage.
-
+## api/doctors/{doctor}
 > Example request:
 
 ```bash
@@ -1485,6 +999,11 @@ fetch(url, {
 ```
 
 
+> Example response (200):
+
+```json
+[]
+```
 
 ### HTTP Request
 `GET api/doctortypes`
@@ -1493,8 +1012,7 @@ fetch(url, {
 <!-- END_c4bda770fe6f998df9ff9a63ccd874db -->
 
 <!-- START_d049702d90b7287ca2dabb8cd56d2c8e -->
-## Store a newly created resource in storage.
-
+## api/doctortypes
 > Example request:
 
 ```bash
@@ -1531,8 +1049,7 @@ fetch(url, {
 <!-- END_d049702d90b7287ca2dabb8cd56d2c8e -->
 
 <!-- START_ffc64814f5f78fe8edfdd822af8759ea -->
-## Display the specified resource.
-
+## api/doctortypes/{doctortype}
 > Example request:
 
 ```bash
@@ -1561,11 +1078,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Doctortype] 1"
 }
 ```
 
@@ -1576,8 +1093,7 @@ fetch(url, {
 <!-- END_ffc64814f5f78fe8edfdd822af8759ea -->
 
 <!-- START_5d3590b0ac524d8ef45a9811d4422706 -->
-## Update the specified resource in storage.
-
+## api/doctortypes/{doctortype}
 > Example request:
 
 ```bash
@@ -1692,8 +1208,7 @@ fetch(url, {
 <!-- END_42968417170a1c2d0f93430d55b630dc -->
 
 <!-- START_3004f34a51c1a5bf28d7841387b1bd4e -->
-## Store a newly created resource in storage.
-
+## api/patientcheckups
 > Example request:
 
 ```bash
@@ -1760,11 +1275,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Patientcheckup] 1"
 }
 ```
 
@@ -1775,8 +1290,7 @@ fetch(url, {
 <!-- END_af81d850b7324e640d08a2399bc642bd -->
 
 <!-- START_1ea3871cdf18f09b04fdf29186f350c0 -->
-## Update the specified resource in storage.
-
+## api/patientcheckups/{patientcheckup}
 > Example request:
 
 ```bash
@@ -1891,8 +1405,7 @@ fetch(url, {
 <!-- END_cdf5e02e9b913556f9304546d59e6c56 -->
 
 <!-- START_9595666a103e105bb3f677f002653307 -->
-## Store a newly created resource in storage.
-
+## api/patients
 > Example request:
 
 ```bash
@@ -1959,11 +1472,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Patient] 1"
 }
 ```
 
@@ -2090,8 +1603,7 @@ fetch(url, {
 <!-- END_954fd4598f1a1eba859301d487880edb -->
 
 <!-- START_78bab5eaed235b36f3d6a6372d8efb33 -->
-## Store a newly created resource in storage.
-
+## api/patientprescriptions
 > Example request:
 
 ```bash
@@ -2158,11 +1670,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Patientprescription] 1"
 }
 ```
 
@@ -2250,205 +1762,6 @@ fetch(url, {
 
 <!-- END_b82921211ef8558da358c3e51c4e3351 -->
 
-<!-- START_42db014707f615cd5cafb5ad1b6d0675 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/permissions`
-
-
-<!-- END_42db014707f615cd5cafb5ad1b6d0675 -->
-
-<!-- START_d513e82f79d47649a14d2e59fda93073 -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/permissions`
-
-
-<!-- END_d513e82f79d47649a14d2e59fda93073 -->
-
-<!-- START_29ec1a9c6f20445dcd75bf6a4cc63e2a -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/permissions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/permissions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/permissions/{permission}`
-
-
-<!-- END_29ec1a9c6f20445dcd75bf6a4cc63e2a -->
-
-<!-- START_cbdd1fce06181b5d5d8d0f3ae85ed0ee -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/permissions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/permissions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/permissions/{permission}`
-
-`PATCH api/permissions/{permission}`
-
-
-<!-- END_cbdd1fce06181b5d5d8d0f3ae85ed0ee -->
-
-<!-- START_58309983000c47ce901812498144165a -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/permissions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/permissions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/permissions/{permission}`
-
-
-<!-- END_58309983000c47ce901812498144165a -->
-
 <!-- START_9af0b9f04f16a1c9705c5300772f6f16 -->
 ## Display a listing of the resource.
 
@@ -2488,8 +1801,7 @@ fetch(url, {
 <!-- END_9af0b9f04f16a1c9705c5300772f6f16 -->
 
 <!-- START_a524d236dd691776be3315d40786a1db -->
-## Store a newly created resource in storage.
-
+## api/transactions
 > Example request:
 
 ```bash
@@ -2556,11 +1868,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Transaction] 1"
 }
 ```
 

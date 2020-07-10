@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/clear', function (){
+//    Artisan::call('optimize');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+//    Artisan::call('key:generate');
+    Artisan::call('config:cache');
+//    Session::flush();
+    return 'Config and Route Cached. All Cache Cleared';
 });

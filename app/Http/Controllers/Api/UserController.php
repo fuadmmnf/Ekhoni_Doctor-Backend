@@ -10,13 +10,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+/**
+ * @group  User management
+ *
+ * APIs related to User
+ */
 class UserController extends Controller
 {
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->middleware(['auth:sanctum', 'role:super_admin|admin:user'])->only('changeUserAgentPermission');
         $this->middleware(['auth:sanctum'])->except('store');
+
+        if($request->method() == 'changeUserAgentPermission'){
+            $this->middleware(['auth:sanctum', 'role:super_admin|admin:user'])->only('changeUserAgentPermission');
+        }
 
     }
 
@@ -36,7 +44,25 @@ class UserController extends Controller
     }
 
 
-
+    /**
+     * Create/Retrieve User
+     *
+     * Get User object using mobile| create new if not present
+     *
+     *
+     * @bodyParam mobile string required The mobile of the user. Example: 01955555555
+     *
+     *
+     * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
+     * @response  201 {
+     * "mobile": "01955555555",
+     * "code": "mxH8SeGHt4cjWr8R",
+     * "updated_at": "2020-07-09T20:44:33.000000Z",
+     * "created_at": "2020-07-09T20:44:33.000000Z",
+     * "id": 6,
+     * "token": "10|gTlkf0Qy4vXkwT51g0BEUqehYEadWonfsKsKPrSnYh7YISkZPFW9DRNZUH0tljrvKAozJTCPgrdtVBnB"
+     * }
+     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -46,21 +72,21 @@ class UserController extends Controller
         $user = User::where('mobile', $request->mobile)->first();
         $tokenUserHandler = new TokenUserHandler();
 
-        if($user){
+        if ($user) {
             $token = $tokenUserHandler->regenerateUserToken($user);
             return response()->json($token, 200);
         }
 
         $newUser = $tokenUserHandler->createUser($request->mobile);
         $newUser->assignRole('patient');
-
+        unset($newUser->roles);
         return response()->json($newUser, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user)
@@ -71,7 +97,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -80,17 +106,31 @@ class UserController extends Controller
     }
 
 
-    public function changeUserAgentPermission(Request $request, User $user){
+    /**
+     * _Alter User Agent permission_
+     *
+     * Change the user object to modify the is_agent & agent_percentage field. !! token required | super_admin, admin:user
+     *
+     * @urlParam  user required The ID of the user.
+     * @bodyParam is_agent boolean required Whether user is agent. Example: true
+     * @bodyParam agent_percentage double required Agent commission percentage for each call. Example: 2.5
+     *
+     *
+     * @response  400 "validation error"
+     * @response  204 {}
+     */
+    public function changeUserAgentPermission(Request $request, User $user)
+    {
         $validator = Validator::make($request->all(), [
             'is_agent' => 'required',
             'agent_percentage' => 'required| numeric| between: 0,100',
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json('validation error', 400);
         }
 
         $user->is_agent = $request->is_agent;
-        $user->agent_percentage = $request->agent_percentage;
+        $user->agent_percentage = ($request->is_agent)? $request->agent_percentage: 0.0;
         $user->save();
 
         return response()->noContent();
@@ -104,7 +144,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)

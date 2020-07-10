@@ -1,6 +1,10 @@
 <?php
 
+use App\Admin;
+use App\Http\Controllers\Handlers\TokenUserHandler;
+use App\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -42,7 +46,22 @@ class AuthorizationSeeder extends Seeder
         $permission_appointments->syncRoles([$role_super_admin, $role_report_admin]);
 
 
+        $name = 'fuad';
+        $email = 'fuadmmnf@gmail.com';
+        $password = 'fuadmmnf';
+        $mobile = '01956572070';
+        $user_role = 'super_admin';
+        $tokenUserHandler = new TokenUserHandler();
+        $user = $tokenUserHandler->createUser($mobile);
+        $newAdmin = new Admin();
+        $newAdmin->user_id = $user->id;
+        $newAdmin->name = $name;
+        $newAdmin->email = $email;
+        $newAdmin->password = Hash::make($password);
+        $newAdmin->save();
 
+        $user->assignRole($user_role);
+        $newAdmin->token = $user->token;
 
 
     }

@@ -30,9 +30,6 @@ class CheckupTransactionHandler
         while($transaction);
         $checkupTransaction->code = $code;
 
-        if($user->is_agent){
-            $checkupTransaction->agent_commission = $user->agent_percentage;
-        }
         $checkupTransaction->save();
         $user->amount = $user->amount - $amount;
         $user->save();

@@ -21,7 +21,7 @@ class CreateDoctorsTable extends Migration
             $table->string('bmdc_number')->unique();
             $table->boolean('payment_style')->default(0); // 0 => paid by customer transactions, 1 => paid by organization
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
-            $table->integer('status')->default(0); //0 available, 1 busy, 2 in call
+            $table->integer('status')->default(0); //0 available, 1 unavailable, 2 in call
             $table->double('rate');
             $table->double('offer_rate');
             $table->dateTime('start_time')->nullable();
