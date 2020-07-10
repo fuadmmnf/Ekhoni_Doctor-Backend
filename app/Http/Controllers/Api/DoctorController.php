@@ -418,7 +418,6 @@ class DoctorController extends Controller
      * Update doctor activation_status. !! token required| super_admin, admin:doctor
      *
      * @urlParam  doctor required The ID of doctor.
-
      * @bodyParam activation_status int required The activation indicatior. 0 => not approved, 1 => approved
      *
      * @response  204
@@ -467,7 +466,6 @@ class DoctorController extends Controller
         $doctor->save();
         return response()->noContent();
     }
-
 
 
     //needs testing after setting doctor appointment
@@ -537,6 +535,18 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
+
+    /**
+     * _Change Doctor Booking Statu_
+     *
+     * Update doctor activation_status. !! token required| super_admin, admin:doctor
+     *
+     * @urlParam  doctor required The ID of doctor.
+     * @bodyParam booking_start_time string required The booking starting time for patient. 'date time string' => booking start time, 'blank string' => booking finished. Example: "2020-07-10T14:19:24.000000Z", ''
+     *
+     * @response  204
+     * @response  400 "another user is currently setting appointment"
+     */
     public function changeDoctorBookingStatus(Request $request, Doctor $doctor)
     {
         if (!$this->user ||
@@ -552,12 +562,14 @@ class DoctorController extends Controller
         ]);
 
         $booking_time = Carbon::parse($request->booking_start_time);
-        if ($request->booking_start_time == null || $booking_time->diffInMinutes($doctor->booking_start_time) > 30) {
+        if (strlen($request->booking_start_time) == 0) {
+            $doctor->booking_start_time = null;
+        } elseif ($booking_time->diffInMinutes($doctor->booking_start_time) > 30) {
             $doctor->booking_start_time = $booking_time;
-            $doctor->save();
         } else {
             return response()->json('another user is currently setting appointment', 400);
         }
+        $doctor->save();
 
         return response()->noContent();
     }
