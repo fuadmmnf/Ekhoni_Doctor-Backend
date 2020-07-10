@@ -26,7 +26,10 @@ Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
 Route::apiResource('doctorappointments', 'Api\DoctorappointmentController');
-Route::apiResource('doctors', 'Api\DoctorController');
+
+
+Route::post('doctors', 'Api\DoctorController@store');
+Route::post('admin/doctors', 'Api\DoctorController@createApprovedDoctor');
 
 
 Route::get('doctortypes', 'Api\DoctortypeController@index');

@@ -21,7 +21,7 @@ class CreateDoctorsTable extends Migration
             $table->string('bmdc_number')->unique();
             $table->boolean('payment_style')->default(0); // 0 => paid by customer transactions, 1 => paid by organization
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
-            $table->integer('status')->default(0); //0 available, 1 unavailable, 2 in call
+            $table->integer('status')->default(0); //0 unavailable, 1 available, 2 in call
             $table->double('rate');
             $table->double('offer_rate');
             $table->time('start_time')->nullable();
@@ -41,7 +41,7 @@ class CreateDoctorsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('doctortype_id')->references('id')->on('doctors');
+            $table->foreign('doctortype_id')->references('id')->on('doctortypes');
         });
     }
 

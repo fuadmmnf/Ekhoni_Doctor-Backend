@@ -26,9 +26,9 @@ class DoctorController extends Controller
     public function __construct(Request $request)
     {
         $publicMethods = ['getAvailableDoctorsByDoctorType', 'store'];
-        $adminMethods = ['getAllPendingDoctorRequest', 'evaluateDoctorJoiningRequest', 'update'];
+        $adminMethods = ['createApprovedDoctor', 'getAllPendingDoctorRequest', 'evaluateDoctorJoiningRequest', 'update'];
         $patientMethods = ['changeDoctorBookingStatus'];
-        $doctorMethods = ['update'];
+        $doctorMethods = ['update', 'changeActiveStatus'];
         $requestMethod = explode('@', Route::currentRouteAction())[1];
 
         $this->middleware('auth:sanctum')->except($publicMethods);
@@ -76,7 +76,7 @@ class DoctorController extends Controller
     {
         $availableDoctorsByType = Doctor::where('doctortype_id', $doctortype->id)
             ->where('activation_status', 1)
-            ->where('status', 0)->paginate(10);
+            ->where('status', 1)->paginate(10);
 
         return response()->json($availableDoctorsByType);
     }
@@ -107,7 +107,7 @@ class DoctorController extends Controller
     }
 
 
-    private function createDoctor(Request $doctorRequest)
+    private function createDoctor(Request $doctorRequest): Doctor
     {
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($doctorRequest->mobile);
@@ -143,20 +143,42 @@ class DoctorController extends Controller
     }
 
     /**
-     * _Create Doctor_
+     * Create Doctor
      *
-     * Doctor store endpoint, returns doctor instance. !! token required | super_admin, admin:doctor
+     * Doctor store endpoint, returns doctor instance. Doctor instance not approved and payment style depends on customer transaction by default
      *
-     *
-     * @bodyParam type int required The type indication of doctor. Example: 0 => emergency, 1 => specialist
-     * @bodyParam  specialization string required The main field of expertise. Example: "cardiology"
+     * @bodyParam doctortype_id int required The doctortype id.
+     * @bodyParam  name string required The fullname of doctor.
+     * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
+     * @bodyParam  rate int required The usual rate of doctor per call/appointment.
+     * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+     * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
+     * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
+     * @bodyParam  email string required The mail address of doctor.
+     * @bodyParam  workplace string required The workplace of doctor.
+     * @bodyParam  designation string required The designation of doctor.
+     * @bodyParam  medical_college string required The graduation college of doctor.
+     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
+     * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
+     * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
+     * @bodyParam  max_appointments_per_day int  Max number of appointments each day in case of specialist within start-end time.
      *
      *
      * @response  201 {
-     * "type": "1",
-     * "specialization": "cardiology",
-     * "updated_at": "2020-07-10T12:16:17.000000Z",
-     * "created_at": "2020-07-10T12:16:17.000000Z",
+     * "user_id": 8,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000000",
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "updated_at": "2020-07-10T14:19:24.000000Z",
+     * "created_at": "2020-07-10T14:19:24.000000Z",
      * "id": 2
      * }
      */
@@ -169,22 +191,63 @@ class DoctorController extends Controller
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
-            'mobile' => 'required| unique:doctors| min: 11| max: 14',
+            'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
             'workplace' => 'required',
             'designation' => 'required',
             'medical_college' => 'required',
-            'others_training' => 'required',
+            'others_training' => 'present',
             'start_time' => 'sometimes| date_format:H:i',
             'end_time' => 'sometimes| date_format:H:i',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-
         $newDoctor = $this->createDoctor($request);
         return response()->json($newDoctor, 201);
     }
 
-
+    /**
+     * _Create Doctor by Admin_
+     *
+     * Doctor store endpoint used by admin, returns doctor instance. Doctor instance approved !! token required | super_admin, admin:doctor
+     *
+     * @bodyParam  doctortype_id int required The doctortype id.
+     * @bodyParam  payment_style int required The payment process of doctor selected by admin. 0 => patient transaction, 1 => paid by organization
+     * @bodyParam  name string required The fullname of doctor.
+     * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
+     * @bodyParam  rate int required The usual rate of doctor per call/appointment.
+     * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+     * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
+     * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
+     * @bodyParam  email string required The mail address of doctor.
+     * @bodyParam  workplace string required The workplace of doctor.
+     * @bodyParam  designation string required The designation of doctor.
+     * @bodyParam  medical_college string required The graduation college of doctor.
+     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
+     * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
+     * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
+     * @bodyParam  max_appointments_per_day int  Max number of appointments each day in case of specialist within start-end time.
+     *
+     *
+     * @response  201 {
+     * "user_id": 10,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000001",
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "updated_at": "2020-07-10T14:57:19.000000Z",
+     * "created_at": "2020-07-10T14:57:19.000000Z",
+     * "id": 4,
+     * "activation_status": 1,
+     * "payment_style": 1
+     * }
+     */
     public function createApprovedDoctor(Request $request)
     {
         $this->validate($request, [
@@ -195,7 +258,7 @@ class DoctorController extends Controller
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
-            'mobile' => 'required| unique:doctors| min: 11| max: 14',
+            'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
             'workplace' => 'required',
             'designation' => 'required',
@@ -206,7 +269,7 @@ class DoctorController extends Controller
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
         $newDoctor = $this->createDoctor($request);
-        $newDoctor->activation_style = 1;
+        $newDoctor->activation_status = 1;
         $newDoctor->payment_style = $request->payment_style;
         $newDoctor->save();
 
@@ -248,11 +311,19 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
+    public function changeActiveStatus(Request $request, Doctor $doctor)
+    {
+        $this->validate($request, [
+            'status' => 'required| numeric',
+        ]);
+        $doctor->status = $request->status;
+        $doctor->save();
+        return response()->noContent();
+    }
 
     public function update(Request $request, Doctor $doctor)
     {
         $this->validate($request, [
-            'status' => 'required| numeric',
             'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
@@ -262,8 +333,6 @@ class DoctorController extends Controller
             'end_time' => 'sometimes| date_format:H:i',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-
-        $doctor->status = $request->status;
 
         if ($request->has('rate')) {
             $doctor->rate = $request->rate;
