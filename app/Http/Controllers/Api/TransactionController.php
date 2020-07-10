@@ -113,7 +113,7 @@ class TransactionController extends Controller
      * @bodyParam type int required The type of transaction. 0 => debit, 1 => credit
      *
      *
-     * @response  201
+     * @response  201 {
      * "user_id": 6,
      * "amount": 100,
      * "type": 0,

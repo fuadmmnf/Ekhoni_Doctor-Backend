@@ -102,7 +102,7 @@ class AdminController extends Controller
      * @bodyParam  roles array required The list of strings defining the roles of the admin. Example: ['admin:doctor', 'admin:yser]
      *
      *
-     * @response  {
+     * @response  201{
      * "user_id": 2,
      * "name": "fuad",
      * "email": "fuad@gmail.com",
