@@ -58,7 +58,7 @@ Route::put('patients/{patient}', 'Api\PatientController@update');
 
 
 
-Route::apiResource('patientprescriptions', 'Api\PatientprescriptionController');
+Route::post('patientprescriptions', 'Api\PatientprescriptionController@store');
 
 
 

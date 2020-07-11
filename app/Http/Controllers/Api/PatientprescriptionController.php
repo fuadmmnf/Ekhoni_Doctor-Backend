@@ -9,104 +9,81 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Intervention\Image\File;
 
 
 class PatientprescriptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    protected $user;
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * PatientprescriptionController constructor.
      */
-    public function create()
+    public function __construct(Request $request)
     {
-        //
+        $this->user = $request->user('sanctum');
     }
 
 
+    /**
+     * _Store Patientprescription_
+     *
+     * Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescription for registered patients, returns patientprescription instance. !! token required | patient
+     *
+     *
+     * @bodyParam patient_id int required The patient id associated with prescription.
+     * @bodyParam  prescription image required The prescription image of patient.
+     *
+     *
+     * @response  201 {
+     * "patient_id": 1,
+     * "code": "aQDaDugHpPUndNGN",
+     * "prescription_path": "assets/images/patients/1/prescriptions/aQDaDugHpPUndNGN1594494657.png",
+     * "updated_at": "2020-07-11T19:10:57.000000Z",
+     * "created_at": "2020-07-11T19:10:57.000000Z",
+     * "id": 14
+     * }
+     *
+     *
+     */
     public function store(Request $request)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('patient')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $this->validate($request, [
-           'patient_id' => 'required| numeric',
-            'prescription' => 'required',
+            'patient_id' => 'required| numeric',
+            'prescription' => 'required| image| max:4096',
         ]);
 
         $patient = Patient::findOrFail($request->patient_id);
 
+        if ($patient->user->id != $this->user->id) {
+            return response()->json('User can only provide prescription for own patient', 403);
+        }
+
         $newPatientPrescription = new Patientprescription();
         $newPatientPrescription->patient_id = $patient->id;
-        do
-        {
+        do {
             $code = Str::random(16);
             $patientprescription = Patientprescription::where('code', $code)->first();
-        }
-        while($patientprescription);
+        } while ($patientprescription);
+        $newPatientPrescription->code = $code;
 
-        if ($request->prescription) {
-            // $filename = time(). '.' . explode('/', explode(':', substr($request->monogram, 0, strpos($request->monogram, ':')))[1])[0];
-            $filename = $newPatientPrescription->code . '_' . time() . '.' . explode(';', explode('/', $request->prescription)[1])[0];
-            $location = '/assets/images/patients/prescriptions/' . $filename;
-            $file = Image::make($request->monogram)->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            Storage::put($location, $file);
-            $newPatientPrescription->prescription_path = $location;
-            $newPatientPrescription->save();
+        $prescription = $request->file('prescription');
+        $location = 'assets/images/patients/' . $patient->id . '/prescriptions/' . $newPatientPrescription->code . time() . '.png';
+//        dd($prescription->getExtension());
+        Storage::put($location, $prescription->get());
+        $newPatientPrescription->prescription_path = $location;
 
-            return response()->json($newPatientPrescription, 201);
-        }
+        $newPatientPrescription->save();
+
+        return response()->json($newPatientPrescription, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Patientprescription  $patientprescription
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Patientprescription $patientprescription)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Patientprescription  $patientprescription
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Patientprescription $patientprescription)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Patientprescription  $patientprescription
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Patientprescription $patientprescription)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Patientprescription  $patientprescription
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Patientprescription $patientprescription)
     {
         //
