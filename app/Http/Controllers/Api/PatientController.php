@@ -117,27 +117,6 @@ class PatientController extends Controller
         return response()->json($newPatient, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Patient $patient
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Patient $patient)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Patient $patient
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Patient $patient)
-    {
-        //
-    }
 
 
     /**

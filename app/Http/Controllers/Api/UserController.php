@@ -19,14 +19,10 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
 
+    protected $user;
     public function __construct(Request $request)
     {
-        $requestMethod = explode('@', Route::currentRouteAction())[1];
-        $this->middleware(['auth:sanctum'])->except('store');
-        if($requestMethod == 'changeUserAgentPermission'){
-            $this->middleware(['auth:sanctum', 'role:super_admin|admin:user'])->only('changeUserAgentPermission');
-        }
-
+        $this->user = $request->user('sanctum');
     }
 
     public function index()
@@ -122,6 +118,12 @@ class UserController extends Controller
      */
     public function changeUserAgentPermission(Request $request, User $user)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
         $validator = Validator::make($request->all(), [
             'is_agent' => 'required',
             'agent_percentage' => 'required| numeric| between: 0,100',

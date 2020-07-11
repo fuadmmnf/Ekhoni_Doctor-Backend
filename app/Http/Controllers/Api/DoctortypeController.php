@@ -14,24 +14,15 @@ use Illuminate\Support\Facades\Route;
  */
 class DoctortypeController extends Controller
 {
+    protected $user;
 
     public function __construct(Request $request)
     {
-        $publicMethods = ['index'];
-        $adminMethods = ['store'];
-        $requestMethod = explode('@', Route::currentRouteAction())[1];
-
-        $this->middleware('auth:sanctum')->except($publicMethods);
         $this->user = $request->user('sanctum');
-        if ($this->user && !in_array($requestMethod, $publicMethods)) {
-            if ($this->user->hasRole('super_admin') || $this->user->hasRole('admin:doctor')) {
-                $this->middleware('role:super_admin|admin:doctor')->only($adminMethods);
-            }
-        }
     }
 
     /**
-     * _Fetch doctor types_
+     * Fetch doctor types
      *
      * Fetch doctor types list.
      *
@@ -71,6 +62,12 @@ class DoctortypeController extends Controller
      */
     public function store(Request $request)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
         $this->validate($request, [
             'type' => 'required| numeric',
             'specialization' => 'required| min:1',

@@ -44,6 +44,7 @@ Route::post('doctortypes', 'Api\DoctortypeController@store');
 
 
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
+Route::put('patientcheckups/{patientcheckup}', 'Api\PatientcheckupController@update');
 
 
 Route::post('patients', 'Api\PatientController@store');

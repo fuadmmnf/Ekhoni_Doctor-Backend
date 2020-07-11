@@ -20,11 +20,8 @@ class TransactionController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->middleware('auth:sanctum');
         $this->user = $request->user('sanctum');
-        if (!$this->user->hasRole('patient')) {
-            $this->middleware('role:super_admin|admin:transaction')->except('store');
-        }
+
     }
 
 
@@ -126,6 +123,11 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('patient')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $this->validate($request, [
             'type' => 'required| numeric',
             'amount' => 'required| numeric| min: 0',
@@ -176,6 +178,11 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('patient')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $this->validate($request, [
             'status' => 'required| numeric'
         ]);

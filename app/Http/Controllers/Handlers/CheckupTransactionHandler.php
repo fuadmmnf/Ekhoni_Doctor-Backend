@@ -31,7 +31,7 @@ class CheckupTransactionHandler
         $checkupTransaction->code = $code;
 
         $checkupTransaction->save();
-        $user->amount = $user->amount - $amount;
+        $user->balance = $user->balance - $amount;
         $user->save();
 
         return $checkupTransaction;
@@ -40,7 +40,7 @@ class CheckupTransactionHandler
 
     public function checkUserAccountBalanceAndProceedTransaction(User $user, Doctor $doctor, $status): ?Transaction
     {
-        $remainingAmountAfterTransaction = $user->amount + $this->userCreditLimit - $doctor->offer_rate;
+        $remainingAmountAfterTransaction = $user->balance + $this->userCreditLimit - $doctor->offer_rate;
 
         if($remainingAmountAfterTransaction >= 0){
             return $this->confirmUserDebitTransaction($user, $doctor->offer_rate, $status);
@@ -51,7 +51,7 @@ class CheckupTransactionHandler
 
 
 
-    public function createNewCheckup(Patient $patient, Doctor $doctor, Carbon $start_time,  Carbon $end_time): ?Patientcheckup
+    public function createNewCheckup(Patient $patient, Doctor $doctor, Carbon $start_time,  ?Carbon $end_time): ?Patientcheckup
     {
         $user = $patient->user;
 
@@ -73,7 +73,7 @@ class CheckupTransactionHandler
             $code = Str::random(16);
             $patientCheckup = Patientcheckup::where('code', $code)->first();
         } while ($patientCheckup);
-
+        $newPatientcheckup->code = $code;
 
         $newPatientcheckup->save();
         return $newPatientcheckup;
