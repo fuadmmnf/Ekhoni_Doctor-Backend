@@ -26,6 +26,36 @@ class PatientprescriptionController extends Controller
 
 
     /**
+     * _Get Patient Prescriptions_
+     *
+     * Fetch patient prescriptinos. !! token required | doctor
+     *
+     *
+     * @urlParam patient int required The Id of patient.
+     *
+     * @response  200 [
+     * {
+     * "id": 14,
+     * "patient_id": 1,
+     * "code": "aQDaDugHpPUndNGN",
+     * "prescription_path": "assets/images/patients/1/prescriptions/aQDaDugHpPUndNGN1594494657.png",
+     * "created_at": "2020-07-11T19:10:57.000000Z",
+     * "updated_at": "2020-07-11T19:10:57.000000Z"
+     * }
+     * ]
+     */
+    public function getPatientPrescriptionByPatient(Patient $patient)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+        $patientPrescriptions = Patientprescription::where('patient_id', $patient->id)->get();
+        return response()->json($patientPrescriptions);
+    }
+
+
+    /**
      * _Store Patientprescription_
      *
      * Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescription for registered patients, returns patientprescription instance. !! token required | patient

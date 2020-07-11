@@ -227,11 +227,14 @@ class DoctorController extends Controller
     }
 
 
-    private function createDoctor(Request $doctorRequest): Doctor
+    private function createDoctor(Request $doctorRequest, $isApproved): Doctor
     {
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($doctorRequest->mobile);
-        $user->assignRole('doctor');
+
+        if($isApproved){
+            $user->assignRole('doctor');
+        }
 
         $doctorType = Doctortype::findOrFail($doctorRequest->doctortype_id);
 
@@ -326,7 +329,7 @@ class DoctorController extends Controller
             'end_time' => 'sometimes| date_format:H:i',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-        $newDoctor = $this->createDoctor($request);
+        $newDoctor = $this->createDoctor($request, false);
         return response()->json($newDoctor, 201);
     }
 
@@ -403,7 +406,7 @@ class DoctorController extends Controller
             'end_time' => 'sometimes| date_format:H:i',
             'max_appointments_per_day' => 'sometimes| numeric',
         ]);
-        $newDoctor = $this->createDoctor($request);
+        $newDoctor = $this->createDoctor($request, true);
         $newDoctor->activation_status = 1;
         $newDoctor->payment_style = $request->payment_style;
         $newDoctor->save();
@@ -435,6 +438,9 @@ class DoctorController extends Controller
         ]);
 
         $doctor->activation_status = $request->activation_status;
+        if($request->activation_status == 1){
+            $this->user->assignRole('doctor');
+        }
         $doctor->save();
 
         return response()->noContent();
