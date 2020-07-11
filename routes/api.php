@@ -46,6 +46,8 @@ Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::put('patientcheckups/{patientcheckup}', 'Api\PatientcheckupController@update');
 
 
+
+
 Route::get('doctors/{doctor}/doctorappointments/today', "Api\DoctorappointmentController@getAllActiveDoctorAppointmentsToday");
 Route::get('doctors/{doctor}/doctorappointments/{status}', "Api\DoctorappointmentController@getAllDoctorAppointmentsByStatus")->where('status', '[0-2]');
 Route::post('doctorappointments', 'Api\DoctorappointmentController@store');
@@ -59,6 +61,7 @@ Route::put('patients/{patient}', 'Api\PatientController@update');
 
 
 Route::get('patients/{patient}/prescriptions', 'Api\PatientprescriptionController@getPatientPrescriptionByPatient');
+Route::get('patientprescriptions/{patientprescription}/image', 'Api\PatientprescriptionController@servePrescriptionImage');
 Route::post('patientprescriptions', 'Api\PatientprescriptionController@store');
 
 

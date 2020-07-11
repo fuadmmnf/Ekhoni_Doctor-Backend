@@ -24,13 +24,15 @@ class PatientcheckupController extends Controller
         $this->user = $request->user('sanctum');
     }
 
-    public function getPatentCheckupsByPatient(Patient $patient)
+
+
+    public function getPatientCheckupsByPatient(Patient $patient)
     {
         $checkupsByPatient = Patientcheckup::where('patient_id', $patient->id)->get();
         return response()->json($checkupsByPatient);
     }
 
-    public function getPatentCheckupsByDoctor(Doctor $doctor)
+    public function getPatientCheckupsByDoctor(Doctor $doctor)
     {
         $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->get();
         return response()->json($checkupsByDoctor);

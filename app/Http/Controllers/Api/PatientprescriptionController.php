@@ -8,8 +8,7 @@ use App\Patientprescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
-use Intervention\Image\File;
+
 
 
 class PatientprescriptionController extends Controller
@@ -28,7 +27,7 @@ class PatientprescriptionController extends Controller
     /**
      * _Get Patient Prescriptions_
      *
-     * Fetch patient prescriptinos. !! token required | doctor
+     * Fetch patient prescriptinos. !! token required | doctor, patient
      *
      *
      * @urlParam patient int required The Id of patient.
@@ -47,11 +46,41 @@ class PatientprescriptionController extends Controller
     public function getPatientPrescriptionByPatient(Patient $patient)
     {
         if (!$this->user ||
-            !$this->user->hasRole('doctor')) {
+            !$this->user->hasRole('doctor') &&
+            !$this->user->hasRole('patient')) {
             return response()->json('Forbidden Access', 403);
         }
+
+        if($this->user->patient && $this->user->id != $patient->user->id){
+            return response()->json('Forbidden Access', 403);
+        }
+
         $patientPrescriptions = Patientprescription::where('patient_id', $patient->id)->get();
         return response()->json($patientPrescriptions);
+    }
+
+
+
+
+   /**
+     * _Serve Patient Prescription Image_
+     *
+     * Fetch patient prescriptino image. !! token required | doctor, patient
+     *
+     *
+     * @urlParam patientprescription int required The Id of patientprescription.
+     *
+     *
+     */
+    public function servePrescriptionImage(Patientprescription $patientprescription)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor') &&
+            !$this->user->hasRole('patient')) {
+            return response()->json('Forbidden Access', 403);
+        }
+        $prescriptionPathArr = explode('.', $patientprescription->prescription_path);;
+        return response(Storage::get($patientprescription->prescription_path))->header('Content-type','image/'. end($prescriptionPathArr));
     }
 
 
