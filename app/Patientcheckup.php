@@ -14,4 +14,9 @@ class Patientcheckup extends Model
     public function patient(){
         return $this->belongsTo('App\Patient');
     }
+
+    public function transaction(){
+        return $this->belongsTo('App\Transaction');
+    }
+
 }

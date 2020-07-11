@@ -16,7 +16,7 @@ class CheckupTransactionHandler
 {
     private $userCreditLimit = 100;
 
-    private function confirmUserDebitTransaction(User $user, $amount, $status): Transaction{
+    private function createUserDebitTransaction(User $user, $amount, $status): Transaction{
         $checkupTransaction = new Transaction();
         $checkupTransaction->user_id = $user->id;
         $checkupTransaction->type = 0; // 0 => debit, 1 => credit
@@ -43,7 +43,7 @@ class CheckupTransactionHandler
         $remainingAmountAfterTransaction = $user->balance + $this->userCreditLimit - $doctor->offer_rate;
 
         if($remainingAmountAfterTransaction >= 0){
-            return $this->confirmUserDebitTransaction($user, $doctor->offer_rate, $status);
+            return $this->createUserDebitTransaction($user, $doctor->offer_rate, $status);
         } else{
             return null;
         }
@@ -51,7 +51,7 @@ class CheckupTransactionHandler
 
 
 
-    public function createNewCheckup(Patient $patient, Doctor $doctor, Carbon $start_time,  ?Carbon $end_time): ?Patientcheckup
+    public function createNewCheckup(Patient $patient, Doctor $doctor, ?Carbon $start_time,  ?Carbon $end_time): ?Patientcheckup
     {
         $user = $patient->user;
 
@@ -61,7 +61,7 @@ class CheckupTransactionHandler
         $newPatientcheckup->start_time = $start_time;
         $newPatientcheckup->end_time = $end_time;
 
-        $transaction = $this->checkUserAccountBalanceAndProceedTransaction($user, $doctor, 1);
+        $transaction = $this->checkUserAccountBalanceAndProceedTransaction($user, $doctor, $start_time != null);
 
         if ($transaction) {
             $newPatientcheckup->transaction_id = $transaction->id;

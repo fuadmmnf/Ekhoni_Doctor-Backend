@@ -55,7 +55,7 @@ class PatientcheckupController extends Controller
      *
      * @bodyParam patient_id int required The patient id associated with call.
      * @bodyParam  doctor_id string required The doctor id associated with call.
-     * @bodyParam  start_time string required The datetime indicating starting time of call. Example: "2020-07-10T14:19:24.000000Z"
+     * @bodyParam  start_time string required The datetime indicating starting time of call. Can be set blank to indicate checkup instance for doctorappointment. Example: "", "2020-07-10T14:19:24.000000Z"
      * @bodyParam  end_time string required The datetime indicating ending time of call. Can be set blank to indicate start of checkup. Example: "", "2020-07-10T14:40:30.000000Z"
      *
      *
@@ -84,15 +84,22 @@ class PatientcheckupController extends Controller
         $this->validate($request, [
             'patient_id' => 'required| numeric',
             'doctor_id' => 'required| numeric',
-            'start_time' => 'required',
+            'start_time' => 'present| nullable',
             'end_time' => 'present| nullable',
         ]);
 
-        $patient = Patient::findOrFail($request->patient_id);
+        $patient = Patient::where('id', $request->patient_id)
+            ->where('user_id', $this->user->id)->first();
+        if(!$patient){
+            return response()->json('No patient selected associated with user', 400);
+        }
+
+
+
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0)? null: Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
         if (!$newPatientCheckup) {
             return response()->json('Insufficient Balance', 400);
         }

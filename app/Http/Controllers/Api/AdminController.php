@@ -29,10 +29,6 @@ class AdminController extends Controller
         $this->middleware(['auth:sanctum', 'role:super_admin'])->except('authenticateAdmin');
     }
 
-    public function index()
-    {
-        //
-    }
 
     /**
      * _Fetch admin roles_
@@ -55,11 +51,6 @@ class AdminController extends Controller
         return response()->json($adminRoles);
     }
 
-
-    public function create()
-    {
-        //
-    }
 
     /**
      * Authenticate Admin
@@ -139,27 +130,7 @@ class AdminController extends Controller
         return response()->json($newAdmin, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Admin $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Admin $admin)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Admin $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

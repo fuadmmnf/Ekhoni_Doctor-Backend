@@ -25,7 +25,6 @@ Route::get('admins/roles/load', 'Api\AdminController@loadAllAdminRoles');
 Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
-Route::apiResource('doctorappointments', 'Api\DoctorappointmentController');
 
 
 Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
@@ -45,6 +44,11 @@ Route::post('doctortypes', 'Api\DoctortypeController@store');
 
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::put('patientcheckups/{patientcheckup}', 'Api\PatientcheckupController@update');
+
+
+Route::post('doctorappointments', 'Api\DoctorappointmentController@store');
+Route::put('doctorappointments/{doctorappointment}', 'Api\DoctorappointmentController@update');
+
 
 
 Route::post('patients', 'Api\PatientController@store');
