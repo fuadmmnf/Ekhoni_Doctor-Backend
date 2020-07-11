@@ -11,6 +11,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+/**
+ * @group  Patientcheckup management
+ *
+ * APIs related to doctor calls for patient checkup
+ */
 class PatientcheckupController extends Controller
 {
 
@@ -26,17 +31,17 @@ class PatientcheckupController extends Controller
 
 
 
-    public function getPatientCheckupsByPatient(Patient $patient)
-    {
-        $checkupsByPatient = Patientcheckup::where('patient_id', $patient->id)->get();
-        return response()->json($checkupsByPatient);
-    }
-
-    public function getPatientCheckupsByDoctor(Doctor $doctor)
-    {
-        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->get();
-        return response()->json($checkupsByDoctor);
-    }
+//    public function getPatientCheckupsByPatient(Patient $patient)
+//    {
+//        $checkupsByPatient = Patientcheckup::where('patient_id', $patient->id)->get();
+//        return response()->json($checkupsByPatient);
+//    }
+//
+//    public function getPatientCheckupsByDoctor(Doctor $doctor)
+//    {
+//        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->get();
+//        return response()->json($checkupsByDoctor);
+//    }
 
 
 
@@ -107,7 +112,7 @@ class PatientcheckupController extends Controller
      * Patientcheckup update patient and doctor ratings and endtime. !! token required | patient, doctor
      *
      *
-     * @urlParam patientcheckup int required The patientcheckup id.
+     * @urlParam patientcheckup required The patientcheckup id.
      * @bodyParam end_time int string Call end time. Example: "2020-07-10T21:45:47.000000Z"
      * @bodyParam doctor_rating int The doctor service rating provided by patient [0-5].
      * @bodyParam  patient_rating int The patient behavior rating provided by doctor [0-5].

@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-
+/**
+ * @group  Patientprescription management
+ *
+ * APIs related to patient prescriptions
+ */
 class PatientprescriptionController extends Controller
 {
     protected $user;
@@ -30,7 +34,7 @@ class PatientprescriptionController extends Controller
      * Fetch patient prescriptinos. !! token required | doctor, patient
      *
      *
-     * @urlParam patient int required The Id of patient.
+     * @urlParam patient required The Id of patient.
      *
      * @response  200 [
      * {
@@ -68,7 +72,7 @@ class PatientprescriptionController extends Controller
      * Fetch patient prescriptino image. !! token required | doctor, patient
      *
      *
-     * @urlParam patientprescription int required The Id of patientprescription.
+     * @urlParam patientprescription required The Id of patientprescription. Example: 14
      *
      *
      */

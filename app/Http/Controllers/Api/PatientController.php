@@ -8,6 +8,11 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+/**
+ * @group  Patient management
+ *
+ * APIs related to patients
+ */
 class PatientController extends Controller
 {
 
@@ -125,7 +130,7 @@ class PatientController extends Controller
      * Patient update endpoint. User associated with token must match with patient user. !! token required | patient
      *
      *
-     * @urlParam   patient string required The patient id.
+     * @urlParam   patient required The patient id.
      * @bodyParam  age int required The patient age.
      * @bodyParam  blood_group string required The patient blood group. Example: "B+ve"
      * @bodyParam  blood_pressure string required The patient blood pressure. Example: "90-150"

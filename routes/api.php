@@ -24,7 +24,6 @@ Route::post('admins', 'Api\AdminController@store');
 Route::get('admins/roles/load', 'Api\AdminController@loadAllAdminRoles');
 Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
-Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
 
 
 Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
@@ -65,7 +64,13 @@ Route::get('patientprescriptions/{patientprescription}/image', 'Api\Patientpresc
 Route::post('patientprescriptions', 'Api\PatientprescriptionController@store');
 
 
+//Route::apiResource('checkupprescriptions', 'Api\CheckupprescriptionController');
+
+
+
 
 Route::post('transactions', 'Api\TransactionController@store');
 Route::put('transactions/{transaction}/status', 'Api\TransactionController@update');
 Route::get('users/{user}/transactions/complete', 'Api\TransactionController@loadAllUserCompletedTransactions');
+
+

@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+/**
+ * @group  DoctorAppointment management
+ *
+ * APIs related to Scheduled Doctor Appointments
+ */
 class DoctorappointmentController extends Controller
 {
     protected $user;
@@ -26,8 +31,8 @@ class DoctorappointmentController extends Controller
      *
      * Fetch scheduled doctor appointments, paginated response of doctorappointment instances. !! token required| super_admin, admin, doctor
      *
-     * @urlParam doctor int required The doctor id associated with appointments.
-     * @urlParam  status int required The status to query for the scheduled appointments. 0 => active, 1 => canceled, 2 => completed.
+     * @urlParam doctor required The doctor id associated with appointments.
+     * @urlParam  status required The status to query for the scheduled appointments. 0 => active, 1 => canceled, 2 => completed.
      *
      *
      * @response  200 {
@@ -78,7 +83,7 @@ class DoctorappointmentController extends Controller
      *
      * Fetch scheduled valid doctor appointments today.
      *
-     * @urlParam doctor int required The doctor id associated with appointments.
+     * @urlParam doctor required The doctor id associated with appointments.
      *
      *
      * @response  200 [
@@ -184,7 +189,7 @@ class DoctorappointmentController extends Controller
      * Doctorappointment update, change appointment status. !! token required | doctor
      *
      *
-     * @urlParam doctorappointment int required The appointment id.
+     * @urlParam doctorappointment required The appointment id.
      * @bodyParam status int string Required Indicates status of appointment. 0 => active, 1 => canceled, 2 => finished
      *
      * @response  204

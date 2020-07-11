@@ -68,7 +68,7 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response (201):
 
 ```json
 {
@@ -199,9 +199,1718 @@ Parameter | Type | Status | Description
     
 <!-- END_666eaa38dc66273f9516ea93ebb6ad94 -->
 
+#DoctorAppointment management
+
+
+APIs related to Scheduled Doctor Appointments
+<!-- START_b1411a610bba26baa76f4f3333d16438 -->
+## Fetch Active Doctors Appointments Today_
+
+Fetch scheduled valid doctor appointments today.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctors/et/doctorappointments/today" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/et/doctorappointments/today"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+[
+    {
+        "id": 1,
+        "doctor_id": 6,
+        "patientcheckup_id": 2,
+        "code": "fyFDiwwuVU2pzlO8",
+        "status": 0,
+        "start_time": "2020-07-11 14:19:24",
+        "end_time": "2020-07-11 14:40:24",
+        "created_at": "2020-07-11T11:51:21.000000Z",
+        "updated_at": "2020-07-11T12:18:16.000000Z"
+    }
+]
+```
+
+### HTTP Request
+`GET api/doctors/{doctor}/doctorappointments/today`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `doctor` |  required  | The doctor id associated with appointments.
+
+<!-- END_b1411a610bba26baa76f4f3333d16438 -->
+
+<!-- START_7fdac91dd25f6c2a3776a481e4afda46 -->
+## _Fetch Paginated Doctors Appointments by Status_
+
+Fetch scheduled doctor appointments, paginated response of doctorappointment instances. !! token required| super_admin, admin, doctor
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctors/velit/doctorappointments/iste" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/velit/doctorappointments/iste"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1,
+            "doctor_id": 6,
+            "patientcheckup_id": 2,
+            "code": "fyFDiwwuVU2pzlO8",
+            "status": 0,
+            "start_time": "2020-07-14 14:19:24",
+            "end_time": "2020-07-14 14:40:24",
+            "created_at": "2020-07-11T11:51:21.000000Z",
+            "updated_at": "2020-07-11T12:18:16.000000Z"
+        }
+    ],
+    "first_page_url": "http:\/\/127.0.0.1:8000\/api\/doctors\/6\/doctorappointments\/0?page=1",
+    "from": 1,
+    "last_page": 1,
+    "last_page_url": "http:\/\/127.0.0.1:8000\/api\/doctors\/6\/doctorappointments\/0?page=1",
+    "next_page_url": null,
+    "path": "http:\/\/127.0.0.1:8000\/api\/doctors\/6\/doctorappointments\/0",
+    "per_page": 10,
+    "prev_page_url": null,
+    "to": 1,
+    "total": 1
+}
+```
+
+### HTTP Request
+`GET api/doctors/{doctor}/doctorappointments/{status}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `doctor` |  required  | The doctor id associated with appointments.
+    `status` |  required  | The status to query for the scheduled appointments. 0 => active, 1 => canceled, 2 => completed.
+
+<!-- END_7fdac91dd25f6c2a3776a481e4afda46 -->
+
+<!-- START_a15b397fc9298594c22a99092feb385b -->
+## _Create Doctorappointment_
+
+Doctorappointment store endpoint, User must have sufficient balance for doctor rate, returns doctorappointment instance. !! token required | patient
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/doctorappointments" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"patientcheckup_id":12,"start_time":"\"2020-07-10T14:19:24.000000Z\"","end_time":"\"2020-07-10T14:40:30.000000Z\""}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctorappointments"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "patientcheckup_id": 12,
+    "start_time": "\"2020-07-10T14:19:24.000000Z\"",
+    "end_time": "\"2020-07-10T14:40:30.000000Z\""
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "doctor_id": 6,
+    "patientcheckup_id": 2,
+    "start_time": "2020-07-14T14:19:24.000000Z",
+    "end_time": "2020-07-14T14:40:24.000000Z",
+    "code": "fyFDiwwuVU2pzlO8",
+    "updated_at": "2020-07-11T11:51:21.000000Z",
+    "created_at": "2020-07-11T11:51:21.000000Z",
+    "id": 1
+}
+```
+> Example response (400):
+
+```json
+"User associated with token does not have patient associated with checkup"
+```
+
+### HTTP Request
+`POST api/doctorappointments`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `patientcheckup_id` | integer |  required  | The patientcheckup id associated with appointment. Frontend must create patientcheckup(with blank start_time and end_time) instance prior to creating doctorappointment.
+        `start_time` | string |  required  | The datetime indicating starting time of scheduled appointment.
+        `end_time` | string |  required  | The datetime indicating ending time of scheduled appointment.
+    
+<!-- END_a15b397fc9298594c22a99092feb385b -->
+
+<!-- START_6536576304cd54c3e66e8a4470d70391 -->
+## _Update Doctorappointment_
+
+Doctorappointment update, change appointment status. !! token required | doctor
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/doctorappointments/quibusdam" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"status":6}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctorappointments/quibusdam"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "status": 6
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+{}
+```
+
+### HTTP Request
+`PUT api/doctorappointments/{doctorappointment}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `doctorappointment` |  required  | The appointment id.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `status` | integer |  optional  | string Required Indicates status of appointment. 0 => active, 1 => canceled, 2 => finished
+    
+<!-- END_6536576304cd54c3e66e8a4470d70391 -->
+
+#DoctorType management
+
+
+APIs related to DoctorTypes
+<!-- START_c4bda770fe6f998df9ff9a63ccd874db -->
+## Fetch doctor types
+
+Fetch doctor types list.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctortypes" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctortypes"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+[
+    {
+        "id": 1,
+        "type": 0,
+        "specialization": "cardiology",
+        "created_at": "2020-07-10T10:09:17.000000Z",
+        "updated_at": "2020-07-10T10:09:17.000000Z"
+    }
+]
+```
+
+### HTTP Request
+`GET api/doctortypes`
+
+
+<!-- END_c4bda770fe6f998df9ff9a63ccd874db -->
+
+<!-- START_d049702d90b7287ca2dabb8cd56d2c8e -->
+## _Create Doctortype_
+
+Doctortype store endpoint, returns doctortype instance. !! token required | super_admin, admin:doctor
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/doctortypes" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"type":0,"specialization":"\"cardiology\""}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctortypes"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "type": 0,
+    "specialization": "\"cardiology\""
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "type": "1",
+    "specialization": "cardiology",
+    "updated_at": "2020-07-10T12:16:17.000000Z",
+    "created_at": "2020-07-10T12:16:17.000000Z",
+    "id": 2
+}
+```
+
+### HTTP Request
+`POST api/doctortypes`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `type` | integer |  required  | The type indication of doctor.
+        `specialization` | string |  required  | The main field of expertise.
+    
+<!-- END_d049702d90b7287ca2dabb8cd56d2c8e -->
+
+#Doctor management
+
+
+APIs related to Doctor
+<!-- START_767f45e4b8f4542ff4089a950d6c90c9 -->
+## Fetch Paginated Active Doctors By Doctortype
+
+Fetch active doctors, paginated response of doctor instances.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctortypes/eligendi/doctors/active" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctortypes/eligendi/doctors/active"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 6,
+            "user_id": 12,
+            "doctortype_id": 2,
+            "name": "doctorname",
+            "bmdc_number": "0000000002",
+            "payment_style": 1,
+            "activation_status": 1,
+            "status": 1,
+            "rate": 100,
+            "offer_rate": 100,
+            "start_time": null,
+            "end_time": null,
+            "max_appointments_per_day": null,
+            "gender": 0,
+            "email": "doctor@google.com",
+            "workplace": "dmc",
+            "designation": "trainee doctor",
+            "postgrad": "dmc",
+            "medical_college": "dmc",
+            "others_training": "sdaosdmoaismdioasmdioas",
+            "device_ids": null,
+            "booking_start_time": null,
+            "created_at": "2020-07-10T15:49:23.000000Z",
+            "updated_at": "2020-07-10T16:03:21.000000Z"
+        }
+    ],
+    "first_page_url": "http:\/\/127.0.0.1:8000\/api\/doctortypes\/2\/doctors\/active?page=1",
+    "from": 1,
+    "last_page": 1,
+    "last_page_url": "http:\/\/127.0.0.1:8000\/api\/doctortypes\/2\/doctors\/active?page=1",
+    "next_page_url": null,
+    "path": "http:\/\/127.0.0.1:8000\/api\/doctortypes\/2\/doctors\/active",
+    "per_page": 10,
+    "prev_page_url": null,
+    "to": 1,
+    "total": 1
+}
+```
+
+### HTTP Request
+`GET api/doctortypes/{doctortype}/doctors/active`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `doctortype` |  required  | The Doctortype ID of doctors.
+
+<!-- END_767f45e4b8f4542ff4089a950d6c90c9 -->
+
+<!-- START_99afa9e2ef841667ddbc168591601b7f -->
+## Fetch Paginated Approved Doctors
+
+Fetch approved doctors, paginated response of doctor instances.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctors/approved" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/approved"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+null
+```
+
+### HTTP Request
+`GET api/doctors/approved`
+
+
+<!-- END_99afa9e2ef841667ddbc168591601b7f -->
+
+<!-- START_98917d04220c26cb73782c5a040b2478 -->
+## _Fetch Paginated Doctors Requests_
+
+Fetch pending doctor joining requests, paginated response of doctor instances. !! token required| super_admin, admin:doctor
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctors/pending" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/pending"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 2,
+            "user_id": 8,
+            "doctortype_id": 2,
+            "name": "doctorname",
+            "bmdc_number": "0000000000",
+            "payment_style": 0,
+            "activation_status": 0,
+            "status": 0,
+            "rate": 100,
+            "offer_rate": 100,
+            "start_time": null,
+            "end_time": null,
+            "max_appointments_per_day": null,
+            "gender": 0,
+            "email": "doctor@google.com",
+            "workplace": "dmc",
+            "designation": "trainee doctor",
+            "postgrad": "dmc",
+            "medical_college": "dmc",
+            "others_training": "sdaosdmoaismdioasmdioas",
+            "device_ids": null,
+            "booking_start_time": null,
+            "created_at": "2020-07-10T14:19:24.000000Z",
+            "updated_at": "2020-07-10T14:19:24.000000Z"
+        }
+    ],
+    "first_page_url": "http:\/\/127.0.0.1:8000\/api\/doctors\/pending?page=1",
+    "from": 1,
+    "last_page": 1,
+    "last_page_url": "http:\/\/127.0.0.1:8000\/api\/doctors\/pending?page=1",
+    "next_page_url": null,
+    "path": "http:\/\/127.0.0.1:8000\/api\/doctors\/pending",
+    "per_page": 10,
+    "prev_page_url": null,
+    "to": 1,
+    "total": 1
+}
+```
+
+### HTTP Request
+`GET api/doctors/pending`
+
+
+<!-- END_98917d04220c26cb73782c5a040b2478 -->
+
+<!-- START_f20841b754b603033ecdbc3f8d10b993 -->
+## Create Doctor
+
+Doctor store endpoint, returns doctor instance. Doctor instance not approved and payment style depends on customer transaction by default
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/doctors" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"doctortype_id":20,"name":"vel","bmdc_number":"ratione","rate":3,"offer_rate":6,"gender":10,"mobile":"voluptas","email":"est","workplace":"fugiat","designation":"dolor","medical_college":"adipisci","post_grad":"est","others_training":"maiores","start_time":"\"10:30\"","end_time":"\"3:30\"","max_appointments_per_day":7}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "doctortype_id": 20,
+    "name": "vel",
+    "bmdc_number": "ratione",
+    "rate": 3,
+    "offer_rate": 6,
+    "gender": 10,
+    "mobile": "voluptas",
+    "email": "est",
+    "workplace": "fugiat",
+    "designation": "dolor",
+    "medical_college": "adipisci",
+    "post_grad": "est",
+    "others_training": "maiores",
+    "start_time": "\"10:30\"",
+    "end_time": "\"3:30\"",
+    "max_appointments_per_day": 7
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "user_id": 8,
+    "doctortype_id": 2,
+    "name": "doctorname",
+    "bmdc_number": "0000000000",
+    "rate": 100,
+    "offer_rate": 100,
+    "gender": 0,
+    "email": "doctor@google.com",
+    "workplace": "dmc",
+    "designation": "trainee doctor",
+    "medical_college": "dmc",
+    "postgrad": "dmc",
+    "others_training": "sdaosdmoaismdioasmdioas",
+    "updated_at": "2020-07-10T14:19:24.000000Z",
+    "created_at": "2020-07-10T14:19:24.000000Z",
+    "id": 2
+}
+```
+
+### HTTP Request
+`POST api/doctors`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `doctortype_id` | integer |  required  | The doctortype id.
+        `name` | string |  required  | The fullname of doctor.
+        `bmdc_number` | string |  required  | The registered bmdc_number of doctor. Unique for doctors.
+        `rate` | integer |  required  | The usual rate of doctor per call/appointment.
+        `offer_rate` | integer |  optional  | The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+        `gender` | integer |  required  | The gender of doctor. 0 => male, 1 => female
+        `mobile` | string |  required  | The mobile of doctor. Must be unique across users table.
+        `email` | string |  required  | The mail address of doctor.
+        `workplace` | string |  required  | The workplace of doctor.
+        `designation` | string |  required  | The designation of doctor.
+        `medical_college` | string |  required  | The graduation college of doctor.
+        `post_grad` | string |  required  | Post Grad degree of doctor [can be blank].
+        `others_training` | string |  required  | Other degrees of doctor [can be blank].
+        `start_time` | string |  optional  | Duty start time for specialist. Must maintain format.
+        `end_time` | string |  optional  | Duty end time for specialist. Must maintain format.
+        `max_appointments_per_day` | integer |  optional  | Max number of appointments each day in case of specialist within start-end time.
+    
+<!-- END_f20841b754b603033ecdbc3f8d10b993 -->
+
+<!-- START_9894223885c982d2265cd4f168dfe315 -->
+## _Create Doctor by Admin_
+
+Doctor store endpoint used by admin, returns doctor instance. Doctor instance approved !! token required | super_admin, admin:doctor
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/doctors/approve" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"doctortype_id":20,"payment_style":20,"name":"quo","bmdc_number":"libero","rate":12,"offer_rate":18,"gender":19,"mobile":"et","email":"harum","workplace":"distinctio","designation":"fugit","medical_college":"quam","post_grad":"quia","others_training":"omnis","start_time":"\"10:30\"","end_time":"\"3:30\"","max_appointments_per_day":5}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/approve"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "doctortype_id": 20,
+    "payment_style": 20,
+    "name": "quo",
+    "bmdc_number": "libero",
+    "rate": 12,
+    "offer_rate": 18,
+    "gender": 19,
+    "mobile": "et",
+    "email": "harum",
+    "workplace": "distinctio",
+    "designation": "fugit",
+    "medical_college": "quam",
+    "post_grad": "quia",
+    "others_training": "omnis",
+    "start_time": "\"10:30\"",
+    "end_time": "\"3:30\"",
+    "max_appointments_per_day": 5
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "user_id": 10,
+    "doctortype_id": 2,
+    "name": "doctorname",
+    "bmdc_number": "0000000001",
+    "rate": 100,
+    "offer_rate": 100,
+    "gender": 0,
+    "email": "doctor@google.com",
+    "workplace": "dmc",
+    "designation": "trainee doctor",
+    "medical_college": "dmc",
+    "others_training": "sdaosdmoaismdioasmdioas",
+    "postgrad": "dmc",
+    "updated_at": "2020-07-10T14:57:19.000000Z",
+    "created_at": "2020-07-10T14:57:19.000000Z",
+    "id": 4,
+    "activation_status": 1,
+    "payment_style": 1
+}
+```
+
+### HTTP Request
+`POST api/doctors/approve`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `doctortype_id` | integer |  required  | The doctortype id.
+        `payment_style` | integer |  required  | The payment process of doctor selected by admin. 0 => patient transaction, 1 => paid by organization
+        `name` | string |  required  | The fullname of doctor.
+        `bmdc_number` | string |  required  | The registered bmdc_number of doctor. Unique for doctors.
+        `rate` | integer |  required  | The usual rate of doctor per call/appointment.
+        `offer_rate` | integer |  optional  | The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+        `gender` | integer |  required  | The gender of doctor. 0 => male, 1 => female
+        `mobile` | string |  required  | The mobile of doctor. Must be unique across users table.
+        `email` | string |  required  | The mail address of doctor.
+        `workplace` | string |  required  | The workplace of doctor.
+        `designation` | string |  required  | The designation of doctor.
+        `medical_college` | string |  required  | The graduation college of doctor.
+        `post_grad` | string |  required  | Post Grad degree of doctor [can be blank].
+        `others_training` | string |  required  | Other degrees of doctor [can be blank].
+        `start_time` | string |  optional  | Duty start time for specialist. Must maintain format.
+        `end_time` | string |  optional  | Duty end time for specialist. Must maintain format.
+        `max_appointments_per_day` | integer |  optional  | Max number of appointments each day in case of specialist within start-end time.
+    
+<!-- END_9894223885c982d2265cd4f168dfe315 -->
+
+<!-- START_572315b3085d226ecbaa3ff74f95441f -->
+## _Create Doctor Active Status_
+
+Doctor update active status endpoint used by doctor.!! token required | doctor
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/doctors/status" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"status":15}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/status"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "status": 15
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+""
+```
+
+### HTTP Request
+`PUT api/doctors/status`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `status` | integer |  required  | The doctor active status. 0 => inactive, 1 => active
+    
+<!-- END_572315b3085d226ecbaa3ff74f95441f -->
+
+<!-- START_30f8decf56505b60bc747d9662be6ec9 -->
+## api/doctors/{doctor}
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/doctors/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`PUT api/doctors/{doctor}`
+
+
+<!-- END_30f8decf56505b60bc747d9662be6ec9 -->
+
+<!-- START_67a7291e52b830e20aa1fbc1d0bd0608 -->
+## _Approve Doctor By Admin_
+
+Update doctor activation_status. !! token required| super_admin, admin:doctor
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/doctors/vel/approve" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"activation_status":15}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/vel/approve"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "activation_status": 15
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+{}
+```
+
+### HTTP Request
+`PUT api/doctors/{doctor}/approve`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `doctor` |  required  | The ID of doctor.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `activation_status` | integer |  required  | The activation indicatior. 0 => not approved, 1 => approved
+    
+<!-- END_67a7291e52b830e20aa1fbc1d0bd0608 -->
+
+<!-- START_bbc335ee3377c8abc50fab7c54dda238 -->
+## _Change Doctor Booking Status_
+
+Update doctor activation_status. !! token required| super_admin, admin:doctor
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/doctors/similique/booking" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"booking_start_time":"\"2020-07-10T14:19:24.000000Z\", ''"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/similique/booking"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "booking_start_time": "\"2020-07-10T14:19:24.000000Z\", ''"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+{}
+```
+> Example response (400):
+
+```json
+"another user is currently setting appointment"
+```
+
+### HTTP Request
+`PUT api/doctors/{doctor}/booking`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `doctor` |  required  | The ID of doctor.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `booking_start_time` | string |  required  | The booking starting time for patient. 'date time string' => booking start time, 'blank string' => booking finished.
+    
+<!-- END_bbc335ee3377c8abc50fab7c54dda238 -->
+
+#Patientcheckup management
+
+
+APIs related to doctor calls for patient checkup
+<!-- START_3004f34a51c1a5bf28d7841387b1bd4e -->
+## _Create Patientcheckup_
+
+Patientcheckup store endpoint, User must have sufficient balance for doctor rate, returns patientcheckup instance. !! token required | patient
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/patientcheckups" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"patient_id":2,"doctor_id":"deserunt","start_time":"\"\", \"2020-07-10T14:19:24.000000Z\"","end_time":"\"\", \"2020-07-10T14:40:30.000000Z\""}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patientcheckups"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "patient_id": 2,
+    "doctor_id": "deserunt",
+    "start_time": "\"\", \"2020-07-10T14:19:24.000000Z\"",
+    "end_time": "\"\", \"2020-07-10T14:40:30.000000Z\""
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "patient_id": 1,
+    "doctor_id": 6,
+    "start_time": "2020-07-10T21:30:47.000000Z",
+    "end_time": null,
+    "transaction_id": 5,
+    "code": "UenaBBVXuQF2F7A4",
+    "updated_at": "2020-07-11T09:46:43.000000Z",
+    "created_at": "2020-07-11T09:46:43.000000Z",
+    "id": 1
+}
+```
+> Example response (400):
+
+```json
+"Insufficient Balance"
+```
+
+### HTTP Request
+`POST api/patientcheckups`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `patient_id` | integer |  required  | The patient id associated with call.
+        `doctor_id` | string |  required  | The doctor id associated with call.
+        `start_time` | string |  required  | The datetime indicating starting time of call. Can be set blank to indicate checkup instance for doctorappointment.
+        `end_time` | string |  required  | The datetime indicating ending time of call. Can be set blank to indicate start of checkup.
+    
+<!-- END_3004f34a51c1a5bf28d7841387b1bd4e -->
+
+<!-- START_0ac1f75e0005973e33eab8026cf9a11a -->
+## _Update Checkup_
+
+Patientcheckup update patient and doctor ratings and endtime. !! token required | patient, doctor
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/patientcheckups/rerum" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"end_time":0,"doctor_rating":6,"patient_rating":12}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patientcheckups/rerum"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "end_time": 0,
+    "doctor_rating": 6,
+    "patient_rating": 12
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+{}
+```
+
+### HTTP Request
+`PUT api/patientcheckups/{patientcheckup}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `patientcheckup` |  required  | The patientcheckup id.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `end_time` | integer |  optional  | string Call end time.
+        `doctor_rating` | integer |  optional  | The doctor service rating provided by patient [0-5].
+        `patient_rating` | integer |  optional  | The patient behavior rating provided by doctor [0-5].
+    
+<!-- END_0ac1f75e0005973e33eab8026cf9a11a -->
+
+#Patient management
+
+
+APIs related to patients
+<!-- START_9595666a103e105bb3f677f002653307 -->
+## _Create Patient_
+
+Patient store endpoint, returns patient instance with user_id set for User instance associated with token.  !! token required | patient
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/patients" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"enim","age":3,"gender":20,"blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\""}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patients"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "enim",
+    "age": 3,
+    "gender": 20,
+    "blood_group": "\"B+ve\"",
+    "blood_pressure": "\"90-150\"",
+    "cholesterol_level": "\"dont know the readings :p\""
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "user_id": 3,
+    "name": "required",
+    "age": 23,
+    "gender": 1,
+    "code": "RMshPimgOz6yKecP",
+    "blood_group": "B+ve",
+    "blood_pressure": "90-150",
+    "cholesterol_level": "60",
+    "updated_at": "2020-07-10T21:30:47.000000Z",
+    "created_at": "2020-07-10T21:30:47.000000Z",
+    "id": 1
+}
+```
+
+### HTTP Request
+`POST api/patients`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | The patient name.
+        `age` | integer |  required  | The patient age.
+        `gender` | integer |  required  | The patient gender. 0 => male, 1 => female
+        `blood_group` | string |  required  | The patient blood group.
+        `blood_pressure` | string |  required  | The patient blood pressure.
+        `cholesterol_level` | string |  required  | The patient cholesterol level.
+    
+<!-- END_9595666a103e105bb3f677f002653307 -->
+
+<!-- START_423bbb3c42a5978f387dafe2fcae2089 -->
+## _Update Patient_
+
+Patient update endpoint. User associated with token must match with patient user. !! token required | patient
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/patients/est" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"age":8,"blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\""}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patients/est"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "age": 8,
+    "blood_group": "\"B+ve\"",
+    "blood_pressure": "\"90-150\"",
+    "cholesterol_level": "\"dont know the readings :p\""
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+{}
+```
+
+### HTTP Request
+`PUT api/patients/{patient}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `patient` |  required  | The patient id.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `age` | integer |  required  | The patient age.
+        `blood_group` | string |  required  | The patient blood group.
+        `blood_pressure` | string |  required  | The patient blood pressure.
+        `cholesterol_level` | string |  required  | The patient cholesterol level.
+    
+<!-- END_423bbb3c42a5978f387dafe2fcae2089 -->
+
+#Patientprescription management
+
+
+APIs related to patient prescriptions
+<!-- START_a3cd4a8305dd303ebdbcb272deee3fcf -->
+## _Get Patient Prescriptions_
+
+Fetch patient prescriptinos. !! token required | doctor, patient
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/patients/reprehenderit/prescriptions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patients/reprehenderit/prescriptions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+[
+    {
+        "id": 14,
+        "patient_id": 1,
+        "code": "aQDaDugHpPUndNGN",
+        "prescription_path": "assets\/images\/patients\/1\/prescriptions\/aQDaDugHpPUndNGN1594494657.png",
+        "created_at": "2020-07-11T19:10:57.000000Z",
+        "updated_at": "2020-07-11T19:10:57.000000Z"
+    }
+]
+```
+
+### HTTP Request
+`GET api/patients/{patient}/prescriptions`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `patient` |  required  | The Id of patient.
+
+<!-- END_a3cd4a8305dd303ebdbcb272deee3fcf -->
+
+<!-- START_22740ea801d09a3619a9d30367a57840 -->
+## _Serve Patient Prescription Image_
+
+Fetch patient prescriptino image. !! token required | doctor, patient
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/patientprescriptions/14/image" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patientprescriptions/14/image"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (403):
+
+```json
+"Forbidden Access"
+```
+
+### HTTP Request
+`GET api/patientprescriptions/{patientprescription}/image`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `patientprescription` |  required  | The Id of patientprescription.
+
+<!-- END_22740ea801d09a3619a9d30367a57840 -->
+
+<!-- START_78bab5eaed235b36f3d6a6372d8efb33 -->
+## _Store Patientprescription_
+
+Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescription for registered patients, returns patientprescription instance. !! token required | patient
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/patientprescriptions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"patient_id":18,"prescription":"dolore"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/patientprescriptions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "patient_id": 18,
+    "prescription": "dolore"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "patient_id": 1,
+    "code": "aQDaDugHpPUndNGN",
+    "prescription_path": "assets\/images\/patients\/1\/prescriptions\/aQDaDugHpPUndNGN1594494657.png",
+    "updated_at": "2020-07-11T19:10:57.000000Z",
+    "created_at": "2020-07-11T19:10:57.000000Z",
+    "id": 14
+}
+```
+
+### HTTP Request
+`POST api/patientprescriptions`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `patient_id` | integer |  required  | The patient id associated with prescription.
+        `prescription` | image |  required  | The prescription image of patient.
+    
+<!-- END_78bab5eaed235b36f3d6a6372d8efb33 -->
+
+#Transaction management
+
+
+APIs related to Transactions resource
+<!-- START_a524d236dd691776be3315d40786a1db -->
+## _Create transaction_
+
+Get transaction object after create. user_id of transaction will be set to the user binded with token !! token required | patient
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost/api/transactions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"type":17,"amount":17,"status":10}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/transactions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "type": 17,
+    "amount": 17,
+    "status": 10
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+{
+    "user_id": 6,
+    "amount": 100,
+    "type": 0,
+    "status": 0,
+    "code": "y4AAAMm3ETJaAwMR",
+    "updated_at": "2020-07-10T07:25:02.000000Z",
+    "created_at": "2020-07-10T07:25:02.000000Z",
+    "id": 2
+}
+```
+
+### HTTP Request
+`POST api/transactions`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `type` | integer |  required  | The type of transaction. 0 => debit, 1 => credit
+        `amount` | integer |  required  | The transaction amount.
+        `status` | integer |  optional  | The status of transaction, default 0. 0 => initialized(tracked), 1 => completed
+    
+<!-- END_a524d236dd691776be3315d40786a1db -->
+
+<!-- START_a6af33fe94e80f41594c9cd00e68cd00 -->
+## _Update transaction status_
+
+Update transaction status to completed. user_id of transaction has to be same with the user binded with token !! token required | super_admin, admin:transaction, patient
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost/api/transactions/sit/status" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"status":9}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/transactions/sit/status"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "status": 9
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (204):
+
+```json
+{}
+```
+
+### HTTP Request
+`PUT api/transactions/{transaction}/status`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `transaction` |  required  | The ID of the transaction.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `status` | integer |  optional  | The status of transaction, default 0. 0 => initialized(tracked), 1 => completed
+    
+<!-- END_a6af33fe94e80f41594c9cd00e68cd00 -->
+
+<!-- START_ab49db38738ca64810eedb4f5fd7ade8 -->
+## _Fetch Paginated User Completed Transactions_
+
+Fetch completed transaction of user, paginated response. !! token required | super_admin, admin:transaction, patient
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/users/accusamus/transactions/complete" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/users/accusamus/transactions/complete"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+null
+```
+
+### HTTP Request
+`GET api/users/{user}/transactions/complete`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `user` |  required  | The ID of the user.
+
+<!-- END_ab49db38738ca64810eedb4f5fd7ade8 -->
+
 #User management
 
-Admin
+
 APIs related to User
 <!-- START_12e37982cc5398c7100e59625ebb5514 -->
 ## Create/Retrieve User
@@ -280,7 +1989,7 @@ Change the user object to modify the is_agent & agent_percentage field. !! token
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/users/1/agent" \
+    "http://localhost/api/users/pariatur/agent" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"is_agent":true,"agent_percentage":2.5}'
@@ -289,7 +1998,7 @@ curl -X PUT \
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/1/agent"
+    "http://localhost/api/users/pariatur/agent"
 );
 
 let headers = {
@@ -326,6 +2035,11 @@ fetch(url, {
 ### HTTP Request
 `PUT api/users/{user}/agent`
 
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `user` |  required  | The ID of the user.
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
@@ -374,1590 +2088,5 @@ fetch(url, {
 
 
 <!-- END_4dfafe7f87ec132be3c8990dd1fa9078 -->
-
-<!-- START_30afa3387c5c241054df472ff81d21f7 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/checkupprescriptions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkupprescriptions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/checkupprescriptions`
-
-
-<!-- END_30afa3387c5c241054df472ff81d21f7 -->
-
-<!-- START_a046e7596d2331866d65d4d5d52a1f8c -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/checkupprescriptions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkupprescriptions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/checkupprescriptions`
-
-
-<!-- END_a046e7596d2331866d65d4d5d52a1f8c -->
-
-<!-- START_4910d6b7772c64fab9f8c89361ccfe40 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/checkupprescriptions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkupprescriptions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Checkupprescription] 1"
-}
-```
-
-### HTTP Request
-`GET api/checkupprescriptions/{checkupprescription}`
-
-
-<!-- END_4910d6b7772c64fab9f8c89361ccfe40 -->
-
-<!-- START_cde8cefeb59bac7f519f62953f81775e -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/checkupprescriptions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkupprescriptions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/checkupprescriptions/{checkupprescription}`
-
-`PATCH api/checkupprescriptions/{checkupprescription}`
-
-
-<!-- END_cde8cefeb59bac7f519f62953f81775e -->
-
-<!-- START_ac6a70d7e3d89a93a5d400712372ea26 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/checkupprescriptions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/checkupprescriptions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/checkupprescriptions/{checkupprescription}`
-
-
-<!-- END_ac6a70d7e3d89a93a5d400712372ea26 -->
-
-<!-- START_af273bdbdf88160f7fbb041368468d89 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/doctorappointments" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctorappointments"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/doctorappointments`
-
-
-<!-- END_af273bdbdf88160f7fbb041368468d89 -->
-
-<!-- START_a15b397fc9298594c22a99092feb385b -->
-## api/doctorappointments
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/doctorappointments" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctorappointments"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/doctorappointments`
-
-
-<!-- END_a15b397fc9298594c22a99092feb385b -->
-
-<!-- START_2fbae4792f0a1cd7e7a6c81876caba5a -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/doctorappointments/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctorappointments/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Doctorappointment] 1"
-}
-```
-
-### HTTP Request
-`GET api/doctorappointments/{doctorappointment}`
-
-
-<!-- END_2fbae4792f0a1cd7e7a6c81876caba5a -->
-
-<!-- START_e057691c24e7d5ef846fee1a9cd7ea1d -->
-## api/doctorappointments/{doctorappointment}
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/doctorappointments/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctorappointments/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/doctorappointments/{doctorappointment}`
-
-`PATCH api/doctorappointments/{doctorappointment}`
-
-
-<!-- END_e057691c24e7d5ef846fee1a9cd7ea1d -->
-
-<!-- START_89ffc2b94a1023d9ee75754f125c47f8 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/doctorappointments/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctorappointments/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/doctorappointments/{doctorappointment}`
-
-
-<!-- END_89ffc2b94a1023d9ee75754f125c47f8 -->
-
-<!-- START_774744abc65e28e4368f69ef4798a8f7 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/doctors" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctors"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/doctors`
-
-
-<!-- END_774744abc65e28e4368f69ef4798a8f7 -->
-
-<!-- START_f20841b754b603033ecdbc3f8d10b993 -->
-## api/doctors
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/doctors" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctors"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/doctors`
-
-
-<!-- END_f20841b754b603033ecdbc3f8d10b993 -->
-
-<!-- START_d2e6f599a5874844f4a0830deeeaef34 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/doctors/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctors/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Doctor] 1"
-}
-```
-
-### HTTP Request
-`GET api/doctors/{doctor}`
-
-
-<!-- END_d2e6f599a5874844f4a0830deeeaef34 -->
-
-<!-- START_44694ba1eafc9d8c78e26c3f52fd7ef6 -->
-## api/doctors/{doctor}
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/doctors/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctors/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/doctors/{doctor}`
-
-`PATCH api/doctors/{doctor}`
-
-
-<!-- END_44694ba1eafc9d8c78e26c3f52fd7ef6 -->
-
-<!-- START_7bd1525b5a96db5e2af0ee77c418deb7 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/doctors/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctors/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/doctors/{doctor}`
-
-
-<!-- END_7bd1525b5a96db5e2af0ee77c418deb7 -->
-
-<!-- START_c4bda770fe6f998df9ff9a63ccd874db -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/doctortypes" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctortypes"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (200):
-
-```json
-[]
-```
-
-### HTTP Request
-`GET api/doctortypes`
-
-
-<!-- END_c4bda770fe6f998df9ff9a63ccd874db -->
-
-<!-- START_d049702d90b7287ca2dabb8cd56d2c8e -->
-## api/doctortypes
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/doctortypes" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctortypes"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/doctortypes`
-
-
-<!-- END_d049702d90b7287ca2dabb8cd56d2c8e -->
-
-<!-- START_ffc64814f5f78fe8edfdd822af8759ea -->
-## api/doctortypes/{doctortype}
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/doctortypes/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctortypes/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Doctortype] 1"
-}
-```
-
-### HTTP Request
-`GET api/doctortypes/{doctortype}`
-
-
-<!-- END_ffc64814f5f78fe8edfdd822af8759ea -->
-
-<!-- START_5d3590b0ac524d8ef45a9811d4422706 -->
-## api/doctortypes/{doctortype}
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/doctortypes/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctortypes/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/doctortypes/{doctortype}`
-
-`PATCH api/doctortypes/{doctortype}`
-
-
-<!-- END_5d3590b0ac524d8ef45a9811d4422706 -->
-
-<!-- START_d2d5d4dc996bcec535ea97dc8ebfcd3b -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/doctortypes/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctortypes/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/doctortypes/{doctortype}`
-
-
-<!-- END_d2d5d4dc996bcec535ea97dc8ebfcd3b -->
-
-<!-- START_42968417170a1c2d0f93430d55b630dc -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/patientcheckups" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientcheckups"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/patientcheckups`
-
-
-<!-- END_42968417170a1c2d0f93430d55b630dc -->
-
-<!-- START_3004f34a51c1a5bf28d7841387b1bd4e -->
-## api/patientcheckups
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/patientcheckups" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientcheckups"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/patientcheckups`
-
-
-<!-- END_3004f34a51c1a5bf28d7841387b1bd4e -->
-
-<!-- START_af81d850b7324e640d08a2399bc642bd -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/patientcheckups/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientcheckups/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Patientcheckup] 1"
-}
-```
-
-### HTTP Request
-`GET api/patientcheckups/{patientcheckup}`
-
-
-<!-- END_af81d850b7324e640d08a2399bc642bd -->
-
-<!-- START_1ea3871cdf18f09b04fdf29186f350c0 -->
-## api/patientcheckups/{patientcheckup}
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/patientcheckups/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientcheckups/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/patientcheckups/{patientcheckup}`
-
-`PATCH api/patientcheckups/{patientcheckup}`
-
-
-<!-- END_1ea3871cdf18f09b04fdf29186f350c0 -->
-
-<!-- START_ae65bb3401f9581365f40934d74fbf8b -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/patientcheckups/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientcheckups/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/patientcheckups/{patientcheckup}`
-
-
-<!-- END_ae65bb3401f9581365f40934d74fbf8b -->
-
-<!-- START_cdf5e02e9b913556f9304546d59e6c56 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/patients" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patients"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/patients`
-
-
-<!-- END_cdf5e02e9b913556f9304546d59e6c56 -->
-
-<!-- START_9595666a103e105bb3f677f002653307 -->
-## api/patients
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/patients" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patients"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/patients`
-
-
-<!-- END_9595666a103e105bb3f677f002653307 -->
-
-<!-- START_e21961238df73c8544f00766ed069000 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/patients/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patients/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Patient] 1"
-}
-```
-
-### HTTP Request
-`GET api/patients/{patient}`
-
-
-<!-- END_e21961238df73c8544f00766ed069000 -->
-
-<!-- START_7b1b54123a6d30586c3e445437e73fd5 -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/patients/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patients/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/patients/{patient}`
-
-`PATCH api/patients/{patient}`
-
-
-<!-- END_7b1b54123a6d30586c3e445437e73fd5 -->
-
-<!-- START_91030317441de3d43a948f7948db4fe7 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/patients/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patients/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/patients/{patient}`
-
-
-<!-- END_91030317441de3d43a948f7948db4fe7 -->
-
-<!-- START_954fd4598f1a1eba859301d487880edb -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/patientprescriptions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientprescriptions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/patientprescriptions`
-
-
-<!-- END_954fd4598f1a1eba859301d487880edb -->
-
-<!-- START_78bab5eaed235b36f3d6a6372d8efb33 -->
-## api/patientprescriptions
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/patientprescriptions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientprescriptions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/patientprescriptions`
-
-
-<!-- END_78bab5eaed235b36f3d6a6372d8efb33 -->
-
-<!-- START_98217124b67f40430e5d0cb8262ee4a8 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/patientprescriptions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientprescriptions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Patientprescription] 1"
-}
-```
-
-### HTTP Request
-`GET api/patientprescriptions/{patientprescription}`
-
-
-<!-- END_98217124b67f40430e5d0cb8262ee4a8 -->
-
-<!-- START_fc702686348765d4aa0d7af9dbc5e58b -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/patientprescriptions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientprescriptions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/patientprescriptions/{patientprescription}`
-
-`PATCH api/patientprescriptions/{patientprescription}`
-
-
-<!-- END_fc702686348765d4aa0d7af9dbc5e58b -->
-
-<!-- START_b82921211ef8558da358c3e51c4e3351 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/patientprescriptions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/patientprescriptions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/patientprescriptions/{patientprescription}`
-
-
-<!-- END_b82921211ef8558da358c3e51c4e3351 -->
-
-<!-- START_9af0b9f04f16a1c9705c5300772f6f16 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/transactions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/transactions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`GET api/transactions`
-
-
-<!-- END_9af0b9f04f16a1c9705c5300772f6f16 -->
-
-<!-- START_a524d236dd691776be3315d40786a1db -->
-## api/transactions
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost/api/transactions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/transactions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/transactions`
-
-
-<!-- END_a524d236dd691776be3315d40786a1db -->
-
-<!-- START_b0a0c604cbe4ea6a880e51244ea30727 -->
-## Display the specified resource.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/transactions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/transactions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (404):
-
-```json
-{
-    "message": "No query results for model [App\\Transaction] 1"
-}
-```
-
-### HTTP Request
-`GET api/transactions/{transaction}`
-
-
-<!-- END_b0a0c604cbe4ea6a880e51244ea30727 -->
-
-<!-- START_507fdb7fd111d325f1e65ea3af991828 -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/transactions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/transactions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/transactions/{transaction}`
-
-`PATCH api/transactions/{transaction}`
-
-
-<!-- END_507fdb7fd111d325f1e65ea3af991828 -->
-
-<!-- START_98b2138fd216945a4b16f2764f45d261 -->
-## Remove the specified resource from storage.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost/api/transactions/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/transactions/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`DELETE api/transactions/{transaction}`
-
-
-<!-- END_98b2138fd216945a4b16f2764f45d261 -->
 
 
