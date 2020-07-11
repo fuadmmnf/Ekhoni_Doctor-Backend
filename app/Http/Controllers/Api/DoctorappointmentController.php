@@ -21,6 +21,87 @@ class DoctorappointmentController extends Controller
         $this->user = $request->user('sanctum');
     }
 
+    /**
+     * _Fetch Paginated Doctors Appointments by Status_
+     *
+     * Fetch scheduled doctor appointments, paginated response of doctorappointment instances. !! token required| super_admin, admin, doctor
+     *
+     * @urlParam doctor int required The doctor id associated with appointments.
+     * @urlParam  status int required The status to query for the scheduled appointments. 0 => active, 1 => canceled, 2 => completed.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 1,
+     * "doctor_id": 6,
+     * "patientcheckup_id": 2,
+     * "code": "fyFDiwwuVU2pzlO8",
+     * "status": 0,
+     * "start_time": "2020-07-14 14:19:24",
+     * "end_time": "2020-07-14 14:40:24",
+     * "created_at": "2020-07-11T11:51:21.000000Z",
+     * "updated_at": "2020-07-11T12:18:16.000000Z"
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctors/6/doctorappointments/0?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctors/6/doctorappointments/0?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctors/6/doctorappointments/0",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
+    public function getAllDoctorAppointmentsByStatus(Doctor $doctor, $status)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $paginatedDoctorAppointmentsByStatus = Doctorappointment::where('doctor_id', $doctor->id)
+            ->where('status', $status)->paginate(10);
+
+        return response()->json($paginatedDoctorAppointmentsByStatus);
+    }
+
+    /**
+     * Fetch Active Doctors Appointments Today_
+     *
+     * Fetch scheduled valid doctor appointments today.
+     *
+     * @urlParam doctor int required The doctor id associated with appointments.
+     *
+     *
+     * @response  200 [
+     * {
+     * "id": 1,
+     * "doctor_id": 6,
+     * "patientcheckup_id": 2,
+     * "code": "fyFDiwwuVU2pzlO8",
+     * "status": 0,
+     * "start_time": "2020-07-11 14:19:24",
+     * "end_time": "2020-07-11 14:40:24",
+     * "created_at": "2020-07-11T11:51:21.000000Z",
+     * "updated_at": "2020-07-11T12:18:16.000000Z"
+     * }
+     * ]
+     */
+    public function getAllActiveDoctorAppointmentsToday(Doctor $doctor)
+    {
+        $activeDoctorAppointmentsToday = Doctorappointment::whereDate('start_time', Carbon::today())
+            ->where('status', 0)->get();
+        return response()->json($activeDoctorAppointmentsToday);
+    }
+
 
     /**
      * _Create Doctorappointment_

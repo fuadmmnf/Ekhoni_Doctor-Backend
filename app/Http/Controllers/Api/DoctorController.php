@@ -154,9 +154,9 @@ class DoctorController extends Controller
 
 
     /**
-     * Fetch Paginated Doctors Requests
+     * _Fetch Paginated Doctors Requests_
      *
-     * Fetch pending doctor joining requests, paginated response of doctor instances.
+     * Fetch pending doctor joining requests, paginated response of doctor instances. !! token required| super_admin, admin:doctor
      *
      *
      * @response  200 {
@@ -537,7 +537,7 @@ class DoctorController extends Controller
 
 
     /**
-     * _Change Doctor Booking Statu_
+     * _Change Doctor Booking Status_
      *
      * Update doctor activation_status. !! token required| super_admin, admin:doctor
      *

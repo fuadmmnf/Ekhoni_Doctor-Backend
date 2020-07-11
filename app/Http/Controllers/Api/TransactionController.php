@@ -71,32 +71,19 @@ class TransactionController extends Controller
      */
     public function loadAllUserCompletedTransactions(User $user)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('patient') &&
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:transaction')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $userCompletedTransactions = Transaction::where('user_id', $user->id)
             ->where('status', 1)->paginate(10);
         return response()->json($userCompletedTransactions, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Transaction $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Transaction $transaction)
-    {
-        //
-    }
 
     /**
      * _Create transaction_
