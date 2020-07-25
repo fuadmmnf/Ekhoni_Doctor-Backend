@@ -24,6 +24,7 @@ class CreateDoctorsTable extends Migration
             $table->integer('status')->default(0); //0 unavailable, 1 available, 2 in call
             $table->double('rate');
             $table->double('offer_rate');
+            $table->double('first_appointment_rate')->nullable();
             $table->integer('gender'); // 0 => male, 1 => female
             $table->string('email');
             $table->string('workplace')->nullable();

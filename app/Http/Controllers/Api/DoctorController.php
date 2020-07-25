@@ -253,17 +253,10 @@ class DoctorController extends Controller
         $newDoctor->designation = $doctorRequest->designation;
         $newDoctor->medical_college = $doctorRequest->medical_college;
         $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
+        $newDoctor->first_appointment_rate = ($doctorRequest->has('first_appointment_rate')) ? $doctorRequest->first_appointment_rate : null;
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->others_training = $doctorRequest->others_training;
 
-        if ($doctorRequest->has('start_time') &&
-            $doctorRequest->has('end_time') &&
-            $doctorRequest->has('max_appointments_per_day')) {
-
-            $newDoctor->start_time = strtotime($doctorRequest->start_time);
-            $newDoctor->end_time = strtotime($doctorRequest->end_time);
-            $newDoctor->max_appointments_per_day = ($doctorRequest->has('max_appointments_per_day')) ? $doctorRequest->max_appointments_per_day : null;
-        }
         $newDoctor->password = Hash::make($newDoctor->mobile . $newDoctor->code);
         $newDoctor->save();
         return $newDoctor;
@@ -319,6 +312,7 @@ class DoctorController extends Controller
             'bmdc_number' => 'required| unique:doctors',
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
+            'first_appointment_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
@@ -327,9 +321,6 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'others_training' => 'present| nullable',
-            'start_time' => 'sometimes| date_format:H:i',
-            'end_time' => 'sometimes| date_format:H:i',
-            'max_appointments_per_day' => 'sometimes| numeric',
         ]);
         $newDoctor = $this->createDoctor($request, false);
         return response()->json($newDoctor, 201);
@@ -396,6 +387,7 @@ class DoctorController extends Controller
             'bmdc_number' => 'required| unique:doctors',
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
+            'first_appointment_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
@@ -404,9 +396,6 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'others_training' => 'present| nullable',
-            'start_time' => 'sometimes| date_format:H:i',
-            'end_time' => 'sometimes| date_format:H:i',
-            'max_appointments_per_day' => 'sometimes| numeric',
         ]);
         $newDoctor = $this->createDoctor($request, true);
         $newDoctor->activation_status = 1;
@@ -489,12 +478,10 @@ class DoctorController extends Controller
         $this->validate($request, [
             'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
+            'first_appointment_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
             'others_training' => 'sometimes',
-            'start_time' => 'sometimes| date_format:H:i',
-            'end_time' => 'sometimes| date_format:H:i',
-            'max_appointments_per_day' => 'sometimes| numeric',
         ]);
 
         if ($request->has('rate')) {
@@ -504,6 +491,10 @@ class DoctorController extends Controller
 
         if ($request->has('offer_rate')) {
             $doctor->offer_rate = $request->offer_rate;
+        }
+
+        if ($request->has('first_appointment_rate')) {
+            $doctor->first_appointment_rate = $request->first_appointment_rate;
         }
 
         if ($request->has('payment_style')) {
@@ -519,24 +510,7 @@ class DoctorController extends Controller
         if ($request->has('others_training')) {
             $doctor->others_training = $request->others_training;
         }
-        if ($request->has('starting_time') && $request->has('ending_time')) {
-            //cancel all appointments in between these times
-            $appointmentHandler = new AppointmentHandler();
-//            $appointmentHandler->cancelAppointmentBetweenTimeRange($doctor, $request->start_time, $request->end_time);
-            $doctorHasActiveAppointments = $appointmentHandler->checkIfDoctorHasRemainingAppointments($doctor);
-            if ($doctorHasActiveAppointments) {
-                return response()->json('must cancel active appointments first', 400);
-            }
 
-            if ($request->has('start_time') &&
-                $request->has('end_time') &&
-                $request->has('max_appointments_per_day')) {
-                $doctor->start_time = strtotime($request->start_time);
-                $doctor->end_time = strtotime($request->end_time);
-                $doctor->max_appointments_per_day = $request->max_appointments_per_day;
-            }
-
-        }
 
         $doctor->save();
 
