@@ -272,6 +272,7 @@ class DoctorController extends Controller
      * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+     * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
      * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
      * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
      * @bodyParam  email string required The mail address of doctor.
@@ -280,9 +281,6 @@ class DoctorController extends Controller
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  others_training string required Other degrees of doctor [can be blank].
-     * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
-     * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
-     * @bodyParam  max_appointments_per_day int  Max number of appointments each day in case of specialist within start-end time.
      *
      *
      * @response  201 {
@@ -337,7 +335,8 @@ class DoctorController extends Controller
      * @bodyParam  name string required The fullname of doctor.
      * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
-     * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+     * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
+     * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
      * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
      * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
      * @bodyParam  email string required The mail address of doctor.
@@ -346,9 +345,6 @@ class DoctorController extends Controller
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  others_training string required Other degrees of doctor [can be blank].
-     * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
-     * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
-     * @bodyParam  max_appointments_per_day int  Max number of appointments each day in case of specialist within start-end time.
      *
      *
      * @response  201 {

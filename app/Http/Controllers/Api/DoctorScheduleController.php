@@ -50,15 +50,16 @@ class DoctorScheduleController extends Controller
      * "current_page": 1,
      * "data": [
      * {
-     * "id": 2,
      * "doctor_id": 1,
-     * "start_time": "2020-07-26 18:30:00",
-     * "end_time": "2020-07-26 18:30:00",
+     * "start_time": "2020-07-29T18:30:00.000000Z",
+     * "end_time": "2020-07-29T18:30:00.000000Z",
      * "max_appointments_per_day": 4,
-     * "schedule_slots": "[{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0}]",
-     * "created_at": "2020-07-25T20:44:16.000000Z",
-     * "updated_at": "2020-07-25T20:44:16.000000Z"
+     * "schedule_slots": "[{\"time\":\"2020-07-29T14:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-29T15:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-29T16:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-29T17:30:00.000000Z\",\"status\":0}]",
+     * "updated_at": "2020-07-25T21:11:49.000000Z",
+     * "created_at": "2020-07-25T21:11:49.000000Z",
+     * "id": 6
      * }
+     * ..
      * ],
      * "first_page_url": "http://127.0.0.1:8000/api/doctors/1/doctorschedules?page=1",
      * "from": 1,
@@ -83,49 +84,36 @@ class DoctorScheduleController extends Controller
 
 
     /**
-     * Create Doctor
+     * _Create Doctorschedule_
      *
-     * Doctor store endpoint, returns doctor instance. Doctor instance not approved and payment style depends on customer transaction by default
+     * Doctorschedule store endpoint, returns doctorschedule instance. !! token required | admin:doctor, doctor
      *
-     * @bodyParam doctortype_id int required The doctortype id.
-     * @bodyParam  name string required The fullname of doctor.
-     * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
-     * @bodyParam  rate int required The usual rate of doctor per call/appointment.
-     * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
-     * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
-     * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
-     * @bodyParam  email string required The mail address of doctor.
-     * @bodyParam  workplace string required The workplace of doctor.
-     * @bodyParam  designation string required The designation of doctor.
-     * @bodyParam  medical_college string required The graduation college of doctor.
-     * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
-     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
-     * @bodyParam  start_time string Duty start time for specialist. Must maintain format. Example: "10:30"
-     * @bodyParam  end_time string Duty end time for specialist. Must maintain format. Example: "3:30"
+     * @bodyParam doctor_id int required The doctor id.
+     * @bodyParam  start_time string Duty start time for specialist. Example: "2020-07-29T14:30:00.000000Z"
+     * @bodyParam  end_time string Duty end time for specialist. Example: "2020-07-29T18:30:00.000000Z"
      * @bodyParam  max_appointments_per_day int  Max number of appointments each day in case of specialist within start-end time.
      *
      *
      * @response  201 {
-     * "user_id": 8,
-     * "doctortype_id": 2,
-     * "name": "doctorname",
-     * "bmdc_number": "0000000000",
-     * "rate": 100,
-     * "offer_rate": 100,
-     * "gender": 0,
-     * "email": "doctor@google.com",
-     * "workplace": "dmc",
-     * "designation": "trainee doctor",
-     * "medical_college": "dmc",
-     * "postgrad": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
-     * "updated_at": "2020-07-10T14:19:24.000000Z",
-     * "created_at": "2020-07-10T14:19:24.000000Z",
-     * "id": 2
+     * "doctor_id": 1,
+     * "start_time": "2020-07-29T14:30:00.000000Z",
+     * "end_time": "2020-07-29T18:30:00.000000Z",
+     * "max_appointments_per_day": 4,
+     * "schedule_slots": "[{\"time\":\"2020-07-29T14:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-29T15:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-29T16:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-29T17:30:00.000000Z\",\"status\":0}]",
+     * "updated_at": "2020-07-25T21:11:49.000000Z",
+     * "created_at": "2020-07-25T21:11:49.000000Z",
+     * "id": 6
      * }
      */
     public function store(Request $request)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         $this->validate($request, [
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
