@@ -27,7 +27,7 @@ Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 
 Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
-Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
+Route::get('doctortypes/{doctortype}doctors/approved', 'Api\DoctorController@getAllApprovedDoctorsByDoctortype');
 Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
 Route::post('doctors', 'Api\DoctorController@store');
 Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');
@@ -54,6 +54,7 @@ Route::put('doctorappointments/{doctorappointment}', 'Api\DoctorappointmentContr
 
 
 
+Route::get('users/{user}/patients', 'Api\PatientController@getPatientsByUser');
 Route::post('patients', 'Api\PatientController@store');
 Route::put('patients/{patient}', 'Api\PatientController@update');
 

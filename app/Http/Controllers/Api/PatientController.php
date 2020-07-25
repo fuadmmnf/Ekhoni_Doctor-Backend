@@ -36,8 +36,41 @@ class PatientController extends Controller
         //
     }
 
+
+    /**
+     *_Fetch Patients By User_
+     *
+     * Fetch Patients By User. !! token required | admin:user, patient
+     *
+     * @urlParam  user required The User ID of patients.
+     *
+     * @response  200 [
+     * {
+     * "user_id": 3,
+     * "name": "required",
+     * "age": 23,
+     * "gender": 1,
+     * "code": "RMshPimgOz6yKecP",
+     * "blood_group": "B+ve",
+     * "blood_pressure": "90-150",
+     * "cholesterol_level": "60",
+     * "updated_at": "2020-07-10T21:30:47.000000Z",
+     * "created_at": "2020-07-10T21:30:47.000000Z",
+     * "id": 1
+     * }
+     * ...
+     * ]
+     */
     public function getPatientsByUser(User $user)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('admin:user') &&
+            !$this->user->hasRole('patient')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+
         $userPatients = Patient::where('user_id', $user->id)->get();
         return response()->json($userPatients);
     }
@@ -121,7 +154,6 @@ class PatientController extends Controller
 
         return response()->json($newPatient, 201);
     }
-
 
 
     /**

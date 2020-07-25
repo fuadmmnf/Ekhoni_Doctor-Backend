@@ -98,10 +98,11 @@ class DoctorController extends Controller
 
 
     /**
-     * Fetch Paginated Approved Doctors
+     * Fetch Paginated Approved Doctors By Doctortype
      *
-     * Fetch approved doctors, paginated response of doctor instances.
+     * Fetch approved doctors, paginated response of doctor instances by doctortype.
      *
+     * @urlParam  doctortype required The Doctortype ID of doctors.
      *
      * @response  200 {
      * "current_page": 1,
@@ -146,9 +147,10 @@ class DoctorController extends Controller
      * "total": 2
      * }
      */
-    public function getAllApprovedDoctors()
+    public function getAllApprovedDoctorsByDoctortype(Doctortype $doctortype)
     {
-        $approvedDoctors = Doctor::where('activation_status', 1)->paginate(10);
+        $approvedDoctors = Doctor::where('doctortype_id', $doctortype->id)
+            ->where('activation_status', 1)->paginate(10);
         return response()->json($approvedDoctors);
     }
 
@@ -232,7 +234,7 @@ class DoctorController extends Controller
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($doctorRequest->mobile);
 
-        if($isApproved){
+        if ($isApproved) {
             $user->assignRole('doctor');
         }
 
@@ -438,7 +440,7 @@ class DoctorController extends Controller
         ]);
 
         $doctor->activation_status = $request->activation_status;
-        if($request->activation_status == 1){
+        if ($request->activation_status == 1) {
             $this->user->assignRole('doctor');
         }
         $doctor->save();
