@@ -463,7 +463,23 @@ class DoctorController extends Controller
     }
 
 
-    //needs testing after setting doctor appointment
+    /**
+     * _Update Doctor_
+     *
+     * Update doctor attributes !! token required | super_admin, admin:doctor, doctor
+     *
+     *
+     * @urlParam  doctor required The ID of the doctor.
+     * @bodyParam  rate int required The usual rate of doctor per call/appointment.
+     * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
+     * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
+     * @bodyParam  workplace string required The workplace of doctor.
+     * @bodyParam  designation string required The designation of doctor.
+     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
+     *
+     *
+     * @response  204
+     */
     public function update(Request $request, Doctor $doctor)
     {
         if (!$this->user ||

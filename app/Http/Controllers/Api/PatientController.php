@@ -65,7 +65,7 @@ class PatientController extends Controller
     {
         if (!$this->user ||
             !$this->user->hasRole('admin:user') &&
-            !$this->user->hasRole('patient')
+            !($this->user->hasRole('patient') && $this->user->id == $user->id)
         ) {
             return response()->json('Forbidden Access', 403);
         }
