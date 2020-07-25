@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Handlers;
 
 use App\Doctor;
 use App\Doctorappointment;
+use App\Doctorschedule;
 use Carbon\Carbon;
 
 class AppointmentHandler
@@ -24,14 +25,31 @@ class AppointmentHandler
 //        }
 //    }
 //
-    public function checkIfDoctorHasRemainingAppointments(Doctor $doctor)
-    {
+//    public function checkIfDoctorHasRemainingAppointments(Doctor $doctor)
+//    {
+//
+//        $activeDoctorAppointments = Doctorappointment::where('status', 0)
+//            ->where('doctor_id', $doctor->id)
+//            ->where('status', 0)
+//            ->get();
+//
+//        return $activeDoctorAppointments->count() > 0;
+//    }
 
-        $activeDoctorAppointments = Doctorappointment::where('status', 0)
-            ->where('doctor_id', $doctor->id)
-            ->where('status', 0)
-            ->get();
+    public function setAppointmentInDoctorSchedule(Doctorappointment $doctorappointment){
+        $doctorSchedule = Doctorschedule::where('doctor_id', $doctorappointment->doctor_id)
+            ->whereDate('start_time', '=', $doctorappointment->start_time)
+            ->first();
 
-        return $activeDoctorAppointments->count() > 0;
+        $scheduleSlots = json_decode($doctorSchedule->schedule_slots);
+        for ($i=0; $i<count($scheduleSlots); $i++){
+            if(abs(Carbon::parse($scheduleSlots[$i]->time)->diffInMinutes($doctorappointment->start_time)) < 1){
+                $scheduleSlots[$i]->status = 1;
+                break;
+            }
+        }
+
+        $doctorSchedule->schedule_slots = json_encode($scheduleSlots);
+        $doctorSchedule->save();
     }
 }
