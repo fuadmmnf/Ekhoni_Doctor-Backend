@@ -111,25 +111,31 @@ class DoctorScheduleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'doctortype_id' => 'required| numeric',
-            'name' => 'required',
-            'bmdc_number' => 'required| unique:doctors',
-            'rate' => 'required| numeric',
-            'offer_rate' => 'sometimes| numeric',
-            'gender' => 'required| numeric',
-            'mobile' => 'required| unique:users| min: 11| max: 14',
-            'email' => 'required',
-            'workplace' => 'required',
-            'designation' => 'required',
-            'medical_college' => 'required',
-            'postgrad' => 'present| nullable',
-            'others_training' => 'present| nullable',
-            'start_time' => 'sometimes| date_format:H:i',
-            'end_time' => 'sometimes| date_format:H:i',
-            'max_appointments_per_day' => 'sometimes| numeric',
+            'doctor_id' => 'required| numeric',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'max_appointments_per_day' => 'required| numeric',
         ]);
-        $newDoctor = $this->createDoctor($request, false);
-        return response()->json($newDoctor, 201);
+
+        $doctor = Doctor::findOrFail($request->doctor_id);
+
+        $newDoctorSchedule = new Doctorschedule();
+        $newDoctorSchedule->start_time = Carbon::parse($request->start_time);
+        $newDoctorSchedule->end_time = Carbon::parse($request->end_time);
+        $newDoctorSchedule->max_appointments_per_day = $request->max_appointments_per_day;
+
+        $scheduleInterval = floor(($newDoctorSchedule->start_time->diffInMinutes($newDoctorSchedule->end_time))/ $newDoctorSchedule->max_appointments_per_day);
+        $time = $newDoctorSchedule->start_time;
+        $appointmentSchedules = Array();
+
+        while($time < $newDoctorSchedule->end_time){
+            $time = $time->addMinutes($scheduleInterval);
+            $appointmentSchedules[] = $time;
+        }
+        $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);
+
+        $newDoctorSchedule->save();
+        return response()->json($newDoctorSchedule, 201);
     }
 
     /**

@@ -18,7 +18,8 @@
         "laravel/sanctum": "^2.4",
         "laravel/tinker": "^2.0",
         "mpociot/laravel-apidoc-generator": "^4.8",
-        "spatie/laravel-permission": "^3.13"
+        "spatie/laravel-permission": "^3.13",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
