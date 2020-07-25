@@ -322,6 +322,7 @@ class DoctorController extends Controller
             'postgrad' => 'present| nullable',
             'others_training' => 'present| nullable',
         ]);
+        Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, false);
         return response()->json($newDoctor, 201);
     }
@@ -397,6 +398,7 @@ class DoctorController extends Controller
             'postgrad' => 'present| nullable',
             'others_training' => 'present| nullable',
         ]);
+        Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, true);
         $newDoctor->activation_status = 1;
         $newDoctor->payment_style = $request->payment_style;

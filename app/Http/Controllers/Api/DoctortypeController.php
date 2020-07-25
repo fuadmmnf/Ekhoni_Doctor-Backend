@@ -69,12 +69,10 @@ class DoctortypeController extends Controller
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
-            'type' => 'required| numeric',
-            'specialization' => 'required| min:1',
+            'name' => 'required| min:1',
         ]);
         $newDoctorType = new Doctortype();
-        $newDoctorType->type = $request->type;
-        $newDoctorType->specialization = $request->specialization;
+        $newDoctorType->name = $request->name;
         $newDoctorType->save();
 
         return response()->json($newDoctorType, 201);

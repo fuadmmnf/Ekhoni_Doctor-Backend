@@ -45,6 +45,9 @@ Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::put('patientcheckups/{patientcheckup}', 'Api\PatientcheckupController@update');
 
 
+Route::get('doctors/{doctor}/doctorschedules', "Api\DoctorScheduleController@getDoctorSchedulesByDoctorFromPresentDate");
+Route::post('doctorschedules', "Api\DoctorScheduleController@store");
+
 
 
 Route::get('doctors/{doctor}/doctorappointments/today', "Api\DoctorappointmentController@getAllActiveDoctorAppointmentsToday");

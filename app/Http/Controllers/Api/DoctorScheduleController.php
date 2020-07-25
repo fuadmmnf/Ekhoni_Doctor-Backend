@@ -120,6 +120,7 @@ class DoctorScheduleController extends Controller
         $doctor = Doctor::findOrFail($request->doctor_id);
 
         $newDoctorSchedule = new Doctorschedule();
+        $newDoctorSchedule->doctor_id = $doctor->id;
         $newDoctorSchedule->start_time = Carbon::parse($request->start_time);
         $newDoctorSchedule->end_time = Carbon::parse($request->end_time);
         $newDoctorSchedule->max_appointments_per_day = $request->max_appointments_per_day;
@@ -130,8 +131,8 @@ class DoctorScheduleController extends Controller
 
         while($time < $newDoctorSchedule->end_time){
             $slot = Array();
-            $slot->time = $time->addMinutes($scheduleInterval);
-            $slot->status = 0; // 0 available, 1 booked
+            $slot['time'] = $time->addMinutes($scheduleInterval);
+            $slot['status'] = 0; // 0 available, 1 booked
             $appointmentSchedules[] = $slot;
         }
         $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);
