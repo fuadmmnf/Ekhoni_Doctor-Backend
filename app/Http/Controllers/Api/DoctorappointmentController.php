@@ -112,7 +112,7 @@ class DoctorappointmentController extends Controller
     /**
      * _Create Doctorappointment_
      *
-     * Doctorappointment store endpoint, User must have sufficient balance for doctor rate, returns doctorappointment instance. !! token required | patient
+     * Doctorappointment store endpoint, User must have sufficient balance for doctor rate, must maintain start_time for one of schedule_slots of doctorschedules(changes status of appointment slot to booked), returns doctorappointment instance. !! token required | patient
      *
      *
      * @bodyParam patientcheckup_id int required The patientcheckup id associated with appointment. Frontend must create patientcheckup(with blank start_time and end_time) instance prior to creating doctorappointment.
