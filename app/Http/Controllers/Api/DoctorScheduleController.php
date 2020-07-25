@@ -50,7 +50,26 @@ class DoctorScheduleController extends Controller
      * "current_page": 1,
      * "data": [
      * {
+     * "id": 2,
+     * "doctor_id": 1,
+     * "start_time": "2020-07-26 18:30:00",
+     * "end_time": "2020-07-26 18:30:00",
+     * "max_appointments_per_day": 4,
+     * "schedule_slots": "[{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0},{\"time\":\"2020-07-26T18:30:00.000000Z\",\"status\":0}]",
+     * "created_at": "2020-07-25T20:44:16.000000Z",
+     * "updated_at": "2020-07-25T20:44:16.000000Z"
+     * }
      * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctors/1/doctorschedules?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctors/1/doctorschedules?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctors/1/doctorschedules",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
      * }
      */
     public function getDoctorSchedulesByDoctorFromPresentDate(Doctor $doctor)
@@ -61,9 +80,6 @@ class DoctorScheduleController extends Controller
 
         return response()->json($doctorSchedulesByDoctorFromPresentDate);
     }
-
-
-
 
 
     /**
@@ -125,15 +141,16 @@ class DoctorScheduleController extends Controller
         $newDoctorSchedule->end_time = Carbon::parse($request->end_time);
         $newDoctorSchedule->max_appointments_per_day = $request->max_appointments_per_day;
 
-        $scheduleInterval = floor(($newDoctorSchedule->start_time->diffInMinutes($newDoctorSchedule->end_time))/ $newDoctorSchedule->max_appointments_per_day);
+        $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
         $time = $newDoctorSchedule->start_time;
-        $appointmentSchedules = Array();
+        $appointmentSchedules = array();
 
-        while($time < $newDoctorSchedule->end_time){
-            $slot = Array();
-            $slot['time'] = $time->addMinutes($scheduleInterval);
-            $slot['status'] = 0; // 0 available, 1 booked
-            $appointmentSchedules[] = $slot;
+        while ($time < $newDoctorSchedule->end_time) {
+            $appointmentSchedules[] = [
+                "time" => $time->copy(),
+                "status" => 0 // 0 available, 1 booked
+            ];
+            $time = $time->addMinutes($scheduleInterval);
         }
         $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);
 
