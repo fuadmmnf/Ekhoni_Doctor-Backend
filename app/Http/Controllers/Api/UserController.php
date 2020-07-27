@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Handlers\SmsHandler;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use App\Otpcode;
 use App\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -53,12 +55,15 @@ class UserController extends Controller
         $newOtpcode->mobile = $request->mobile;
 
         $code = '';
-
         for($i = 0; $i < 6; $i++) {
             $code .= mt_rand(0, 9);
         }
         $newOtpcode->code = $code;
         $newOtpcode->save();
+
+
+        $smsHandler = new SmsHandler();
+        $smsHandler->send_sms($newOtpcode->mobile, "Your verification OTP is {$newOtpcode->code}.");
 
         return response()->json($newOtpcode, 201);
     }

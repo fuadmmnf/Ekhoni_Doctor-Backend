@@ -49,7 +49,7 @@ class AuthorizationSeeder extends Seeder
         $name = 'fuad';
         $email = 'fuadmmnf@gmail.com';
         $password = 'fuadmmnf';
-        $mobile = '01956572070';
+        $mobile = '01156572070';
         $user_role = 'super_admin';
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($mobile);
