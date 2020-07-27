@@ -34,7 +34,8 @@ class TokenUserHandler
 
     public function regenerateUserToken($user){
         $user->tokens()->delete();
-        return $user->createToken($user->mobile . $user->code)->plainTextToken;
+        $user->token = $user->createToken($user->mobile . $user->code)->plainTextToken;
+        return $user;
     }
 
 

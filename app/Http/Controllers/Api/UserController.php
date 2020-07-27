@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
+use App\Otpcode;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -41,6 +42,28 @@ class UserController extends Controller
     }
 
 
+    public function sendAuthenticationToken(Request $request){
+        $this->validate($request, [
+            'mobile' => 'required| min:11| max: 14',
+        ]);
+
+        Otpcode::where('mobile', $request->mobile)->delete();
+
+        $newOtpcode = new Otpcode();
+        $newOtpcode->mobile = $request->mobile;
+
+        $code = '';
+
+        for($i = 0; $i < 6; $i++) {
+            $code .= mt_rand(0, 9);
+        }
+        $newOtpcode->code = $code;
+        $newOtpcode->save();
+
+        return response()->json($newOtpcode, 201);
+    }
+
+
     /**
      * Create/Retrieve User
      *
@@ -64,19 +87,30 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'mobile' => 'required| min:11| max: 14',
+            'otp_code' => 'required'
         ]);
+
+        $otprequest = Otpcode::where('mobile', $request->mobile)
+            ->where('otp_code', $request->otp_code)
+            ->first();
+
+        if(!$otprequest){
+            return response()->json('otp verification code mismatch', 401);
+        }
 
         $user = User::where('mobile', $request->mobile)->first();
         $tokenUserHandler = new TokenUserHandler();
 
+        //retrive existing user
         if ($user) {
-            $token = $tokenUserHandler->regenerateUserToken($user);
-            return response()->json($token, 200);
+            $user = $tokenUserHandler->regenerateUserToken($user);
+            return response()->json($user, 200);
         }
 
+        //create general user
         $newUser = $tokenUserHandler->createUser($request->mobile);
         $newUser->assignRole('patient');
-        unset($newUser->roles);
+//        unset($newUser->roles);
         return response()->json($newUser, 201);
     }
 
