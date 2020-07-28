@@ -43,7 +43,17 @@ class UserController extends Controller
         //
     }
 
-
+    /**
+     * Send OTP to user mobile
+     *
+     * Get User mobile and send otp.
+     *
+     *
+     * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
+     *
+     *
+     * @response  201 526124
+     */
     public function sendAuthenticationToken(Request $request){
         $this->validate($request, [
             'mobile' => 'required| min:11| max: 14',
@@ -63,7 +73,7 @@ class UserController extends Controller
 
 
         $smsHandler = new SmsHandler();
-        $smsHandler->send_sms($newOtpcode->mobile, "Your verification OTP is {$newOtpcode->code}.");
+        $smsHandler->send_sms($newOtpcode->mobile, "Your_verification_OTP_is_{$newOtpcode->code}.");
 
         return response()->json($newOtpcode, 201);
     }
@@ -75,12 +85,13 @@ class UserController extends Controller
      * Get User object using mobile| create new if not present
      *
      *
-     * @bodyParam mobile string required The mobile of the user. Example: 01955555555
+     * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
+     * @bodyParam otp_code string required The 6 digit access otp token sent via sms. Example: 526124
      *
      *
      * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
      * @response  201 {
-     * "mobile": "01955555555",
+     * "mobile": "8801955555555",
      * "code": "mxH8SeGHt4cjWr8R",
      * "updated_at": "2020-07-09T20:44:33.000000Z",
      * "created_at": "2020-07-09T20:44:33.000000Z",
