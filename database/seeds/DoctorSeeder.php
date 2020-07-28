@@ -27,6 +27,7 @@ class DoctorSeeder extends Seeder
         $user = $tokenUserHandler->createUser($mobile);
         $newDoctor = new \App\Doctor();
         $newDoctor->user_id = $user->id;
+        $newDoctor->doctortype_id = 1;
         $newDoctor->name = 'fuad';
         $newDoctor->email = 'doctor1@ekhonidoctor.com';
         $newDoctor->bmdc_number = '1111111';
@@ -36,10 +37,9 @@ class DoctorSeeder extends Seeder
         $newDoctor->offer_rate = 80;
         $newDoctor->first_appointment_rate = 150;
         $newDoctor->gender = 0;
-        $newDoctor->bmdc_number = '1111111';
+        $newDoctor->password = 'doctor123';
+        $newDoctor->save();
 
         $user->assignRole($user_role);
-        $newDoctor->token = $user->token;
-        $newDoctor->save();
     }
 }

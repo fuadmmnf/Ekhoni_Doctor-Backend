@@ -46,9 +46,9 @@ class AuthorizationSeeder extends Seeder
         $permission_appointments->syncRoles([$role_super_admin, $role_report_admin]);
 
 
-        $name = 'fuad';
-        $email = 'fuadmmnf@gmail.com';
-        $password = 'fuadmmnf';
+        $name = 'admin';
+        $email = 'admin@ekhonidoctor.com';
+        $password = 'admin123';
         $mobile = '01156572070';
         $user_role = 'super_admin';
         $tokenUserHandler = new TokenUserHandler();

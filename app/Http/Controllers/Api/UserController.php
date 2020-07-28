@@ -59,7 +59,6 @@ class UserController extends Controller
             'mobile' => 'required| min:11| max: 14',
         ]);
 
-        Otpcode::where('mobile', $request->mobile)->delete();
 
         $newOtpcode = new Otpcode();
         $newOtpcode->mobile = $request->mobile;
@@ -107,7 +106,7 @@ class UserController extends Controller
         ]);
 
         $otprequest = Otpcode::where('mobile', $request->mobile)
-            ->where('otp_code', $request->otp_code)
+            ->where('code', $request->otp_code)
             ->first();
 
         if(!$otprequest){
