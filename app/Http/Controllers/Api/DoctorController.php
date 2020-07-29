@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use Intervention\Image\File;
 
 /**
  * @group  Doctor management
@@ -57,6 +59,7 @@ class DoctorController extends Controller
      * "payment_style": 1,
      * "activation_status": 1,
      * "status": 1,
+     * "is_featured": 0,
      * "rate": 100,
      * "offer_rate": 100,
      * "start_time": null,
@@ -116,6 +119,7 @@ class DoctorController extends Controller
      * "payment_style": 1,
      * "activation_status": 1,
      * "status": 0,
+     * "is_featured": 0,
      * "rate": 100,
      * "offer_rate": 100,
      * "start_time": null,
@@ -174,6 +178,7 @@ class DoctorController extends Controller
      * "payment_style": 1,
      * "activation_status": 1,
      * "status": 0,
+     * "is_featured": 0,
      * "rate": 100,
      * "offer_rate": 100,
      * "start_time": null,
@@ -212,6 +217,54 @@ class DoctorController extends Controller
     }
 
 
+
+    /**
+     * Fetch All Featured Doctors
+     *
+     * Fetch featured doctors, response of doctor instances.
+     *
+     *
+     * @response  200 {
+     * [
+     * {
+     * "id": 4,
+     * "user_id": 10,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000001",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 0,
+     * "is_featured": 1,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "start_time": null,
+     * "end_time": null,
+     * "max_appointments_per_day": null,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "device_ids": null,
+     * "booking_start_time": null,
+     * "created_at": "2020-07-10T14:57:19.000000Z",
+     * "updated_at": "2020-07-10T14:57:19.000000Z"
+     * },
+     * ...
+     * ],
+     *
+     * }
+     */
+    public function getAllFeaturedDoctors()
+    {
+        $featuredDoctors = Doctor::where('is_featured', 1)->get();
+        return response()->json($featuredDoctors);
+    }
+
+
     /**
      * _Fetch Paginated Doctors Requests_
      *
@@ -230,6 +283,7 @@ class DoctorController extends Controller
      * "payment_style": 0,
      * "activation_status": 0,
      * "status": 0,
+     * "is_featured": 0,
      * "rate": 100,
      * "offer_rate": 100,
      * "start_time": null,
@@ -260,7 +314,6 @@ class DoctorController extends Controller
      * "total": 1
      * }
      */
-
     public function getAllPendingDoctorRequest()
     {
         if (!$this->user ||
@@ -275,15 +328,6 @@ class DoctorController extends Controller
         return response()->json($pendingDoctorRequests);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
 
     private function createDoctor(Request $doctorRequest, $isApproved): Doctor
@@ -313,7 +357,6 @@ class DoctorController extends Controller
         $newDoctor->first_appointment_rate = ($doctorRequest->has('first_appointment_rate')) ? $doctorRequest->first_appointment_rate : null;
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->others_training = $doctorRequest->others_training;
-
         $newDoctor->password = Hash::make($newDoctor->mobile . $newDoctor->code);
         $newDoctor->save();
         return $newDoctor;
@@ -376,6 +419,7 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'others_training' => 'present| nullable',
+            'monogram' => 'required| image',
         ]);
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, false);
@@ -486,6 +530,8 @@ class DoctorController extends Controller
         $doctor->activation_status = $request->activation_status;
         if ($request->activation_status == 1) {
             $this->user->assignRole('doctor');
+        } else {
+            $this->user->tokens()->delete();
         }
         $doctor->save();
 
@@ -494,7 +540,7 @@ class DoctorController extends Controller
 
 
     /**
-     * _Create Doctor Active Status_
+     * _Change Doctor Active Status_
      *
      * Doctor update active status endpoint used by doctor.!! token required | doctor
      *
@@ -513,7 +559,7 @@ class DoctorController extends Controller
         $this->validate($request, [
             'status' => 'required| numeric',
         ]);
-        $doctor = $request->user('sanctum')->doctor;
+        $doctor = $this->user->doctor;
         $doctor->status = $request->status;
         $doctor->save();
         return response()->noContent();
@@ -590,6 +636,50 @@ class DoctorController extends Controller
 
 
     /**
+     * _Change Doctor Image_
+     *
+     * Update doctor image (Multipart Request)!! token required | super_admin, admin:doctor, doctor
+     *
+     *
+     * @urlParam  doctor required The ID of the doctor.
+     * @bodyParam  image file required The doctor image file.
+     *
+     *
+     * @response  204
+     */
+    public function changeDoctorMonogram(Request $request, Doctor $doctor)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('doctor')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $this->validate($request, [
+            'image' => 'required| image',
+        ]);
+        if ($request->hasFile('image')) {
+            $image_path = public_path('/images/users/' . $doctor->image);
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+            }
+            $image = $request->file('image');
+            $filename = $doctor->code . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('/images/users/' . $filename);
+            Image::make($image)->resize(250, 250)->save($location);
+            $doctor->image = $filename;
+        }
+        $doctor->save();
+        return response()->noContent();
+    }
+
+
+
+
+
+    /**
      * _Change Doctor Booking Status_
      *
      * Update doctor activation_status. !! token required| super_admin, admin:doctor
@@ -627,14 +717,5 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Doctor $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Doctor $doctor)
-    {
-        //
-    }
+
 }

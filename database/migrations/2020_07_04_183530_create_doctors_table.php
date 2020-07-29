@@ -22,6 +22,7 @@ class CreateDoctorsTable extends Migration
             $table->boolean('payment_style')->default(0); // 0 => paid by customer transactions, 1 => paid by organization
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
             $table->integer('status')->default(0); //0 unavailable, 1 available, 2 in call
+            $table->integer('is_featured')->default(0); //0 no, 1 yes
             $table->double('rate');
             $table->double('offer_rate');
             $table->double('first_appointment_rate')->nullable();
@@ -36,6 +37,7 @@ class CreateDoctorsTable extends Migration
             $table->string('device_ids')->nullable(true);
             $table->dateTime('booking_start_time')->nullable(); // null => available, dateTime => booking process starting_time
             $table->string('password');
+            $table->string('image')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
