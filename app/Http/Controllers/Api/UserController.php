@@ -23,6 +23,7 @@ class UserController extends Controller
 {
 
     protected $user;
+
     public function __construct(Request $request)
     {
         $this->user = $request->user('sanctum');
@@ -52,9 +53,13 @@ class UserController extends Controller
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
      *
      *
-     * @response  201 526124
+     * @response  201 {
+     * "mobile": "01956572070",
+     * "code": "526124"
+     * }
      */
-    public function sendAuthenticationToken(Request $request){
+    public function sendAuthenticationToken(Request $request)
+    {
         $this->validate($request, [
             'mobile' => 'required| min:11| max: 14',
         ]);
@@ -64,7 +69,7 @@ class UserController extends Controller
         $newOtpcode->mobile = $request->mobile;
 
         $code = '';
-        for($i = 0; $i < 6; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $code .= mt_rand(0, 9);
         }
         $newOtpcode->code = $code;
@@ -72,7 +77,7 @@ class UserController extends Controller
 
 
         $smsHandler = new SmsHandler();
-        $smsHandler->send_sms($newOtpcode->mobile, "Your_verification_OTP_is_{$newOtpcode->code}.");
+        $smsHandler->send_sms($newOtpcode->mobile, "'Ekhoni Daktar' OTP code is: {$newOtpcode->code}.");
 
         return response()->json($newOtpcode, 201);
     }
@@ -85,7 +90,7 @@ class UserController extends Controller
      *
      *
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
-     * @bodyParam otp_code string required The 6 digit access otp token sent via sms. Example: 526124
+     * @bodyParam otp_code string required The 6 digit access otp token sent via sms. Example: 1234
      *
      *
      * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
@@ -109,7 +114,7 @@ class UserController extends Controller
             ->where('code', $request->otp_code)
             ->first();
 
-        if(!$otprequest){
+        if (!$otprequest) {
             return response()->json('otp verification code mismatch', 401);
         }
 
@@ -182,7 +187,7 @@ class UserController extends Controller
         }
 
         $user->is_agent = $request->is_agent;
-        $user->agent_percentage = ($request->is_agent)? $request->agent_percentage: 0.0;
+        $user->agent_percentage = ($request->is_agent) ? $request->agent_percentage : 0.0;
         $user->save();
 
         return response()->noContent();

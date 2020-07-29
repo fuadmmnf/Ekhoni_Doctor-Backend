@@ -28,7 +28,8 @@ Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 
 Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
-Route::get('doctortypes/{doctortype}doctors/approved', 'Api\DoctorController@getAllApprovedDoctorsByDoctortype');
+Route::get('doctortypes/{doctortype}/doctors/approved', 'Api\DoctorController@getAllApprovedDoctorsByDoctortype');
+Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
 Route::post('doctors', 'Api\DoctorController@store');
 Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');

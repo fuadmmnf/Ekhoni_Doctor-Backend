@@ -135,6 +135,64 @@ class DoctorController extends Controller
      * },
      * ...
      * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/{doctortype}/doctors/approved?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/{doctortype}/doctors/approved?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctortypes/{doctortype}/doctors/approved",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 2,
+     * "total": 2
+     * }
+     */
+    public function getAllApprovedDoctorsByDoctortype(Doctortype $doctortype)
+    {
+        $approvedDoctors = Doctor::where('doctortype_id', $doctortype->id)
+            ->where('activation_status', 1)->paginate(10);
+        return response()->json($approvedDoctors);
+    }
+
+
+
+    /**
+     * Fetch Paginated Approved Doctors
+     *
+     * Fetch approved doctors, paginated response of doctor instances.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 4,
+     * "user_id": 10,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000001",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "start_time": null,
+     * "end_time": null,
+     * "max_appointments_per_day": null,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "device_ids": null,
+     * "booking_start_time": null,
+     * "created_at": "2020-07-10T14:57:19.000000Z",
+     * "updated_at": "2020-07-10T14:57:19.000000Z"
+     * },
+     * ...
+     * ],
      * "first_page_url": "http://127.0.0.1:8000/api/doctors/approved?page=1",
      * "from": 1,
      * "last_page": 1,
@@ -147,10 +205,9 @@ class DoctorController extends Controller
      * "total": 2
      * }
      */
-    public function getAllApprovedDoctorsByDoctortype(Doctortype $doctortype)
+    public function getAllApprovedDoctors()
     {
-        $approvedDoctors = Doctor::where('doctortype_id', $doctortype->id)
-            ->where('activation_status', 1)->paginate(10);
+        $approvedDoctors = Doctor::where('activation_status', 1)->paginate(10);
         return response()->json($approvedDoctors);
     }
 
