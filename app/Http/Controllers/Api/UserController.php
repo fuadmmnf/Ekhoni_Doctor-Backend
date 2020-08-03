@@ -29,21 +29,6 @@ class UserController extends Controller
         $this->user = $request->user('sanctum');
     }
 
-    public function index()
-    {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Send OTP to user mobile
      *
@@ -53,10 +38,7 @@ class UserController extends Controller
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
      *
      *
-     * @response  201 {
-     * "mobile": "01956572070",
-     * "code": "526124"
-     * }
+     * @response  201 "otp token created"
      */
     public function sendAuthenticationToken(Request $request)
     {
@@ -79,7 +61,7 @@ class UserController extends Controller
         $smsHandler = new SmsHandler();
         $smsHandler->send_sms($newOtpcode->mobile, "'Ekhoni Daktar' OTP code is: {$newOtpcode->code}.");
 
-        return response()->json($newOtpcode, 201);
+        return response()->json("otp token created", 201);
     }
 
 
@@ -90,7 +72,7 @@ class UserController extends Controller
      *
      *
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
-     * @bodyParam otp_code string required The 6 digit access otp token sent via sms. Example: 1234
+     * @bodyParam otp_code string required The 4 digit access otp token sent via sms. Example: 1234
      *
      *
      * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
@@ -134,27 +116,6 @@ class UserController extends Controller
         return response()->json($newUser, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return response($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
 
 
     /**
@@ -193,19 +154,5 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    public function update(Request $request, User $user)
-    {
 
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-
-    }
 }

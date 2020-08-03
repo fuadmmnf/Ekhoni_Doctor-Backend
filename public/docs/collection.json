@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Laravel API",
-        "_postman_id": "4819fa75-fb7f-4d56-8a2c-d6c8c73481f8",
+        "_postman_id": "173fac5a-3192-4cdc-b128-9ffa08553406",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -113,7 +113,7 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "rerum",
+                                    "value": "quis",
                                     "description": "The doctor id associated with appointments."
                                 }
                             ]
@@ -149,13 +149,13 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "ut",
+                                    "value": "quas",
                                     "description": "The doctor id associated with appointments."
                                 },
                                 {
                                     "id": "status",
                                     "key": "status",
-                                    "value": "explicabo",
+                                    "value": "ea",
                                     "description": "The status to query for the scheduled appointments. 0 => active, 1 => canceled, 2 => completed."
                                 }
                             ]
@@ -201,7 +201,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"patientcheckup_id\": 17,\n    \"start_time\": \"\\\"2020-07-10T14:19:24.000000Z\\\"\",\n    \"end_time\": \"\\\"2020-07-10T14:40:30.000000Z\\\"\"\n}"
+                            "raw": "{\n    \"patientcheckup_id\": 18,\n    \"start_time\": \"\\\"2020-07-10T14:19:24.000000Z\\\"\",\n    \"end_time\": \"\\\"2020-07-10T14:40:30.000000Z\\\"\"\n}"
                         },
                         "description": "Doctorappointment store endpoint, User must have sufficient balance for doctor rate, must maintain start_time for one of schedule_slots of doctorschedules(changes status of appointment slot to booked), returns doctorappointment instance. !! token required | patient",
                         "response": []
@@ -219,7 +219,7 @@
                                 {
                                     "id": "doctorappointment",
                                     "key": "doctorappointment",
-                                    "value": "velit",
+                                    "value": "a",
                                     "description": "The appointment id."
                                 }
                             ]
@@ -261,7 +261,7 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "corporis",
+                                    "value": "explicabo",
                                     "description": "The Doctor ID of doctor schedules."
                                 }
                             ]
@@ -307,7 +307,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"doctor_id\": 1,\n    \"start_time\": \"\\\"2020-07-29T14:30:00.000000Z\\\"\",\n    \"end_time\": \"\\\"2020-07-29T18:30:00.000000Z\\\"\",\n    \"max_appointments_per_day\": 19\n}"
+                            "raw": "{\n    \"doctor_id\": 8,\n    \"start_time\": \"\\\"2020-07-29T14:30:00.000000Z\\\"\",\n    \"end_time\": \"\\\"2020-07-29T18:30:00.000000Z\\\"\",\n    \"max_appointments_per_day\": 14\n}"
                         },
                         "description": "Doctorschedule store endpoint, returns doctorschedule instance. !! token required | admin:doctor, doctor",
                         "response": []
@@ -393,7 +393,7 @@
                                 {
                                     "id": "doctortype",
                                     "key": "doctortype",
-                                    "value": "ut",
+                                    "value": "consequatur",
                                     "description": "The Doctortype ID of doctors."
                                 }
                             ]
@@ -429,7 +429,7 @@
                                 {
                                     "id": "doctortype",
                                     "key": "doctortype",
-                                    "value": "ab",
+                                    "value": "veniam",
                                     "description": "The Doctortype ID of doctors."
                                 }
                             ]
@@ -559,7 +559,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"doctortype_id\": 2,\n    \"name\": \"necessitatibus\",\n    \"bmdc_number\": \"quia\",\n    \"rate\": 12,\n    \"offer_rate\": 19,\n    \"first_appointment_rate\": 19,\n    \"gender\": 2,\n    \"mobile\": \"laudantium\",\n    \"email\": \"ducimus\",\n    \"workplace\": \"qui\",\n    \"designation\": \"quo\",\n    \"medical_college\": \"et\",\n    \"post_grad\": \"expedita\",\n    \"others_training\": \"et\"\n}"
+                            "raw": "{\n    \"doctortype_id\": 9,\n    \"name\": \"at\",\n    \"bmdc_number\": \"et\",\n    \"rate\": 1,\n    \"offer_rate\": 7,\n    \"first_appointment_rate\": 3,\n    \"gender\": 3,\n    \"mobile\": \"tempora\",\n    \"email\": \"est\",\n    \"workplace\": \"dolores\",\n    \"designation\": \"explicabo\",\n    \"medical_college\": \"hic\",\n    \"post_grad\": \"id\",\n    \"others_training\": \"ratione\"\n}"
                         },
                         "description": "Doctor store endpoint, returns doctor instance. Doctor instance not approved and payment style depends on customer transaction by default",
                         "response": []
@@ -587,7 +587,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"doctortype_id\": 6,\n    \"payment_style\": 20,\n    \"name\": \"nam\",\n    \"bmdc_number\": \"pariatur\",\n    \"rate\": 13,\n    \"offer_rate\": 17,\n    \"first_appointment_rate\": 10,\n    \"gender\": 13,\n    \"mobile\": \"dolores\",\n    \"email\": \"aliquid\",\n    \"workplace\": \"et\",\n    \"designation\": \"id\",\n    \"medical_college\": \"atque\",\n    \"post_grad\": \"cum\",\n    \"others_training\": \"omnis\"\n}"
+                            "raw": "{\n    \"doctortype_id\": 2,\n    \"payment_style\": 4,\n    \"name\": \"fugiat\",\n    \"bmdc_number\": \"quaerat\",\n    \"rate\": 6,\n    \"offer_rate\": 9,\n    \"first_appointment_rate\": 11,\n    \"gender\": 18,\n    \"mobile\": \"aut\",\n    \"email\": \"sequi\",\n    \"workplace\": \"esse\",\n    \"designation\": \"distinctio\",\n    \"medical_college\": \"modi\",\n    \"post_grad\": \"qui\",\n    \"others_training\": \"sit\"\n}"
                         },
                         "description": "Doctor store endpoint used by admin, returns doctor instance. Doctor instance approved !! token required | super_admin, admin:doctor",
                         "response": []
@@ -615,7 +615,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"status\": 9\n}"
+                            "raw": "{\n    \"status\": 7\n}"
                         },
                         "description": "Doctor update active status endpoint used by doctor.!! token required | doctor",
                         "response": []
@@ -633,7 +633,7 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "quod",
+                                    "value": "repellendus",
                                     "description": "The ID of the doctor."
                                 }
                             ]
@@ -651,7 +651,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"rate\": 3,\n    \"offer_rate\": 13,\n    \"first_appointment_rate\": 11,\n    \"workplace\": \"porro\",\n    \"designation\": \"facere\",\n    \"others_training\": \"labore\"\n}"
+                            "raw": "{\n    \"rate\": 12,\n    \"offer_rate\": 18,\n    \"first_appointment_rate\": 2,\n    \"workplace\": \"quo\",\n    \"designation\": \"voluptas\",\n    \"others_training\": \"ut\"\n}"
                         },
                         "description": "Update doctor attributes !! token required | super_admin, admin:doctor, doctor",
                         "response": []
@@ -669,7 +669,7 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "id",
+                                    "value": "est",
                                     "description": "The ID of doctor."
                                 }
                             ]
@@ -687,7 +687,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"activation_status\": 11\n}"
+                            "raw": "{\n    \"activation_status\": 4\n}"
                         },
                         "description": "Update doctor activation_status. !! token required| super_admin, admin:doctor",
                         "response": []
@@ -705,7 +705,7 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "sequi",
+                                    "value": "dignissimos",
                                     "description": "The ID of doctor."
                                 }
                             ]
@@ -741,7 +741,7 @@
                                 {
                                     "id": "doctor",
                                     "key": "doctor",
-                                    "value": "quisquam",
+                                    "value": "nesciunt",
                                     "description": "The ID of the doctor."
                                 }
                             ]
@@ -759,7 +759,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"image\": \"et\"\n}"
+                            "raw": "{\n    \"image\": \"autem\"\n}"
                         },
                         "description": "Update doctor image (Multipart Request)!! token required | super_admin, admin:doctor, doctor",
                         "response": []
@@ -793,7 +793,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"patient_id\": 8,\n    \"doctor_id\": \"exercitationem\",\n    \"start_time\": \"\\\"\\\", \\\"2020-07-10T14:19:24.000000Z\\\"\",\n    \"end_time\": \"\\\"\\\", \\\"2020-07-10T14:40:30.000000Z\\\"\"\n}"
+                            "raw": "{\n    \"patient_id\": 18,\n    \"doctor_id\": \"id\",\n    \"start_time\": \"\\\"\\\", \\\"2020-07-10T14:19:24.000000Z\\\"\",\n    \"end_time\": \"\\\"\\\", \\\"2020-07-10T14:40:30.000000Z\\\"\"\n}"
                         },
                         "description": "Patientcheckup store endpoint, User must have sufficient balance for doctor rate, returns patientcheckup instance. !! token required | patient",
                         "response": []
@@ -811,7 +811,7 @@
                                 {
                                     "id": "patientcheckup",
                                     "key": "patientcheckup",
-                                    "value": "voluptatem",
+                                    "value": "ad",
                                     "description": "The patientcheckup id."
                                 }
                             ]
@@ -829,7 +829,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"end_time\": 0,\n    \"doctor_rating\": 14,\n    \"patient_rating\": 7\n}"
+                            "raw": "{\n    \"end_time\": 0,\n    \"doctor_rating\": 16,\n    \"patient_rating\": 13\n}"
                         },
                         "description": "Patientcheckup update patient and doctor ratings and endtime. !! token required | patient, doctor",
                         "response": []
@@ -853,7 +853,7 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "pariatur",
+                                    "value": "facilis",
                                     "description": "The User ID of patients."
                                 }
                             ]
@@ -899,7 +899,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"dolorem\",\n    \"age\": 4,\n    \"gender\": 14,\n    \"blood_group\": \"\\\"B+ve\\\"\",\n    \"blood_pressure\": \"\\\"90-150\\\"\",\n    \"cholesterol_level\": \"\\\"dont know the readings :p\\\"\"\n}"
+                            "raw": "{\n    \"name\": \"quam\",\n    \"age\": 4,\n    \"gender\": 4,\n    \"blood_group\": \"\\\"B+ve\\\"\",\n    \"blood_pressure\": \"\\\"90-150\\\"\",\n    \"cholesterol_level\": \"\\\"dont know the readings :p\\\"\"\n}"
                         },
                         "description": "Patient store endpoint, returns patient instance with user_id set for User instance associated with token.  !! token required | patient",
                         "response": []
@@ -917,7 +917,7 @@
                                 {
                                     "id": "patient",
                                     "key": "patient",
-                                    "value": "quia",
+                                    "value": "voluptate",
                                     "description": "The patient id."
                                 }
                             ]
@@ -959,7 +959,7 @@
                                 {
                                     "id": "patient",
                                     "key": "patient",
-                                    "value": "dignissimos",
+                                    "value": "natus",
                                     "description": "The Id of patient."
                                 }
                             ]
@@ -1041,7 +1041,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"patient_id\": 4,\n    \"prescription\": \"odio\"\n}"
+                            "raw": "{\n    \"patient_id\": 20,\n    \"prescription\": \"vero\"\n}"
                         },
                         "description": "Patientprescription store endpoint [Must be multipart\/form-data request with image file], User must provide prescription for registered patients, returns patientprescription instance. !! token required | patient",
                         "response": []
@@ -1075,7 +1075,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"type\": 3,\n    \"amount\": 5,\n    \"status\": 4\n}"
+                            "raw": "{\n    \"type\": 5,\n    \"amount\": 10,\n    \"status\": 7\n}"
                         },
                         "description": "Get transaction object after create. user_id of transaction will be set to the user binded with token !! token required | patient",
                         "response": []
@@ -1093,7 +1093,7 @@
                                 {
                                     "id": "transaction",
                                     "key": "transaction",
-                                    "value": "sit",
+                                    "value": "possimus",
                                     "description": "The ID of the transaction."
                                 }
                             ]
@@ -1111,7 +1111,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"status\": 11\n}"
+                            "raw": "{\n    \"status\": 4\n}"
                         },
                         "description": "Update transaction status to completed. user_id of transaction has to be same with the user binded with token !! token required | super_admin, admin:transaction, patient",
                         "response": []
@@ -1129,7 +1129,7 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "soluta",
+                                    "value": "expedita",
                                     "description": "The ID of the user."
                                 }
                             ]
@@ -1227,7 +1227,7 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "consequuntur",
+                                    "value": "dolor",
                                     "description": "The ID of the user."
                                 }
                             ]

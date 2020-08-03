@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
+
+
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
 Route::put('users/{user}/agent', 'Api\UserController@changeUserAgentPermission');
@@ -82,3 +84,6 @@ Route::put('transactions/{transaction}/status', 'Api\TransactionController@updat
 Route::get('users/{user}/transactions/complete', 'Api\TransactionController@loadAllUserCompletedTransactions');
 
 
+//twilio
+Route::get('access_token', 'Api\AccessTokenController@generate_token');
+//twilio
