@@ -56,8 +56,9 @@ Route::post('doctorschedules', "Api\DoctorScheduleController@store");
 
 
 
-Route::get('doctors/{doctor}/doctorappointments/today', "Api\DoctorappointmentController@getAllActiveDoctorAppointmentsToday");
+Route::get('doctors/{doctor}/doctorappointments/{date}', "Api\DoctorappointmentController@getAllDoctorAppointmentsByDate");
 Route::get('doctors/{doctor}/doctorappointments/{status}', "Api\DoctorappointmentController@getAllDoctorAppointmentsByStatus")->where('status', '[0-2]');
+Route::get('doctors/{doctor}/doctorappointments/upcoming', "Api\DoctorappointmentController@getAllUpcomingDoctorAppointments");
 Route::post('doctorappointments', 'Api\DoctorappointmentController@store');
 Route::put('doctorappointments/{doctorappointment}', 'Api\DoctorappointmentController@update');
 
@@ -85,5 +86,5 @@ Route::get('users/{user}/transactions/complete', 'Api\TransactionController@load
 
 
 //twilio
-Route::get('access_token', 'Api\AccessTokenController@generate_token');
+Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');
 //twilio

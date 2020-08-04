@@ -74,17 +74,19 @@ class DoctorappointmentController extends Controller
         }
 
         $paginatedDoctorAppointmentsByStatus = Doctorappointment::where('doctor_id', $doctor->id)
+            ->orderBy('start_time', 'ASC')
             ->where('status', $status)->paginate(10);
 
         return response()->json($paginatedDoctorAppointmentsByStatus);
     }
 
     /**
-     * Fetch Active Doctors Appointments Today_
+     * Fetch Active Doctors Appointments By Date_
      *
-     * Fetch scheduled valid doctor appointments today.
+     * Fetch scheduled valid doctor appointments by Date.
      *
      * @urlParam doctor required The doctor id associated with appointments.
+     * @urlParam date required The query date.
      *
      *
      * @response  200 [
@@ -101,13 +103,58 @@ class DoctorappointmentController extends Controller
      * }
      * ]
      */
-    public function getAllActiveDoctorAppointmentsToday(Doctor $doctor)
+    public function getAllActiveDoctorAppointmentsByDate(Doctor $doctor, $date)
     {
-        $activeDoctorAppointmentsToday = Doctorappointment::whereDate('start_time', Carbon::today())
-            ->where('status', 0)->get();
-        return response()->json($activeDoctorAppointmentsToday);
+        $date = Carbon::parse($date);
+        $doctorAppointmentsByDate = Doctorappointment::where('doctor_id', $doctor->id)
+            ->whereDate('start_time', '=', $date)
+            ->orderBy('start_time', 'ASC')
+            ->get();
+        return response()->json($doctorAppointmentsByDate);
     }
 
+    /**
+     * _Fetch Paginated Upcoming Doctors Appointments_
+     *
+     * Fetch scheduled upcoming doctor appointments starting from current date, paginated response of doctorappointment instances. !! token required| super_admin, admin, doctor
+     *
+     * @urlParam doctor required The doctor id associated with appointments.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 1,
+     * "doctor_id": 6,
+     * "patientcheckup_id": 2,
+     * "code": "fyFDiwwuVU2pzlO8",
+     * "status": 0,
+     * "start_time": "2020-07-14 14:19:24",
+     * "end_time": "2020-07-14 14:40:24",
+     * "created_at": "2020-07-11T11:51:21.000000Z",
+     * "updated_at": "2020-07-11T12:18:16.000000Z"
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctors/6/doctorappointments/upcoming?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctors/6/doctorappointments/upcoming?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctors/6/doctorappointments/upcoming",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
+    public function getAllUpcomingDoctorAppointments(Doctor $doctor){
+        $upcomingDoctorAppointments = Doctorappointment::where('doctor_id', $doctor->id)
+            ->whereDate('start_time', '>=', Carbon::now())
+            ->orderBy('start_time', 'ASC')
+            ->paginate(10);
+        return response()->json($upcomingDoctorAppointments);
+    }
 
     /**
      * _Create Doctorappointment_

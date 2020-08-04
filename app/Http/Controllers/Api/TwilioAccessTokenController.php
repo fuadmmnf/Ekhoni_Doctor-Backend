@@ -30,7 +30,7 @@ class TwilioAccessTokenController extends Controller
 
         // Grant access to Video
         $grant = new VideoGrant();
-        $grant->setRoom('cool room');
+        $grant->setRoom('demo');
         $token->addGrant($grant);
 
         // Serialize the token as a JWT
