@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Doctor;
 use App\Http\Controllers\Handlers\SmsHandler;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use App\Otpcode;
 use App\User;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 /**
  * @group  User management
@@ -28,6 +25,22 @@ class UserController extends Controller
     {
         $this->user = $request->user('sanctum');
     }
+
+    public function fetchUserTypeFromToken()
+    {
+        if (!$this->user) {
+            return response()->json('Unauthorized', 401);
+        }
+
+        $user = $this->user;
+        if ($user->hasRole('doctor')) {
+            $user->doctor;
+        } elseif (!$user->hasRole('patient')) {
+            $user->admin;
+        }
+        return response()->json($user);
+    }
+
 
     /**
      * Send OTP to user mobile
@@ -115,7 +128,6 @@ class UserController extends Controller
 //        unset($newUser->roles);
         return response()->json($newUser, 201);
     }
-
 
 
     /**

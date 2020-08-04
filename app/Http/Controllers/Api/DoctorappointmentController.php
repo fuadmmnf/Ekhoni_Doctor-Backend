@@ -132,6 +132,19 @@ class DoctorappointmentController extends Controller
      * "status": 0,
      * "start_time": "2020-07-14 14:19:24",
      * "end_time": "2020-07-14 14:40:24",
+     * "patient": {
+     *  "user_id": 3,
+     *  "name": "required",
+     *  "age": 23,
+     *  "gender": 1,
+     *  "code": "RMshPimgOz6yKecP",
+     *  "blood_group": "B+ve",
+     *  "blood_pressure": "90-150",
+     *  "cholesterol_level": "60",
+     *  "updated_at": "2020-07-10T21:30:47.000000Z",
+     *  "created_at": "2020-07-10T21:30:47.000000Z",
+     *  "id": 1
+     * }
      * "created_at": "2020-07-11T11:51:21.000000Z",
      * "updated_at": "2020-07-11T12:18:16.000000Z"
      * }
@@ -148,11 +161,19 @@ class DoctorappointmentController extends Controller
      * "total": 1
      * }
      */
-    public function getAllUpcomingDoctorAppointments(Doctor $doctor){
+    public function getAllUpcomingDoctorAppointments(Doctor $doctor)
+    {
         $upcomingDoctorAppointments = Doctorappointment::where('doctor_id', $doctor->id)
             ->whereDate('start_time', '>=', Carbon::now())
             ->orderBy('start_time', 'ASC')
             ->paginate(10);
+
+        $upcomingDoctorAppointments->map(function ($doctorappointment) {
+            $patientcheckup = Patientcheckup::findOrFail($doctorappointment->patientcheckup_id);
+            $doctorappointment->patient = $patientcheckup->patient;
+            return $doctorappointment;
+        });
+
         return response()->json($upcomingDoctorAppointments);
     }
 
