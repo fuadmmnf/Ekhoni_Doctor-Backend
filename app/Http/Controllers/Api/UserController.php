@@ -86,6 +86,7 @@ class UserController extends Controller
      *
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
      * @bodyParam otp_code string required The 4 digit access otp token sent via sms. Example: 1234
+     * @bodyParam is_patient boolean required The boolean representation to indicate if request in from general user. So that if user not found new user will be created. Example: true
      *
      *
      * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
@@ -102,7 +103,8 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'mobile' => 'required| min:11| max: 14',
-            'otp_code' => 'required'
+            'otp_code' => 'required',
+            'is_patient' => 'required| boolean',
         ]);
 
         $otprequest = Otpcode::where('mobile', $request->mobile)
@@ -123,10 +125,14 @@ class UserController extends Controller
         }
 
         //create general user
-        $newUser = $tokenUserHandler->createUser($request->mobile);
-        $newUser->assignRole('patient');
+        if($request->is_patient){
+            $newUser = $tokenUserHandler->createUser($request->mobile);
+            $newUser->assignRole('patient');
 //        unset($newUser->roles);
-        return response()->json($newUser, 201);
+            return response()->json($newUser, 201);
+        }
+
+        return response()->json("No Such User Found", 401);
     }
 
 
