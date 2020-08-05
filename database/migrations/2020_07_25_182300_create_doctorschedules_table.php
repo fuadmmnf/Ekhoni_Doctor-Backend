@@ -18,7 +18,7 @@ class CreateDoctorschedulesTable extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
-            $table->integer('max_appointments_per_day')->nullable();
+            $table->integer('max_appointments_per_day');
             $table->json('schedule_slots');
             $table->timestamps();
 

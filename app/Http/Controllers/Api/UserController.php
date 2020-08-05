@@ -26,18 +26,24 @@ class UserController extends Controller
         $this->user = $request->user('sanctum');
     }
 
+
+    private function getUserType(User $user){
+        if ($user->hasRole('doctor')) {
+            $user->doctor;
+        } elseif (!$user->hasRole('patient')) {
+            $user->admin;
+        }
+
+        return $user;
+    }
+
     public function fetchUserTypeFromToken()
     {
         if (!$this->user) {
             return response()->json('Unauthorized', 401);
         }
 
-        $user = $this->user;
-        if ($user->hasRole('doctor')) {
-            $user->doctor;
-        } elseif (!$user->hasRole('patient')) {
-            $user->admin;
-        }
+        $user = $this->getUserType($this->user);
         return response()->json($user);
     }
 
@@ -120,7 +126,7 @@ class UserController extends Controller
 
         //retrive existing user
         if ($user) {
-            $user = $tokenUserHandler->regenerateUserToken($user);
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user));
             return response()->json($user, 200);
         }
 

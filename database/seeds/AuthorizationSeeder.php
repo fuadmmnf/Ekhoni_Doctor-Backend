@@ -49,7 +49,7 @@ class AuthorizationSeeder extends Seeder
         $name = 'admin';
         $email = 'admin@ekhonidoctor.com';
         $password = 'admin123';
-        $mobile = '01156572070';
+        $mobile = '8801156572070';
         $user_role = 'super_admin';
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($mobile);

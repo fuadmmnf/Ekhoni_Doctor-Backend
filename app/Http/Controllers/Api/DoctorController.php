@@ -67,7 +67,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "postgrad": "dmc",
      * "medical_college": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T15:49:23.000000Z",
@@ -93,6 +93,64 @@ class DoctorController extends Controller
             ->where('status', 1)->paginate(10);
 
         return response()->json($availableDoctorsByType);
+    }
+
+
+    /**
+     * Fetch Paginated Active Doctors
+     *
+     * Fetch active doctors, paginated response of doctor instances.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 6,
+     * "user_id": 12,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000002",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 1,
+     * "is_featured": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "start_time": null,
+     * "end_time": null,
+     * "max_appointments_per_day": null,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "device_ids": null,
+     * "booking_start_time": null,
+     * "created_at": "2020-07-10T15:49:23.000000Z",
+     * "updated_at": "2020-07-10T16:03:21.000000Z"
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctors/active?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctors/active?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctors/active",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
+    public function getActiveDoctors()
+    {
+        $availableDoctors = Doctor::where('activation_status', 1)
+            ->where('status', 1)->paginate(10);
+
+        return response()->json($availableDoctors);
     }
 
 
@@ -127,7 +185,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "postgrad": "dmc",
      * "medical_college": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -153,7 +211,6 @@ class DoctorController extends Controller
             ->where('activation_status', 1)->paginate(10);
         return response()->json($approvedDoctors);
     }
-
 
 
     /**
@@ -186,7 +243,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "postgrad": "dmc",
      * "medical_college": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -211,7 +268,6 @@ class DoctorController extends Controller
         $approvedDoctors = Doctor::where('activation_status', 1)->paginate(10);
         return response()->json($approvedDoctors);
     }
-
 
 
     /**
@@ -243,7 +299,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "postgrad": "dmc",
      * "medical_college": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -291,7 +347,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "postgrad": "dmc",
      * "medical_college": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:19:24.000000Z",
@@ -325,7 +381,6 @@ class DoctorController extends Controller
     }
 
 
-
     private function createDoctor(Request $doctorRequest, $isApproved): Doctor
     {
         $tokenUserHandler = new TokenUserHandler();
@@ -351,8 +406,9 @@ class DoctorController extends Controller
         $newDoctor->medical_college = $doctorRequest->medical_college;
         $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
         $newDoctor->first_appointment_rate = ($doctorRequest->has('first_appointment_rate')) ? $doctorRequest->first_appointment_rate : null;
+        $newDoctor->report_followup_rate = ($doctorRequest->has('report_followup_rate')) ? $doctorRequest->report_followup_rate : null;
         $newDoctor->postgrad = $doctorRequest->postgrad;
-        $newDoctor->others_training = $doctorRequest->others_training;
+        $newDoctor->other_trainings = $doctorRequest->other_trainings;
         $newDoctor->password = Hash::make($newDoctor->mobile . $newDoctor->code);
         $newDoctor->save();
         return $newDoctor;
@@ -369,6 +425,7 @@ class DoctorController extends Controller
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
+     * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
      * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
      * @bodyParam  email string required The mail address of doctor.
@@ -376,7 +433,7 @@ class DoctorController extends Controller
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
-     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
+     * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
      *
      *
      * @response  201 {
@@ -392,7 +449,7 @@ class DoctorController extends Controller
      * "designation": "trainee doctor",
      * "medical_college": "dmc",
      * "postgrad": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "updated_at": "2020-07-10T14:19:24.000000Z",
      * "created_at": "2020-07-10T14:19:24.000000Z",
      * "id": 2
@@ -407,6 +464,7 @@ class DoctorController extends Controller
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
             'first_appointment_rate' => 'sometimes| numeric',
+            'report_followup_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
@@ -414,7 +472,7 @@ class DoctorController extends Controller
             'designation' => 'required',
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
-            'others_training' => 'present| nullable',
+            'other_trainings' => 'present| nullable',
             'monogram' => 'required| image',
         ]);
         Doctortype::findOrFail($request->doctortype_id);
@@ -434,6 +492,7 @@ class DoctorController extends Controller
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
+     * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
      * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
      * @bodyParam  email string required The mail address of doctor.
@@ -441,7 +500,7 @@ class DoctorController extends Controller
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
-     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
+     * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
      *
      *
      * @response  201 {
@@ -451,12 +510,13 @@ class DoctorController extends Controller
      * "bmdc_number": "0000000001",
      * "rate": 100,
      * "offer_rate": 100,
+     * "report_followup_rate": 100,
      * "gender": 0,
      * "email": "doctor@google.com",
      * "workplace": "dmc",
      * "designation": "trainee doctor",
      * "medical_college": "dmc",
-     * "others_training": "sdaosdmoaismdioasmdioas",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
      * "postgrad": "dmc",
      * "updated_at": "2020-07-10T14:57:19.000000Z",
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -482,6 +542,7 @@ class DoctorController extends Controller
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
             'first_appointment_rate' => 'sometimes| numeric',
+            'report_followup_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
@@ -489,7 +550,7 @@ class DoctorController extends Controller
             'designation' => 'required',
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
-            'others_training' => 'present| nullable',
+            'other_trainings' => 'present| nullable',
         ]);
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, true);
@@ -572,9 +633,10 @@ class DoctorController extends Controller
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
+     * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @bodyParam  workplace string required The workplace of doctor.
      * @bodyParam  designation string required The designation of doctor.
-     * @bodyParam  others_training string required Other degrees of doctor [can be blank].
+     * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
      *
      *
      * @response  204
@@ -592,9 +654,10 @@ class DoctorController extends Controller
             'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
             'first_appointment_rate' => 'sometimes| numeric',
+            'report_followup_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
-            'others_training' => 'sometimes',
+            'other_trainings' => 'sometimes',
         ]);
 
         if ($request->has('rate')) {
@@ -610,6 +673,10 @@ class DoctorController extends Controller
             $doctor->first_appointment_rate = $request->first_appointment_rate;
         }
 
+        if ($request->has('report_followup_rate')) {
+            $doctor->report_followup_rate = $request->report_followup_rate;
+        }
+
         if ($request->has('payment_style')) {
             $doctor->payment_style = $request->payment_style;
         }
@@ -620,8 +687,8 @@ class DoctorController extends Controller
         if ($request->has('designation')) {
             $doctor->designation = $request->designation;
         }
-        if ($request->has('others_training')) {
-            $doctor->others_training = $request->others_training;
+        if ($request->has('other_trainings')) {
+            $doctor->other_trainings = $request->other_trainings;
         }
 
 
@@ -670,9 +737,6 @@ class DoctorController extends Controller
         $doctor->save();
         return response()->noContent();
     }
-
-
-
 
 
     /**

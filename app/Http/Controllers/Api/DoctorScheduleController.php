@@ -40,15 +40,13 @@ class DoctorScheduleController extends Controller
 
 
     /**
-     * Fetch Paginated Doctor Schedules By Doctor
+     * Fetch Doctor Schedules By Doctor
      *
-     * Fetch doctor schedules starting from present date, response of doctorschedule instances.
+     * Fetch doctor schedules starting from present date to upcoming 30days, Schedule Will not be shown if all slots are booked, response of doctorschedule instances.
      *
      * @urlParam  doctor required The Doctor ID of doctor schedules.
      *
-     * @response  200 {
-     * "current_page": 1,
-     * "data": [
+     * @response  200 [
      * {
      * "doctor_id": 1,
      * "start_time": "2020-07-29T18:30:00.000000Z",
@@ -61,24 +59,23 @@ class DoctorScheduleController extends Controller
      * }
      * ..
      * ],
-     * "first_page_url": "http://127.0.0.1:8000/api/doctors/1/doctorschedules?page=1",
-     * "from": 1,
-     * "last_page": 1,
-     * "last_page_url": "http://127.0.0.1:8000/api/doctors/1/doctorschedules?page=1",
-     * "next_page_url": null,
-     * "path": "http://127.0.0.1:8000/api/doctors/1/doctorschedules",
-     * "per_page": 10,
-     * "prev_page_url": null,
-     * "to": 1,
-     * "total": 1
-     * }
      */
     public function getDoctorSchedulesByDoctorFromPresentDate(Doctor $doctor)
     {
         $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::where('doctor_id', $doctor->id)
             ->whereDate('start_time', '>=', Carbon::now())
-            ->paginate(10);
+            ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
+            ->get();
 
+        $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
+            $scheduleSlots = json_decode($doctorSchedule->schedule_slots, true);
+            foreach ($scheduleSlots as $scheduleSlot){
+                if($scheduleSlot['status'] == 0){
+                    return true;
+                }
+            }
+            return false;
+        })->values();
         return response()->json($doctorSchedulesByDoctorFromPresentDate);
     }
 

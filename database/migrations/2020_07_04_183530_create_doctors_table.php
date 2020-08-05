@@ -26,13 +26,14 @@ class CreateDoctorsTable extends Migration
             $table->double('rate');
             $table->double('offer_rate');
             $table->double('first_appointment_rate')->nullable();
+            $table->double('report_followup_rate')->nullable();
             $table->integer('gender'); // 0 => male, 1 => female
             $table->string('email');
             $table->string('workplace')->nullable();
             $table->string('designation')->nullable();
             $table->string('postgrad')->nullable();
             $table->string('medical_college')->nullable();
-            $table->string('others_training')->nullable();
+            $table->string('other_trainings')->nullable();
 
             $table->string('device_ids')->nullable(true);
             $table->dateTime('booking_start_time')->nullable(); // null => available, dateTime => booking process starting_time

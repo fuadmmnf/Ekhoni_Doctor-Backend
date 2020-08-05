@@ -30,6 +30,7 @@ Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 
 Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
+Route::get('doctors/active', 'Api\DoctorController@getActiveDoctors');
 Route::get('doctortypes/{doctortype}/doctors/approved', 'Api\DoctorController@getAllApprovedDoctorsByDoctortype');
 Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
