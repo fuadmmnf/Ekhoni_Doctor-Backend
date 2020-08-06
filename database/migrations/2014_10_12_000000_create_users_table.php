@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_agent')->default(false);
             $table->double('agent_percentage')->default(0.0);
             $table->double('balance')->default(0.0);
+            $table->string('device_ids')->nullable(true);
             $table->string('password');
             $table->timestamps();
         });

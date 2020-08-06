@@ -27,7 +27,8 @@ class UserController extends Controller
     }
 
 
-    private function getUserType(User $user){
+    private function getUserType(User $user)
+    {
         if ($user->hasRole('doctor')) {
             $user->doctor;
         } elseif (!$user->hasRole('patient')) {
@@ -65,6 +66,7 @@ class UserController extends Controller
             'mobile' => 'required| min:11| max: 14',
         ]);
 
+        Otpcode::where('mobile', $request->mobile)->delete();
 
         $newOtpcode = new Otpcode();
         $newOtpcode->mobile = $request->mobile;
@@ -111,6 +113,7 @@ class UserController extends Controller
             'mobile' => 'required| min:11| max: 14',
             'otp_code' => 'required',
             'is_patient' => 'required| boolean',
+            'device_id' => 'present| nullable'
         ]);
 
         $otprequest = Otpcode::where('mobile', $request->mobile)
@@ -126,14 +129,15 @@ class UserController extends Controller
 
         //retrive existing user
         if ($user) {
-            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user));
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, $request->device_id));
             return response()->json($user, 200);
         }
 
         //create general user
-        if($request->is_patient){
-            $newUser = $tokenUserHandler->createUser($request->mobile);
+        if ($request->is_patient) {
+            $newUser = $tokenUserHandler->createUser($request->mobile, $request->device_id);
             $newUser->assignRole('patient');
+
 //        unset($newUser->roles);
             return response()->json($newUser, 201);
         }
