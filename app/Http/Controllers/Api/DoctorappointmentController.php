@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Doctor;
 use App\Doctorappointment;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Handlers\AppointmentHandler;
+use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
+use App\Http\Controllers\Handlers\DoctorScheduleHandler;
 use App\Http\Controllers\Handlers\CheckupTransactionHandler;
 use App\Patientcheckup;
 use Carbon\Carbon;
@@ -248,7 +249,7 @@ class DoctorappointmentController extends Controller
         $doctor->booking_start_time = null;
         $doctor->save();
 
-        $appointmentHandler = new AppointmentHandler();
+        $appointmentHandler = new DoctorScheduleHandler();
         $appointmentHandler->setAppointmentInDoctorSchedule($newDoctorAppointment);
 
 
@@ -285,14 +286,11 @@ class DoctorappointmentController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Doctorappointment $doctorappointment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Doctorappointment $doctorappointment)
-    {
-        //
+
+
+    public function sendAppointmentCheckupCallNotification(Doctorappointment $doctorappointment){
+        $pushNotificationHandler = new CheckupCallHandler();
+        $patientcheckup = $doctorappointment->patientcheckup;
+        $pushNotificationHandler->createCallRequest($patientcheckup->doctor, $patientcheckup->patient, true);
     }
 }

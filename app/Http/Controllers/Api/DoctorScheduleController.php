@@ -6,7 +6,7 @@ use App\Doctor;
 use App\Doctorappointment;
 use App\Doctorschedule;
 use App\Doctortype;
-use App\Http\Controllers\Handlers\AppointmentHandler;
+use App\Http\Controllers\Handlers\DoctorScheduleHandler;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;

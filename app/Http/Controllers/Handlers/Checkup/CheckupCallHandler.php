@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Handlers\Checkup;
+
+use App\Http\Controllers\Handlers\Firebase\FirestoreHandler;
+use Kreait\Firebase\Factory;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
 
-
-class TwilioAccessTokenController extends Controller
+class CheckupCallHandler
 {
-    public function generate_token()
+    private function generate_token()
     {
         // Substitute your Twilio Account SID and API Key details
         $accountSid = env('TWILIO_ACCOUNT_SID');
@@ -34,6 +34,18 @@ class TwilioAccessTokenController extends Controller
         $token->addGrant($grant);
 
         // Serialize the token as a JWT
-        echo $token->toJWT();
+        return $token->toJWT();
+    }
+
+
+    public function createCallRequest($caller, $callee, $isAppointment){
+        $data = [
+            'access_token' => $this->generate_token(),
+            'caller_name' => $caller->name
+        ];
+
+        $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        $firestoreHandler = new FirestoreHandler($factory->createFirestore());
+        $firestoreHandler->addCheckupDocument($callee, $data, $isAppointment);
     }
 }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Doctor;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
 use App\Http\Controllers\Handlers\CheckupTransactionHandler;
-use App\Http\Controllers\Handlers\PushNotificationHandler;
 use App\Patient;
 use App\Patientcheckup;
 use Carbon\Carbon;
@@ -156,7 +156,7 @@ class PatientcheckupController extends Controller
 
 
     public function sendCheckupCallNotification(Patientcheckup $patientcheckup){
-        $pushNotificationHandler = new PushNotificationHandler();
-        $pushNotificationHandler->sendNotificationToSpecificUser($patientcheckup->patient->user, "Incoming Call");
+        $pushNotificationHandler = new CheckupCallHandler();
+        $pushNotificationHandler->createCallRequest($patientcheckup->patient, $patientcheckup->doctor, false);
     }
 }

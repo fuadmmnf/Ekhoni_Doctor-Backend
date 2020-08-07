@@ -9,7 +9,7 @@ use App\Doctorappointment;
 use App\Doctorschedule;
 use Carbon\Carbon;
 
-class AppointmentHandler
+class DoctorScheduleHandler
 {
 //    public function cancelAppointmentBetweenTimeRange(Doctor $doctor, $start, $end)
 //    {
