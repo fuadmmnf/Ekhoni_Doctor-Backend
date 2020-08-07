@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Doctor;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handlers\CheckupTransactionHandler;
+use App\Http\Controllers\Handlers\PushNotificationHandler;
 use App\Patient;
 use App\Patientcheckup;
 use Carbon\Carbon;
@@ -152,14 +153,10 @@ class PatientcheckupController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Patientcheckup $patientcheckup
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Patientcheckup $patientcheckup)
-    {
-        //
+
+
+    public function sendCheckupCallNotification(Patientcheckup $patientcheckup){
+        $pushNotificationHandler = new PushNotificationHandler();
+        $pushNotificationHandler->sendNotificationToSpecificUser($patientcheckup->patient->user, "Incoming Call");
     }
 }

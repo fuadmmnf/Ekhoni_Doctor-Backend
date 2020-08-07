@@ -4,6 +4,7 @@
 /public/storage
 /public/docs
 /storage/*.key
+ekhoni-daktar-99596-2eded06c49c4.json
 .env
 .env.backup
 .phpunit.result.cache
