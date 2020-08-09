@@ -18,7 +18,7 @@ class CreatePatientcheckupsTable extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('transaction_id');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
             $table->double('doctor_rating')->default(5);

@@ -4,13 +4,14 @@
 namespace App\Http\Controllers\Handlers\Checkup;
 
 use App\Http\Controllers\Handlers\Firebase\FirestoreHandler;
+use App\Patientcheckup;
 use Kreait\Firebase\Factory;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
 
 class CheckupCallHandler
 {
-    private function generate_token()
+    private function generate_token($room)
     {
         // Substitute your Twilio Account SID and API Key details
         $accountSid = env('TWILIO_ACCOUNT_SID');
@@ -30,7 +31,7 @@ class CheckupCallHandler
 
         // Grant access to Video
         $grant = new VideoGrant();
-        $grant->setRoom('demo');
+        $grant->setRoom($room);
         $token->addGrant($grant);
 
         // Serialize the token as a JWT
@@ -38,14 +39,26 @@ class CheckupCallHandler
     }
 
 
-    public function createCallRequest($caller, $callee, $isAppointment){
+    public function createCallRequest(Patientcheckup $patientcheckup, $isAppointment){
+        $doctor = $patientcheckup->doctor;
+        $patient = $patientcheckup->patient;
+        $room = $doctor->bmdc_number . '_' . $patient->code;
+        $access_token = $this->generate_token($room);
+
         $data = [
-            'access_token' => $this->generate_token(),
-            'caller_name' => $caller->name
+            'access_token' => $access_token,
+            'room_name' => $room,
+            'caller_name' => ($isAppointment)? $doctor->name: $patient->name,
+            'checkup_code' => $patientcheckup->code
         ];
 
         $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
-        $firestoreHandler = new FirestoreHandler($factory->createFirestore());
-        $firestoreHandler->addCheckupDocument($callee, $data, $isAppointment);
+        $addedDocRef = $factory->createFirestore()->database()
+            ->collection($isAppointment? 'doctorcall': 'patientcall')
+            ->document(($isAppointment)? $patient->user->code: $doctor->user->code)
+            ->set($data);
+
+        return $access_token;
     }
+
 }

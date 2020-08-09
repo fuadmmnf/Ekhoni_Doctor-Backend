@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Doctor;
+use App\Doctorappointment;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
 use App\Http\Controllers\Handlers\CheckupTransactionHandler;
@@ -31,6 +32,10 @@ class PatientcheckupController extends Controller
     }
 
 
+    public function getDetailsFromCode(Patientcheckup $patientcheckup){
+        $patientcheckup->patient;
+        return response()->json($patientcheckup, 200);
+    }
 
 //    public function getPatientCheckupsByPatient(Patient $patient)
 //    {
@@ -63,7 +68,6 @@ class PatientcheckupController extends Controller
      * "doctor_id": 6,
      * "start_time": "2020-07-10T21:30:47.000000Z",
      * "end_time": null,
-     * "transaction_id": 5,
      * "code": "UenaBBVXuQF2F7A4",
      * "updated_at": "2020-07-11T09:46:43.000000Z",
      * "created_at": "2020-07-11T09:46:43.000000Z",
@@ -156,7 +160,9 @@ class PatientcheckupController extends Controller
 
 
     public function sendCheckupCallNotification(Patientcheckup $patientcheckup){
+        $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
         $pushNotificationHandler = new CheckupCallHandler();
-        $pushNotificationHandler->createCallRequest($patientcheckup->patient, $patientcheckup->doctor, false);
+        $data = $pushNotificationHandler->createCallRequest($patientcheckup, $doctorappointment != null);
+        return response()->json($data, 201);
     }
 }

@@ -3,10 +3,6 @@
 
 namespace App\Http\Controllers\Handlers\Firebase;
 
-
-use App\Doctor;
-use App\Patient;
-use App\User;
 use Kreait\Firebase\Firestore;
 
 class FirestoreHandler
@@ -21,11 +17,8 @@ class FirestoreHandler
 
     public function addCheckupDocument($callee, $data, $isAppointment)
     {
-
-
-        $addedDocRef = $this->db->collection($isAppointment? 'doctor': 'patient')
+        $addedDocRef = $this->db->collection($isAppointment? 'doctorcall': 'patientcall')
             ->document('' . $callee->user->code)
-            ->collection('checkups')
-            ->add($data);
+            ->set($data);
     }
 }
