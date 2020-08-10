@@ -159,13 +159,18 @@ class DoctorappointmentController extends Controller
      * "total": 1
      * }
      */
-    public function getAllUpcomingDoctorAppointments(Doctor $doctor)
+    public function getUpcomingDoctorAppointments(Doctor $doctor)
     {
         $upcomingDoctorAppointments = Doctorappointment::where('doctor_id', $doctor->id)
             ->whereDate('start_time', '>=', Carbon::now())
             ->orderBy('start_time', 'ASC')
             ->paginate(15);
+
         $upcomingDoctorAppointments->load('patientcheckup');
+//        $upcomingDoctorAppointments = $upcomingDoctorAppointments->map(function ($appointment) {
+//            $appointment->patientcheckup;
+//            return $appointment;
+//        })->values();
 //        $upcomingDoctorAppointments->map(function ($doctorappointment) {
 //            $patientcheckup = Patientcheckup::findOrFail($doctorappointment->patientcheckup_id);
 //            $doctorappointment->patient = $patientcheckup->patient;

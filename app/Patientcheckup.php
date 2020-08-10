@@ -22,4 +22,7 @@ class Patientcheckup extends Model
         return $this->belongsTo('App\Transaction');
     }
 
+    public function doctorappointment(){
+        return $this->hasOne('App\Doctorappointment');
+    }
 }
