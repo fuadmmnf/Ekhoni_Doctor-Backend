@@ -3,7 +3,6 @@
 
 namespace App\Http\Controllers\Handlers\Checkup;
 
-use App\Http\Controllers\Handlers\Firebase\FirestoreHandler;
 use App\Patientcheckup;
 use Kreait\Firebase\Factory;
 use Twilio\Jwt\AccessToken;
@@ -52,12 +51,13 @@ class CheckupCallHandler
             'checkup_code' => $patientcheckup->code
         ];
 
-        $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        $factory = (new Factory)->withServiceAccount(base_path() . '/' . env('FIREBASE_CREDENTIALS'));
         $addedDocRef = $factory->createFirestore()->database()
             ->collection($isAppointment? 'doctorcall': 'patientcall')
             ->document(($isAppointment)? $patient->user->code: $doctor->user->code)
             ->set($data);
 
+        error_log(json_encode($addedDocRef));
         return $access_token;
     }
 
