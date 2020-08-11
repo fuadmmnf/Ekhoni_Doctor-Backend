@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
 use App\Http\Controllers\Handlers\DoctorScheduleHandler;
 use App\Http\Controllers\Handlers\CheckupTransactionHandler;
+use App\Patient;
 use App\Patientcheckup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -186,7 +187,8 @@ class DoctorappointmentController extends Controller
      * Doctorappointment store endpoint, User must have sufficient balance for doctor rate, must maintain start_time for one of schedule_slots of doctorschedules(changes status of appointment slot to booked), returns doctorappointment instance. !! token required | patient
      *
      *
-     * @bodyParam patientcheckup_id int required The patientcheckup id associated with appointment. Frontend must create patientcheckup(with blank start_time and end_time) instance prior to creating doctorappointment.
+     * @bodyParam patient_id int required The patient id associated with call.
+     * @bodyParam  doctor_id string required The doctor id associated with call.
      * @bodyParam  start_time string required The datetime indicating starting time of scheduled appointment. Example: "2020-07-10T14:19:24.000000Z"
      * @bodyParam  end_time string required The datetime indicating ending time of scheduled appointment. Example: "2020-07-10T14:40:30.000000Z"
      *
@@ -213,16 +215,29 @@ class DoctorappointmentController extends Controller
         }
         $this->validate($request, [
 //            'doctor_id' => 'required| numeric',
-            'patientcheckup_id' => 'required| numeric',
+            'patient_id' => 'required| numeric',
+            'doctor_id' => 'required| numeric',
             'start_time' => 'required',
             'end_time' => 'required',
         ]);
 
+        $patient = Patient::where('id', $request->patient_id)
+            ->where('user_id', $this->user->id)->first();
+        if(!$patient){
+            return response()->json('No patient selected associated with user', 400);
+        }
+
+
+
+        $doctor = Doctor::findOrFail($request->doctor_id);
+        $checkupTransactionHandler = new CheckupTransactionHandler();
+
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0)? null: Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
+        if (!$newPatientCheckup) {
+            return response()->json('Insufficient Balance', 400);
+        }
 //        $doctor = Doctor::findOrFail($request->doctor_id);
-        $patientCheckup = Patientcheckup::findOrFail($request->patientcheckup_id);
-        $patient = $patientCheckup->patient;
-        $doctor = $patientCheckup->doctor;
-        $transaction = $patientCheckup->transaction;
+        $transaction = $newPatientCheckup->transaction;
 
 
         if ($this->user->id != $patient->user->id) {
@@ -234,7 +249,7 @@ class DoctorappointmentController extends Controller
 
         $newDoctorAppointment = new Doctorappointment();
         $newDoctorAppointment->doctor_id = $doctor->id;
-        $newDoctorAppointment->patientcheckup_id = $patientCheckup->id;
+        $newDoctorAppointment->patientcheckup_id = $newPatientCheckup->id;
         $newDoctorAppointment->start_time = Carbon::parse($request->start_time);
         $newDoctorAppointment->end_time = Carbon::parse($request->end_time);
 

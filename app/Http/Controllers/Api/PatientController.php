@@ -7,6 +7,8 @@ use App\Patient;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use Intervention\Image\File;
 
 /**
  * @group  Patient management
@@ -94,9 +96,12 @@ class PatientController extends Controller
      * @bodyParam name string required The patient name.
      * @bodyParam  age int required The patient age.
      * @bodyParam  gender int required The patient gender. 0 => male, 1 => female
+     * @bodyParam  address string The patient address.
      * @bodyParam  blood_group string required The patient blood group. Example: "B+ve"
      * @bodyParam  blood_pressure string required The patient blood pressure. Example: "90-150"
      * @bodyParam  cholesterol_level string required The patient cholesterol level. Example: "dont know the readings :p"
+     * @bodyParam  height string The patient height.
+     * @bodyParam  weight string The patient weight.
      *
      *
      * @response  201 {
@@ -104,10 +109,13 @@ class PatientController extends Controller
      * "name": "required",
      * "age": 23,
      * "gender": 1,
+     * "address": "address"
      * "code": "RMshPimgOz6yKecP",
      * "blood_group": "B+ve",
      * "blood_pressure": "90-150",
      * "cholesterol_level": "60",
+     * "height": "5'10''",
+     * "weight": "80",
      * "updated_at": "2020-07-10T21:30:47.000000Z",
      * "created_at": "2020-07-10T21:30:47.000000Z",
      * "id": 1
@@ -124,9 +132,12 @@ class PatientController extends Controller
             'name' => 'required',
             'age' => 'required| numeric',
             'gender' => 'required| numeric',
+            'address' => 'sometimes| nullable',
             'blood_group' => 'sometimes| nullable',
             'blood_pressure' => 'sometimes| nullable',
             'cholesterol_level' => 'sometimes| nullable',
+            'height' => 'sometimes| nullable',
+            'weight' => 'sometimes| nullable',
         ]);
 
         $newPatient = new Patient();
@@ -141,6 +152,10 @@ class PatientController extends Controller
         } while ($patient);
         $newPatient->code = $code;
 
+        if ($request->has('address')) {
+            $newPatient->address = $request->address;
+        }
+
         if ($request->has('blood_group')) {
             $newPatient->blood_group = $request->blood_group;
         }
@@ -149,6 +164,12 @@ class PatientController extends Controller
         }
         if ($request->has('cholesterol_level')) {
             $newPatient->cholesterol_level = $request->cholesterol_level;
+        }
+        if ($request->has('height')) {
+            $newPatient->height = $request->height;
+        }
+        if ($request->has('weight')) {
+            $newPatient->weight = $request->weight;
         }
         $newPatient->save();
 
@@ -163,10 +184,14 @@ class PatientController extends Controller
      *
      *
      * @urlParam   patient required The patient id.
-     * @bodyParam  age int required The patient age.
-     * @bodyParam  blood_group string required The patient blood group. Example: "B+ve"
-     * @bodyParam  blood_pressure string required The patient blood pressure. Example: "90-150"
-     * @bodyParam  cholesterol_level string required The patient cholesterol level. Example: "dont know the readings :p"
+     * @bodyParam  name string The patient name.
+     * @bodyParam  address string The patient address.
+     * @bodyParam  age int The patient age.
+     * @bodyParam  blood_group string The patient blood group. Example: "B+ve"
+     * @bodyParam  blood_pressure string The patient blood pressure. Example: "90-150"
+     * @bodyParam  cholesterol_level string The patient cholesterol level. Example: "dont know the readings :p"
+     * @bodyParam  height string The patient height.
+     * @bodyParam  weight string The patient weight.
      *
      *
      * @response  204
@@ -179,14 +204,24 @@ class PatientController extends Controller
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
+            'name' => 'sometimes| numeric',
             'age' => 'sometimes| numeric',
+            'address' => 'sometimes| numeric',
             'blood_group' => 'sometimes',
             'blood_pressure' => 'sometimes',
             'cholesterol_level' => 'sometimes',
+            'height' => 'sometimes',
+            'weight' => 'sometimes',
         ]);
 
+        if ($request->has('name')) {
+            $patient->name = $request->name;
+        }
         if ($request->has('age')) {
             $patient->age = $request->age;
+        }
+        if ($request->has('address')) {
+            $patient->address = $request->address;
         }
         if ($request->has('blood_group')) {
             $patient->blood_group = $request->blood_group;
@@ -197,19 +232,56 @@ class PatientController extends Controller
         if ($request->has('cholesterol_level')) {
             $patient->cholesterol_level = $request->cholesterol_level;
         }
+
+        if ($request->has('height')) {
+            $patient->height = $request->height;
+        }
+        if ($request->has('weight')) {
+            $patient->weight = $request->weight;
+        }
         $patient->save();
 
         return response()->noContent();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * _Change Patient Image_
      *
-     * @param \App\Patient $patient
-     * @return \Illuminate\Http\Response
+     * Update patient image (Multipart Request)!! token required | super_admin, admin:user, user
+     *
+     *
+     * @urlParam  patient required The ID of the patient.
+     * @bodyParam  image file required The patient image file.
+     *
+     *
+     * @response  204
      */
-    public function destroy(Patient $patient)
+    public function changePatientMonogram(Request $request, Patient $patient)
     {
-        //
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user') &&
+            !$this->user->hasRole('user')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $this->validate($request, [
+            'image' => 'required| image',
+        ]);
+        if ($request->hasFile('image')) {
+            $image_path = public_path('/images/users/patients/' . $patient->image);
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+            }
+            $image = $request->file('image');
+            $filename = $patient->code . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('/images/users/patients' . $filename);
+            Image::make($image)->resize(250, 250)->save($location);
+            $patient->image = $filename;
+        }
+        $patient->save();
+        return response()->noContent();
     }
+
 }

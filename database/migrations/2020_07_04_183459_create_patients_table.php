@@ -21,9 +21,13 @@ class CreatePatientsTable extends Migration
             $table->integer('status')->default(0); // 0 => available, 1 => in call,
             $table->string('age');
             $table->integer('gender'); // 0 => male, 1 => female
+            $table->string('address')->nullable();
             $table->string('blood_group')->nullable();
             $table->string('blood_pressure')->nullable();
             $table->string('cholesterol_level')->nullable();
+            $table->string('height')->nullable();
+            $table->string('weight')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

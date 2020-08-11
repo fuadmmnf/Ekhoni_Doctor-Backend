@@ -29,8 +29,8 @@ class DoctortypeController extends Controller
      * @response  [
      * {
      * "id": 1,
-     * "type": 0,
-     * "specialization": "cardiology",
+     * "name": "cardiology",
+     * "monogram": "image url from server",
      * "created_at": "2020-07-10T10:09:17.000000Z",
      * "updated_at": "2020-07-10T10:09:17.000000Z"
      * }
@@ -48,13 +48,12 @@ class DoctortypeController extends Controller
      * Doctortype store endpoint, returns doctortype instance. !! token required | super_admin, admin:doctor
      *
      *
-     * @bodyParam type int required The type indication of doctor. Example: 0 => emergency, 1 => specialist
-     * @bodyParam  specialization string required The main field of expertise. Example: "cardiology"
+     * @bodyParam  name string required The main field of expertise. Example: "cardiology"
      *
      *
      * @response  201 {
-     * "type": "1",
-     * "specialization": "cardiology",
+     * "name": "cardiology",
+     * "monogram": null,
      * "updated_at": "2020-07-10T12:16:17.000000Z",
      * "created_at": "2020-07-10T12:16:17.000000Z",
      * "id": 2
