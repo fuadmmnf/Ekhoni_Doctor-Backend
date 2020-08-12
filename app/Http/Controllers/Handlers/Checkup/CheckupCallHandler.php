@@ -48,7 +48,8 @@ class CheckupCallHandler
             'access_token' => $access_token,
             'room_name' => $room,
             'caller_name' => ($isAppointment)? $doctor->name: $patient->name,
-            'checkup_code' => $patientcheckup->code
+            'checkup_code' => $patientcheckup->code,
+            'time' => time()
         ];
 
         $factory = (new Factory)->withServiceAccount(base_path() . '/' . env('FIREBASE_CREDENTIALS'));
@@ -58,7 +59,7 @@ class CheckupCallHandler
             ->set($data);
 
         error_log(json_encode($addedDocRef));
-        return $access_token;
+        return $data;
     }
 
 }
