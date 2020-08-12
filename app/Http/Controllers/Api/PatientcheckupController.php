@@ -122,7 +122,7 @@ class PatientcheckupController extends Controller
      * @bodyParam doctor_rating int The doctor service rating provided by patient [0-5].
      * @bodyParam  patient_rating int The patient behavior rating provided by doctor [0-5].
      *
-     * @response  204
+     * @response  204 ""
      *
      *
      */

@@ -57,8 +57,7 @@ class DoctorScheduleController extends Controller
      * "created_at": "2020-07-25T21:11:49.000000Z",
      * "id": 6
      * }
-     * ..
-     * ],
+     * ]
      */
     public function getDoctorSchedulesByDoctorFromPresentDate(Doctor $doctor)
     {

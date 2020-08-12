@@ -38,6 +38,44 @@ class PatientController extends Controller
         //
     }
 
+    /**
+     *_Fetch User default Patient Profile_
+     *
+     * Fetch default user patient. !! token required | admin:user, patient
+     *
+     * @urlParam  user required The User ID of patients.
+     *
+     * @response  200 [
+     * {
+     * "user_id": 3,
+     * "name": "required",
+     * "age": 23,
+     * "gender": 1,
+     * "code": "RMshPimgOz6yKecP",
+     * "blood_group": "B+ve",
+     * "blood_pressure": "90-150",
+     * "cholesterol_level": "60",
+     * "updated_at": "2020-07-10T21:30:47.000000Z",
+     * "created_at": "2020-07-10T21:30:47.000000Z",
+     * "id": 1
+     * }
+     * ]
+     */
+    public function getUserDefaultPatientProfile(User $user){
+        if (!$this->user ||
+            !$this->user->hasRole('admin:user') &&
+            !($this->user->hasRole('patient') && $this->user->id == $user->id)
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+
+        $userProfile = Patient::where('user_id', $user->id)->first();
+        if(!$userProfile){
+            return response()->json(['status' => false], 400);
+        }
+        return response()->json($userProfile, 200);
+    }
 
     /**
      *_Fetch Patients By User_
@@ -60,7 +98,6 @@ class PatientController extends Controller
      * "created_at": "2020-07-10T21:30:47.000000Z",
      * "id": 1
      * }
-     * ...
      * ]
      */
     public function getPatientsByUser(User $user)
@@ -194,7 +231,7 @@ class PatientController extends Controller
      * @bodyParam  weight string The patient weight.
      *
      *
-     * @response  204
+     * @response  204 ""
      *
      */
     public function update(Request $request, Patient $patient)
@@ -254,7 +291,7 @@ class PatientController extends Controller
      * @bodyParam  image file required The patient image file.
      *
      *
-     * @response  204
+     * @response  204 ""
      */
     public function changePatientMonogram(Request $request, Patient $patient)
     {

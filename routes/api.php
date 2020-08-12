@@ -67,6 +67,7 @@ Route::put('doctorappointments/{doctorappointment}', 'Api\DoctorappointmentContr
 
 
 
+Route::get('users/{user}/patients/default', 'Api\PatientController@getUserDefaultPatientProfile');
 Route::get('users/{user}/patients', 'Api\PatientController@getPatientsByUser');
 Route::post('patients', 'Api\PatientController@store');
 Route::put('patients/{patient}', 'Api\PatientController@update');

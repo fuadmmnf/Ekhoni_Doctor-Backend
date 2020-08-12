@@ -42,7 +42,7 @@ class AdminController extends Controller
      * "guard_name": "web",
      * "created_at": "2020-07-09T18:23:36.000000Z",
      * "updated_at": "2020-07-09T18:23:36.000000Z"
-     * },
+     * }
      * ]
      */
     public function loadAllAdminRoles()

@@ -190,8 +190,7 @@ class DoctorController extends Controller
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
      * "updated_at": "2020-07-10T14:57:19.000000Z"
-     * },
-     * ...
+     * }
      * ],
      * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/{doctortype}/doctors/approved?page=1",
      * "from": 1,
@@ -248,8 +247,7 @@ class DoctorController extends Controller
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
      * "updated_at": "2020-07-10T14:57:19.000000Z"
-     * },
-     * ...
+     * }
      * ],
      * "first_page_url": "http://127.0.0.1:8000/api/doctors/approved?page=1",
      * "from": 1,
@@ -276,8 +274,7 @@ class DoctorController extends Controller
      * Fetch featured doctors, response of doctor instances.
      *
      *
-     * @response  200 {
-     * [
+     * @response  200 [
      * {
      * "id": 4,
      * "user_id": 10,
@@ -304,11 +301,8 @@ class DoctorController extends Controller
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
      * "updated_at": "2020-07-10T14:57:19.000000Z"
-     * },
-     * ...
-     * ],
-     *
      * }
+     * ]
      */
     public function getAllFeaturedDoctors()
     {
@@ -570,7 +564,7 @@ class DoctorController extends Controller
      * @urlParam  doctor required The ID of doctor.
      * @bodyParam activation_status int required The activation indicatior. 0 => not approved, 1 => approved
      *
-     * @response  204
+     * @response  204 ""
      */
     public function evaluateDoctorJoiningRequest(Request $request, Doctor $doctor)
     {
@@ -634,12 +628,13 @@ class DoctorController extends Controller
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
      * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
-     * @bodyParam  workplace string required The workplace of doctor.
+     * @bodyParam  workplace string required The
+     * workplace of doctor.
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
      *
      *
-     * @response  204
+     * @response  204 ""
      */
     public function update(Request $request, Doctor $doctor)
     {
@@ -708,7 +703,7 @@ class DoctorController extends Controller
      * @bodyParam  image file required The doctor image file.
      *
      *
-     * @response  204
+     * @response  204 ""
      */
     public function changeDoctorMonogram(Request $request, Doctor $doctor)
     {
@@ -747,7 +742,7 @@ class DoctorController extends Controller
      * @urlParam  doctor required The ID of doctor.
      * @bodyParam booking_start_time string required The booking starting time for patient. 'date time string' => booking start time, 'blank string' => booking finished. Example: "2020-07-10T14:19:24.000000Z", ''
      *
-     * @response  204
+     * @response  204 ""
      * @response  400 "another user is currently setting appointment"
      */
     public function changeDoctorBookingStatus(Request $request, Doctor $doctor)

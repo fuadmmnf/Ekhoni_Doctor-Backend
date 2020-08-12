@@ -58,7 +58,9 @@ class UserController extends Controller
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
      *
      *
-     * @response  201 "otp token created"
+     * @response  201 {
+     * "respose": "otp token created"
+     * }
      */
     public function sendAuthenticationToken(Request $request)
     {
@@ -84,7 +86,7 @@ class UserController extends Controller
 
         $smsHandler->send_sms($newOtpcode->mobile, $message);
 
-        return response()->json("otp token created", 201);
+        return response()->json(["response" => "otp token created"], 201);
     }
 
 
@@ -115,7 +117,6 @@ class UserController extends Controller
             'mobile' => 'required| min:11| max: 14',
             'otp_code' => 'required',
             'is_patient' => 'required| boolean',
-            'device_id' => 'present| nullable'
         ]);
 
         $otprequest = Otpcode::where('mobile', $request->mobile)
