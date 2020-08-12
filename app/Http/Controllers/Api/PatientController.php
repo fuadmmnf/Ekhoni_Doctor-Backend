@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Patient;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
-use Intervention\Image\File;
 
 /**
  * @group  Patient management
@@ -61,7 +61,8 @@ class PatientController extends Controller
      * }
      * ]
      */
-    public function getUserDefaultPatientProfile(User $user){
+    public function getUserDefaultPatientProfile(User $user)
+    {
         if (!$this->user ||
             !$this->user->hasRole('admin:user') &&
             !($this->user->hasRole('patient') && $this->user->id == $user->id)
@@ -71,7 +72,7 @@ class PatientController extends Controller
 
 
         $userProfile = Patient::where('user_id', $user->id)->first();
-        if(!$userProfile){
+        if (!$userProfile) {
             return response()->json(['status' => false], 400);
         }
         return response()->json($userProfile, 200);
@@ -284,7 +285,7 @@ class PatientController extends Controller
     /**
      * _Change Patient Image_
      *
-     * Update patient image (Multipart Request)!! token required | super_admin, admin:user, user
+     * Update patient image (Multipart Request)!! token required | super_admin, admin:user, patient
      *
      *
      * @urlParam  patient required The ID of the patient.
@@ -293,30 +294,27 @@ class PatientController extends Controller
      *
      * @response  204 ""
      */
-    public function changePatientMonogram(Request $request, Patient $patient)
+    public function changePatientImage(Request $request, Patient $patient)
     {
         if (!$this->user ||
             !$this->user->hasRole('super_admin') &&
             !$this->user->hasRole('admin:user') &&
-            !$this->user->hasRole('user')
+            !$this->user->hasRole('patient')
         ) {
             return response()->json('Forbidden Access', 403);
         }
 
-        $this->validate($request, [
-            'image' => 'required| image',
-        ]);
-        if ($request->hasFile('image')) {
-            $image_path = public_path('/images/users/patients/' . $patient->image);
-            if (File::exists($image_path)) {
-                File::delete($image_path);
-            }
-            $image = $request->file('image');
-            $filename = $patient->code . '_' . time() . '.' . $image->getClientOriginalExtension();
-            $location = public_path('/images/users/patients' . $filename);
-            Image::make($image)->resize(250, 250)->save($location);
-            $patient->image = $filename;
+//        dd('asd');
+        $image_path = public_path('/images/users/patients/' . $patient->image);
+        if (File::exists($image_path)) {
+            File::delete($image_path);
         }
+        $image = $request->file('image');
+        $filename = $patient->code . '_' . time() . '.' . $image->getClientOriginalExtension();
+        $location = public_path('/images/users/patients/' ) . $filename;
+        Image::make($image)->resize(250, 250)->save($location);
+        $patient->image = $filename;
+
         $patient->save();
         return response()->noContent();
     }

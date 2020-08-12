@@ -70,6 +70,7 @@ Route::put('doctorappointments/{doctorappointment}', 'Api\DoctorappointmentContr
 Route::get('users/{user}/patients/default', 'Api\PatientController@getUserDefaultPatientProfile');
 Route::get('users/{user}/patients', 'Api\PatientController@getPatientsByUser');
 Route::post('patients', 'Api\PatientController@store');
+Route::post('patients/{patient}/image', 'Api\PatientController@changePatientImage');
 Route::put('patients/{patient}', 'Api\PatientController@update');
 
 
@@ -90,5 +91,5 @@ Route::get('users/{user}/transactions/complete', 'Api\TransactionController@load
 
 
 //twilio
-Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');
+//Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');
 //twilio
