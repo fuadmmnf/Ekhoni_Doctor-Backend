@@ -82,7 +82,8 @@ class UserController extends Controller
 
 
         $smsHandler = new SmsHandler();
-        $message = "<#> 'Ekhoni Dakar' OTP code is : {$newOtpcode->code}. App Id: [EZtoGwmcCrh]";
+//        $message = "<#> 'Ekhoni Dakar' OTP code is : {$newOtpcode->code}. App Id: [EZtoGwmcCrh]";
+        $message = "'Ekhoni Daktar' OTP code is: {$newOtpcode->code}.";
 
         $smsHandler->send_sms($newOtpcode->mobile, $message);
 

@@ -45,8 +45,7 @@ class PatientController extends Controller
      *
      * @urlParam  user required The User ID of patients.
      *
-     * @response  200 [
-     * {
+     * @response  200 {
      * "user_id": 3,
      * "name": "required",
      * "age": 23,
@@ -59,7 +58,6 @@ class PatientController extends Controller
      * "created_at": "2020-07-10T21:30:47.000000Z",
      * "id": 1
      * }
-     * ]
      */
     public function getUserDefaultPatientProfile(User $user)
     {
