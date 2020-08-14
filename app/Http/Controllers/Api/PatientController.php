@@ -230,8 +230,22 @@ class PatientController extends Controller
      * @bodyParam  weight string The patient weight.
      *
      *
-     * @response  204 ""
-     *
+     * @response  200 {
+     * "user_id": 3,
+     * "name": "required",
+     * "age": 23,
+     * "gender": 1,
+     * "address": "address"
+     * "code": "RMshPimgOz6yKecP",
+     * "blood_group": "B+ve",
+     * "blood_pressure": "90-150",
+     * "cholesterol_level": "60",
+     * "height": "5'10''",
+     * "weight": "80",
+     * "updated_at": "2020-07-10T21:30:47.000000Z",
+     * "created_at": "2020-07-10T21:30:47.000000Z",
+     * "id": 1
+     * }
      */
     public function update(Request $request, Patient $patient)
     {
@@ -277,7 +291,7 @@ class PatientController extends Controller
         }
         $patient->save();
 
-        return response()->noContent();
+        return response()->json($patient);
     }
 
     /**
@@ -290,7 +304,22 @@ class PatientController extends Controller
      * @bodyParam  image file required The patient image file.
      *
      *
-     * @response  204 ""
+     * @response  200 {
+     * "user_id": 3,
+     * "name": "required",
+     * "age": 23,
+     * "gender": 1,
+     * "address": "address"
+     * "code": "RMshPimgOz6yKecP",
+     * "blood_group": "B+ve",
+     * "blood_pressure": "90-150",
+     * "cholesterol_level": "60",
+     * "height": "5'10''",
+     * "weight": "80",
+     * "updated_at": "2020-07-10T21:30:47.000000Z",
+     * "created_at": "2020-07-10T21:30:47.000000Z",
+     * "id": 1
+     * }
      */
     public function changePatientImage(Request $request, Patient $patient)
     {
@@ -314,7 +343,7 @@ class PatientController extends Controller
         $patient->image = $filename;
 
         $patient->save();
-        return response()->noContent();
+        return response()->json($patient);
     }
 
 }
