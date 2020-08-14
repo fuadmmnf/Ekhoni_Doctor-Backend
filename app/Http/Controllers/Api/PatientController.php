@@ -222,7 +222,7 @@ class PatientController extends Controller
      * @urlParam   patient required The patient id.
      * @bodyParam  name string The patient name.
      * @bodyParam  address string The patient address.
-     * @bodyParam  age int The patient age.
+     * @bodyParam  age string The patient age.
      * @bodyParam  blood_group string The patient blood group. Example: "B+ve"
      * @bodyParam  blood_pressure string The patient blood pressure. Example: "90-150"
      * @bodyParam  cholesterol_level string The patient cholesterol level. Example: "dont know the readings :p"
@@ -240,9 +240,9 @@ class PatientController extends Controller
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
-            'name' => 'sometimes| numeric',
-            'age' => 'sometimes| numeric',
-            'address' => 'sometimes| numeric',
+            'name' => 'sometimes',
+            'age' => 'sometimes',
+            'address' => 'sometimes',
             'blood_group' => 'sometimes',
             'blood_pressure' => 'sometimes',
             'cholesterol_level' => 'sometimes',

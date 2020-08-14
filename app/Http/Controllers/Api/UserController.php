@@ -128,6 +128,8 @@ class UserController extends Controller
             return response()->json('otp verification code mismatch', 401);
         }
 
+        Otpcode::where('mobile', $request->mobile)->delete();
+
         $user = User::where('mobile', $request->mobile)->first();
         $tokenUserHandler = new TokenUserHandler();
 
