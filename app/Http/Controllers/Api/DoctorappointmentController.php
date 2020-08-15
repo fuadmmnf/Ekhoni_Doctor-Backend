@@ -30,7 +30,72 @@ class DoctorappointmentController extends Controller
         $this->user = $request->user('sanctum');
     }
 
-
+    /**
+     * _Fetch Upcoming Appointments For User_
+     *
+     * Fetch upcoming doctor appointments by user. !! token required| super_admin, admin:patient, patient
+     *
+     * @urlParam user required The user id associated with appointments.
+     *
+     *
+     * @response  200 [
+     * {
+     * "id": 1,
+     * "doctor_id": 2,
+     * "patientcheckup_id": 1,
+     * "code": "e11hf1h1h81f1f1f",
+     * "status": 0,
+     * "start_time": "2020-08-13 20:30:47",
+     * "end_time": "2020-08-12 14:22:47",
+     * "created_at": null,
+     * "updated_at": null,
+     * "patient": {
+     * "id": 1,
+     * "user_id": 5,
+     * "name": "patient name",
+     * "code": "aaaaaaaaaa",
+     * "status": 0,
+     * "age": "21",
+     * "gender": 0,
+     * "address": "asdasdasdasdasdasdasdasd",
+     * "blood_group": "B -ve",
+     * "blood_pressure": "100-150",
+     * "cholesterol_level": "120",
+     * "height": "5'11''",
+     * "weight": "90",
+     * "image": "aaaaaaaaaa_1597428565.png",
+     * "created_at": "2020-08-09T06:25:34.000000Z",
+     * "updated_at": "2020-08-14T18:09:26.000000Z"
+     * },
+     * "doctor": {
+     * "id": 2,
+     * "user_id": 4,
+     * "doctortype_id": 1,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000004",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 0,
+     * "is_featured": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "first_appointment_rate": 1000,
+     * "report_followup_rate": null,
+     * "gender": 0,
+     * "email": "doctor2@google.com",
+     * "workplace": "dmc2",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "booking_start_time": null,
+     * "monogram": null,
+     * "created_at": "2020-08-06T11:24:40.000000Z",
+     * "updated_at": "2020-08-06T11:24:40.000000Z"
+     * }
+     * }
+     * ]
+     */
     public function getUpcomingAppointmentsByUser(User $user)
     {
         if (!$this->user ||
@@ -49,11 +114,95 @@ class DoctorappointmentController extends Controller
             ->where('status', 0)
             ->orderBy('start_time', 'ASC')
             ->get();
+        $upcomingUserAppointments->load('doctor');
+        $upcomingUserAppointments = $upcomingUserAppointments->map(function ($appointment) {
+            $appointment->patient = $appointment->patientcheckup->patient;
+            unset($appointment->patientcheckup);
+            return $appointment;
+        });
 
         return response()->json($upcomingUserAppointments);
     }
 
-
+    /**
+     * _Fetch Paginated Appointments History By User_
+     *
+     * Fetch paginated response of completed  doctor appointments by user. !! token required| super_admin, admin:patient, patient
+     *
+     * @urlParam user required The user id associated with appointments.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 1,
+     * "doctor_id": 2,
+     * "patientcheckup_id": 1,
+     * "code": "e11hf1h1h81f1f1f",
+     * "status": 1,
+     * "start_time": "2020-08-13 20:30:47",
+     * "end_time": "2020-08-12 14:22:47",
+     * "created_at": null,
+     * "updated_at": null,
+     * "patient": {
+     * "id": 1,
+     * "user_id": 5,
+     * "name": "patient name",
+     * "code": "aaaaaaaaaa",
+     * "status": 0,
+     * "age": "21",
+     * "gender": 0,
+     * "address": "asdasdasdasdasdasdasdasd",
+     * "blood_group": "B -ve",
+     * "blood_pressure": "100-150",
+     * "cholesterol_level": "120",
+     * "height": "5'11''",
+     * "weight": "90",
+     * "image": "aaaaaaaaaa_1597428565.png",
+     * "created_at": "2020-08-09T06:25:34.000000Z",
+     * "updated_at": "2020-08-14T18:09:26.000000Z"
+     * },
+     * "doctor": {
+     * "id": 2,
+     * "user_id": 4,
+     * "doctortype_id": 1,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000004",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 0,
+     * "is_featured": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "first_appointment_rate": 1000,
+     * "report_followup_rate": null,
+     * "gender": 0,
+     * "email": "doctor2@google.com",
+     * "workplace": "dmc2",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "booking_start_time": null,
+     * "monogram": null,
+     * "created_at": "2020-08-06T11:24:40.000000Z",
+     * "updated_at": "2020-08-06T11:24:40.000000Z"
+     * }
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/users/5/doctorappointments/history?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/users/5/doctorappointments/history?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/users/5/doctorappointments/history",
+     * "per_page": 20,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
     public function getAppointmentHistoryByUser(User $user)
     {
         if (!$this->user ||
@@ -71,11 +220,94 @@ class DoctorappointmentController extends Controller
             ->where('status', 1)
             ->orderBy('start_time', 'ASC')
             ->paginate(20);
-
+        $completedUserAppointments->getCollection()->transform(function ($appointment) {
+            $appointment->patient = $appointment->patientcheckup->patient;
+            $appointment->doctor;
+            unset($appointment->patientcheckup);
+            return $appointment;
+        });
         return response()->json($completedUserAppointments);
     }
 
-
+    /**
+     * _Fetch Paginated Appointments History By Patient_
+     *
+     * Fetch paginated response of completed  doctor appointments by patient. !! token required| super_admin, admin:patient, patient
+     *
+     * @urlParam patient required The patient id associated with appointments.
+     *
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 1,
+     * "doctor_id": 2,
+     * "patientcheckup_id": 1,
+     * "code": "e11hf1h1h81f1f1f",
+     * "status": 1,
+     * "start_time": "2020-08-13 20:30:47",
+     * "end_time": "2020-08-12 14:22:47",
+     * "created_at": null,
+     * "updated_at": null,
+     * "patient": {
+     * "id": 1,
+     * "user_id": 5,
+     * "name": "patient name",
+     * "code": "aaaaaaaaaa",
+     * "status": 0,
+     * "age": "21",
+     * "gender": 0,
+     * "address": "asdasdasdasdasdasdasdasd",
+     * "blood_group": "B -ve",
+     * "blood_pressure": "100-150",
+     * "cholesterol_level": "120",
+     * "height": "5'11''",
+     * "weight": "90",
+     * "image": "aaaaaaaaaa_1597428565.png",
+     * "created_at": "2020-08-09T06:25:34.000000Z",
+     * "updated_at": "2020-08-14T18:09:26.000000Z"
+     * },
+     * "doctor": {
+     * "id": 2,
+     * "user_id": 4,
+     * "doctortype_id": 1,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000004",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 0,
+     * "is_featured": 0,
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "first_appointment_rate": 1000,
+     * "report_followup_rate": null,
+     * "gender": 0,
+     * "email": "doctor2@google.com",
+     * "workplace": "dmc2",
+     * "designation": "trainee doctor",
+     * "postgrad": "dmc",
+     * "medical_college": "dmc",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "booking_start_time": null,
+     * "monogram": null,
+     * "created_at": "2020-08-06T11:24:40.000000Z",
+     * "updated_at": "2020-08-06T11:24:40.000000Z"
+     * }
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/patients/1/doctorappointments/history?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/patients/1/doctorappointments/history?page=1",
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/patients/1/doctorappointments/history",
+     * "per_page": 20,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
     public function getAppointmentHistoryByPatient(Patient $patient)
     {
         if (!$this->user ||
@@ -93,13 +325,19 @@ class DoctorappointmentController extends Controller
             ->orderBy('start_time', 'ASC')
             ->paginate(20);
 
+        $completedPatientAppointments = $completedPatientAppointments->getCollection()->transform(function ($appointment) {
+            $appointment->patient = $appointment->patientcheckup->patient;
+            $appointment->doctor;
+            unset($appointment->patientcheckup);
+            return $appointment;
+        });
         return response()->json($completedPatientAppointments);
     }
 
     /**
      * _Fetch Paginated Doctors Appointments by Status_
      *
-     * Fetch scheduled doctor appointments, paginated response of doctorappointment instances. !! token required| super_admin, admin, doctor
+     * Fetch scheduled doctor appointments, paginated response of doctorappointment instances. !! token required| super_admin, admin:doctor, doctor
      *
      * @urlParam doctor required The doctor id associated with appointments.
      * @urlParam  status required The status to query for the scheduled appointments. 0 => active, 1 => canceled, 2 => completed.
@@ -185,7 +423,7 @@ class DoctorappointmentController extends Controller
     /**
      * _Fetch Paginated Upcoming Doctors Appointments_
      *
-     * Fetch scheduled upcoming doctor appointments starting from current date, paginated response of doctorappointment instances. !! token required| super_admin, admin, doctor
+     * Fetch scheduled upcoming doctor appointments starting from current date, paginated response of doctorappointment instances. !! token required| super_admin, admin:doctor, doctor
      *
      * @urlParam doctor required The doctor id associated with appointments.
      *
@@ -290,16 +528,15 @@ class DoctorappointmentController extends Controller
 
         $patient = Patient::where('id', $request->patient_id)
             ->where('user_id', $this->user->id)->first();
-        if(!$patient){
+        if (!$patient) {
             return response()->json('No patient selected associated with user', 400);
         }
-
 
 
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0)? null: Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0) ? null : Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
         if (!$newPatientCheckup) {
             return response()->json('Insufficient Balance', 400);
         }
