@@ -10,6 +10,7 @@ use App\Http\Controllers\Handlers\DoctorScheduleHandler;
 use App\Http\Controllers\Handlers\CheckupTransactionHandler;
 use App\Patient;
 use App\Patientcheckup;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -27,6 +28,72 @@ class DoctorappointmentController extends Controller
     public function __construct(Request $request)
     {
         $this->user = $request->user('sanctum');
+    }
+
+
+    public function getUpcomingAppointmentsByUser(User $user)
+    {
+        if (!$this->user ||
+            !($this->user->hasRole('patient') && $this->user->id == $user->id) &&
+            !$this->user->hasRole('admin:patient') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $userPatientIds = Patient::where('user_id', $user->id)->pluck('id');
+        $userCheckupsIds = Patientcheckup::whereIn('patient_id', $userPatientIds)
+            ->whereNull('start_time')
+            ->pluck('id');
+        $upcomingUserAppointments = Doctorappointment::whereIn('patientcheckup_id', $userCheckupsIds)
+            ->where('status', 0)
+            ->orderBy('start_time', 'ASC')
+            ->get();
+
+        return response()->json($upcomingUserAppointments);
+    }
+
+
+    public function getAppointmentHistoryByUser(User $user)
+    {
+        if (!$this->user ||
+            !($this->user->hasRole('patient') && $this->user->id == $user->id) &&
+            !$this->user->hasRole('admin:patient') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $userPatientIds = Patient::where('user_id', $user->id)->pluck('id');
+        $userCheckupsIds = Patientcheckup::whereIn('patient_id', $userPatientIds)
+            ->pluck('id');
+        $completedUserAppointments = Doctorappointment::whereIn('patientcheckup_id', $userCheckupsIds)
+            ->where('status', 1)
+            ->orderBy('start_time', 'ASC')
+            ->paginate(20);
+
+        return response()->json($completedUserAppointments);
+    }
+
+
+    public function getAppointmentHistoryByPatient(Patient $patient)
+    {
+        if (!$this->user ||
+            !($this->user->hasRole('patient') && $this->user->id == $patient->user->id) &&
+            !$this->user->hasRole('admin:patient') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $patientCheckupsIds = Patientcheckup::where('patient_id', $patient->id)
+            ->pluck('id');
+        $completedPatientAppointments = Doctorappointment::whereIn('patientcheckup_id', $patientCheckupsIds)
+            ->where('status', 1)
+            ->orderBy('start_time', 'ASC')
+            ->paginate(20);
+
+        return response()->json($completedPatientAppointments);
     }
 
     /**

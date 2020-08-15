@@ -58,7 +58,9 @@ Route::get('doctors/{doctor}/doctorschedules', "Api\DoctorScheduleController@get
 Route::post('doctorschedules', "Api\DoctorScheduleController@store");
 
 
-
+Route::get('users/{user}/doctorappointments/upcoming', "Api\DoctorappointmentController@getUpcomingAppointmentsByUser");
+Route::get('users/{user}/doctorappointments/history', "Api\DoctorappointmentController@getAppointmentHistoryByUser");
+Route::get('patients/{patient}/doctorappointments/history', "Api\DoctorappointmentController@getAppointmentHistoryByPatient");
 Route::get('doctors/{doctor}/doctorappointments/upcoming', "Api\DoctorappointmentController@getUpcomingDoctorAppointments");
 Route::get('doctors/{doctor}/doctorappointments/{date}', "Api\DoctorappointmentController@getAllDoctorAppointmentsByDate");
 Route::get('doctors/{doctor}/doctorappointments/{status}', "Api\DoctorappointmentController@getAllDoctorAppointmentsByStatus")->where('status', '[0-2]');
