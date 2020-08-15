@@ -19,7 +19,7 @@
         }
 
         .bordertable td, th {
-            border: 1px solid #A8A8A8;
+            border: 0px solid #A8A8A8;
         }
 
         .storeWaterMark {
@@ -33,7 +33,7 @@
             header: page-header;
             footer: page-footer;
             {{--            background: url({{ public_path('images/ekhonidaktar_logo_bangla.png') }});--}}
- background-size: cover;
+    background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
         }
@@ -52,26 +52,37 @@
       Checkup Prescription
     </span>
 </p>
-
-<div class="row">
-    <div class="col-4">
-        Patient Description
-    </div>
-    <div class="col-8">
-        <table class="bordertable">
-            <thead>
-            <tr>
-                {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                <th>Medicine Name</th>
-                <th>Dosage</th>
-                <th>Duration</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
+<table>
+    <tr>
+        <td width="35%" align="left">
+            <div>
+                Patient Description
+            </div>
+        </td>
+        <td align="left">
+            <table class="bordertable">
+                <thead>
+                <tr>
+                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                    <th>Medicine Name</th>
+                    <th>Dosage</th>
+                    <th>Duration</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach($prescription['medicine_descriptions'] as $medicineDescription)
+                        <tr>
+                            {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                            <td>{{ $medicineDescription['name'] }}</td>
+                            <td>{{ $medicineDescription['tag'] }}</td>
+                            <td>{{ $medicineDescription['duration'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
 
 
 <htmlpageheader name="page-header">
@@ -101,7 +112,7 @@
                 <span style="font-size: 11px; color: #525659;">Developed by: Innova Tech</span>
             </td>
             <td align="right">
-                <span style="font-family: Calibri; font-size: 11px; color: #3f51b5;">Powered by:
+                <span style="font-family: Calibri,serif; font-size: 11px; color: #3f51b5;">Powered by:
                     http://ekhonidaktar.com</span>
             </td>
         </tr>
