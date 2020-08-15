@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +28,34 @@ Route::get('/clear', function (){
     Artisan::call('config:cache');
 //    Session::flush();
     return 'Config and Route Cached. All Cache Cleared';
+});
+
+
+Route::get('/prescription', function (){
+    $data = [
+        "doctor" => \App\Doctor::findOrFail(2),
+        "patient" => \App\Patient::findOrFail(1),
+        "prescription" => [
+            "disease_description" => "disease description",
+            "medicine_descriptions" => [
+                [
+                    "name" => "napa",
+                    "tag" => "day, before lunch, dinner",
+                    "duration" => "15 days"
+                ],
+                [
+                    "name" => "paracetamaul",
+                    "tag" => "day, before lunch, dinner",
+                    "duration" => "10 days"
+                ]
+            ],
+            "test_descriptions" => [
+                [
+                    "name" => "xray",
+                ]
+            ],
+        ]
+    ];
+    $pdf = PDF::loadView("pdf.prescription.checkupprescription", $data);
+    return $pdf->stream('document.pdf');
 });

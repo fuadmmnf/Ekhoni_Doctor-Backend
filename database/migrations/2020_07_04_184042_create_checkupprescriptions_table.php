@@ -16,7 +16,9 @@ class CreateCheckupprescriptionsTable extends Migration
         Schema::create('checkupprescriptions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patientcheckup_id');
+            $table->integer('status'); // 0 => not created, 1 => submitted
             $table->string('code');
+            $table->json('contents');
             $table->string('prescription_path');
             $table->timestamps();
 

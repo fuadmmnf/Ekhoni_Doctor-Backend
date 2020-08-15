@@ -82,12 +82,11 @@ class DoctorScheduleController extends Controller
     /**
      * _Create Doctorschedule_
      *
-     * Doctorschedule store endpoint, returns doctorschedule instance. !! token required | admin:doctor, doctor
+     * Doctorschedule store endpoint(appointment duration set to 20minutes), returns doctorschedule instance. !! token required | admin:doctor, doctor
      *
      * @bodyParam doctor_id int required The doctor id.
      * @bodyParam  start_time string Duty start time for specialist. Example: "2020-07-29T14:30:00.000000Z"
      * @bodyParam  end_time string Duty end time for specialist. Example: "2020-07-29T18:30:00.000000Z"
-     * @bodyParam  max_appointments_per_day int  Max number of appointments each day in case of specialist within start-end time.
      *
      *
      * @response  201 {
@@ -114,7 +113,7 @@ class DoctorScheduleController extends Controller
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
             'end_time' => 'required',
-            'max_appointments_per_day' => 'required| numeric',
+//            'max_appointments_per_day' => 'required| numeric',
         ]);
 
         $doctor = Doctor::findOrFail($request->doctor_id);
@@ -123,21 +122,24 @@ class DoctorScheduleController extends Controller
         $newDoctorSchedule->doctor_id = $doctor->id;
         $newDoctorSchedule->start_time = Carbon::parse($request->start_time);
         $newDoctorSchedule->end_time = Carbon::parse($request->end_time);
-        $newDoctorSchedule->max_appointments_per_day = $request->max_appointments_per_day;
 
-        $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
+//        $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
+        $scheduleInterval = 20;
         $time = $newDoctorSchedule->start_time;
         $appointmentSchedules = array();
 
+        $numAppointments = 0;
         while ($time < $newDoctorSchedule->end_time) {
             $appointmentSchedules[] = [
                 "time" => $time->copy(),
                 "status" => 0 // 0 available, 1 booked
             ];
 //            $time = $time->addMinutes($scheduleInterval);
-            $time = $time->addMinutes(20);
+            $time = $time->addMinutes($scheduleInterval);
+            $numAppointments ++;
         }
         $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);
+        $newDoctorSchedule->max_appointments_per_day = $numAppointments;
 
         $newDoctorSchedule->save();
         return response()->json($newDoctorSchedule, 201);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Checkupprescription;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class CheckupprescriptionController extends Controller
 {
@@ -28,15 +29,28 @@ class CheckupprescriptionController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function storeCheckupPrescriptionPDF(Request $request, Checkupprescription $checkupprescription)
     {
-        //
+        $this->validate($request, [
+           'contents' => 'required'
+        ]);
+
+        $patientcheckup = $checkupprescription->patientcheckup;
+
+        $checkupprescription->status = 1;
+        $checkupprescription->contents = $request->contents;
+
+        $data = [
+            "doctor" => $patientcheckup->doctor,
+            "patient" => $patientcheckup->patient,
+            "prescription" => json_encode($request->contents)
+        ];
+
+        $pdf = PDF::loadView('pdf.prescription.checkupprescription', $data);
+        $pdf->save($checkupprescription->code);
+
+        $checkupprescription->save();
     }
 
     /**
