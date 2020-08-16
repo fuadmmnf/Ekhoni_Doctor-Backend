@@ -50,7 +50,7 @@ class CheckupTransactionHandler
                 ->orderBy('start_time', 'desc')->first();
             if (!$patientPreviousAppointment && $doctor->first_appointment_rate != null) {
                 $rate = $doctor->first_appointment_rate;
-            } elseif ($patientPreviousAppointment && Carbon::now()->diffInDays(Carbon::parse($patientPreviousAppointment->start_time)) < 10){
+            } elseif ($patientPreviousAppointment && $doctor->report_followup_rate != null && Carbon::now()->diffInDays(Carbon::parse($patientPreviousAppointment->start_time)) < 10){
                 $rate = $doctor->report_followup_rate;
             }
 

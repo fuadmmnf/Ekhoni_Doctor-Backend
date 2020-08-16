@@ -493,9 +493,9 @@ class DoctorappointmentController extends Controller
      *
      *
      * @bodyParam patient_id int required The patient id associated with call.
-     * @bodyParam  doctor_id string required The doctor id associated with call.
-     * @bodyParam  start_time string required The datetime indicating starting time of scheduled appointment. Example: "2020-07-10T14:19:24.000000Z"
-     * @bodyParam  end_time string required The datetime indicating ending time of scheduled appointment. Example: "2020-07-10T14:40:30.000000Z"
+     * @bodyParam doctor_id string required The doctor id associated with call.
+     * @bodyParam start_time string required The datetime indicating starting time of scheduled appointment. Example: "2020-07-10T14:19:24.000000Z"
+     * @bodyParam end_time string required The datetime indicating ending time of scheduled appointment. Example: "2020-07-10T14:40:30.000000Z"
      *
      *
      * @response  201 {
@@ -519,7 +519,6 @@ class DoctorappointmentController extends Controller
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
-//            'doctor_id' => 'required| numeric',
             'patient_id' => 'required| numeric',
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
@@ -534,6 +533,14 @@ class DoctorappointmentController extends Controller
 
 
         $doctor = Doctor::findOrFail($request->doctor_id);
+
+        $appointmentHandler = new DoctorScheduleHandler();
+        $isSlotAvailable = $appointmentHandler->setAppointmentInDoctorSchedule($doctor, Carbon::parse($request->start_time));
+        if(!$isSlotAvailable){
+            return response()->json(["status" => "Appointment slot booked"], 400);
+        }
+
+
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
         $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
@@ -550,6 +557,7 @@ class DoctorappointmentController extends Controller
 //        if ($request->doctor_id != $patientCheckup->doctor->id) {
 //            return response()->json('doctor_id and patientCheckup doctor id mismatch', 400);
 //        }
+
 
         $newDoctorAppointment = new Doctorappointment();
         $newDoctorAppointment->doctor_id = $doctor->id;
@@ -570,8 +578,6 @@ class DoctorappointmentController extends Controller
         $doctor->booking_start_time = null;
         $doctor->save();
 
-        $appointmentHandler = new DoctorScheduleHandler();
-        $appointmentHandler->setAppointmentInDoctorSchedule($newDoctorAppointment);
 
 
         return response()->json($newDoctorAppointment, 201);
@@ -612,6 +618,6 @@ class DoctorappointmentController extends Controller
     {
         $pushNotificationHandler = new CheckupCallHandler();
         $patientcheckup = $doctorappointment->patientcheckup;
-        $pushNotificationHandler->createCallRequest($patientcheckup->doctor, $patientcheckup->patient, true);
+        $pushNotificationHandler->createCallRequest($patientcheckup->doctor, $patientcheckup->patient);
     }
 }
