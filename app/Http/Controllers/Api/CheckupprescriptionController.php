@@ -3,37 +3,150 @@
 namespace App\Http\Controllers\Api;
 
 use App\Checkupprescription;
+use App\Doctor;
 use App\Http\Controllers\Controller;
+use App\Patient;
 use Illuminate\Http\Request;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class CheckupprescriptionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * _Fetch Pending Checkupprescription By Doctor_
      *
-     * @return \Illuminate\Http\Response
+     * Fetch pending doctor checkupprescriptions. !! token required| super_admin, admin:doctor, doctor
+     *
+     * @urlParam doctor required The doctor id associated with the prescription.
+     *
+     *
+     * @response  200 [
+     * {
+     * "id": 1,
+     * "patientcheckup_id": 1,
+     * "status": 0,
+     * "code": "ae12e12f12f",
+     * "contents": null,
+     * "prescription_path": "",
+     * "created_at": null,
+     * "updated_at": null,
+     * "patientcheckup": {
+     * "id": 1,
+     * "patient_id": 1,
+     * "doctor_id": 2,
+     * "code": "aabbaaaabb",
+     * "start_time": "2020-08-16 20:42:05",
+     * "end_time": null,
+     * "doctor_rating": 5,
+     * "patient_rating": 5,
+     * "created_at": null,
+     * "updated_at": null,
+     * "patient": {
+     * "id": 1,
+     * "user_id": 5,
+     * "name": "patient name",
+     * "code": "aaaaaaaaaa",
+     * "status": 0,
+     * "age": "21",
+     * "gender": 0,
+     * "address": "asdasdasdasdasdasdasdasd",
+     * "blood_group": "B -ve",
+     * "blood_pressure": "100-150",
+     * "cholesterol_level": "120",
+     * "height": "5'11''",
+     * "weight": "90",
+     * "image": "aaaaaaaaaa_1597428565.png",
+     * "created_at": "2020-08-09T06:25:34.000000Z",
+     * "updated_at": "2020-08-14T18:09:26.000000Z"
+     * }
+     * }
+     * }
+     * ]
      */
-    public function index()
+    public function getPendingPrescriptionByDoctor(Doctor $doctor)
     {
-        //
+        $pendingCheckupPrescriptions = Checkupprescription::where('status', 0)->get();
+        $pendingCheckupPrescriptions = $pendingCheckupPrescriptions->filter(function ($checkupPrescription) use ($doctor) {
+            $isDoctorMatching = $checkupPrescription->patientcheckup->doctor->id == $doctor->id;
+            if ($isDoctorMatching) {
+                $checkupPrescription->patientcheckup->patient;
+            }
+            unset($checkupPrescription->patientcheckup->doctor);
+            return $isDoctorMatching;
+        });
+        return response()->json($pendingCheckupPrescriptions);
     }
 
+
     /**
-     * Show the form for creating a new resource.
+     * _Fetch Pending Checkupprescription By Patient_
      *
-     * @return \Illuminate\Http\Response
+     * Fetch pending patient checkupprescriptions. !! token required| super_admin, admin:patient, patient
+     *
+     * @urlParam patient required The patient id associated with the prescription.
+     *
+     *
+     * @response  200 [
+     * {
+     * "id": 1,
+     * "patientcheckup_id": 1,
+     * "status": 0,
+     * "code": "ae12e12f12f",
+     * "contents": null,
+     * "prescription_path": "",
+     * "created_at": null,
+     * "updated_at": null,
+     * "patientcheckup": {
+     * "id": 1,
+     * "patient_id": 1,
+     * "doctor_id": 2,
+     * "code": "aabbaaaabb",
+     * "start_time": "2020-08-16 20:42:05",
+     * "end_time": null,
+     * "doctor_rating": 5,
+     * "patient_rating": 5,
+     * "created_at": null,
+     * "updated_at": null,
+     * "patient": {
+     * "id": 1,
+     * "user_id": 5,
+     * "name": "patient name",
+     * "code": "aaaaaaaaaa",
+     * "status": 0,
+     * "age": "21",
+     * "gender": 0,
+     * "address": "asdasdasdasdasdasdasdasd",
+     * "blood_group": "B -ve",
+     * "blood_pressure": "100-150",
+     * "cholesterol_level": "120",
+     * "height": "5'11''",
+     * "weight": "90",
+     * "image": "aaaaaaaaaa_1597428565.png",
+     * "created_at": "2020-08-09T06:25:34.000000Z",
+     * "updated_at": "2020-08-14T18:09:26.000000Z"
+     * }
+     * }
+     * }
+     * ]
      */
-    public function create()
+    public function getPendingPrescriptionByPatient(Patient $patient)
     {
-        //
+        $pendingCheckupPrescriptions = Checkupprescription::where('status', 0)->get();
+        $pendingCheckupPrescriptions = $pendingCheckupPrescriptions->filter(function ($checkupPrescription) use ($patient) {
+            $isPatientMatching = $checkupPrescription->patientcheckup->patient->id == $patient->id;
+            if ($isPatientMatching) {
+                $checkupPrescription->patientcheckup->doctor;
+            }
+            unset($checkupPrescription->patientcheckup->patient);
+            return $isPatientMatching;
+        });
+        return response()->json($pendingCheckupPrescriptions);
     }
 
 
     public function storeCheckupPrescriptionPDF(Request $request, Checkupprescription $checkupprescription)
     {
         $this->validate($request, [
-           'contents' => 'required'
+            'contents' => 'required'
         ]);
 
         $patientcheckup = $checkupprescription->patientcheckup;
@@ -44,6 +157,7 @@ class CheckupprescriptionController extends Controller
         $data = [
             "doctor" => $patientcheckup->doctor,
             "patient" => $patientcheckup->patient,
+            "checkup" => $patientcheckup,
             "prescription" => json_encode($request->contents)
         ];
 
@@ -56,7 +170,7 @@ class CheckupprescriptionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Checkupprescription  $checkupprescription
+     * @param \App\Checkupprescription $checkupprescription
      * @return \Illuminate\Http\Response
      */
     public function show(Checkupprescription $checkupprescription)
@@ -67,7 +181,7 @@ class CheckupprescriptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Checkupprescription  $checkupprescription
+     * @param \App\Checkupprescription $checkupprescription
      * @return \Illuminate\Http\Response
      */
     public function edit(Checkupprescription $checkupprescription)
@@ -78,8 +192,8 @@ class CheckupprescriptionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Checkupprescription  $checkupprescription
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Checkupprescription $checkupprescription
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Checkupprescription $checkupprescription)
@@ -90,7 +204,7 @@ class CheckupprescriptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Checkupprescription  $checkupprescription
+     * @param \App\Checkupprescription $checkupprescription
      * @return \Illuminate\Http\Response
      */
     public function destroy(Checkupprescription $checkupprescription)

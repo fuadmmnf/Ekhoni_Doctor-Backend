@@ -8,6 +8,6 @@ class Checkupprescription extends Model
 {
     //
     public function patientcheckup(){
-        return $this->hasOne('App\Patientcheckup');
+        return $this->belongsTo('App\Patientcheckup');
     }
 }
