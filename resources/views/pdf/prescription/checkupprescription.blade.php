@@ -18,6 +18,16 @@
 
         .bordertable td, th {
             /*border: 0 phonpx solid #A8A8A8;*/
+            border-spacing: 0;
+        }
+
+        .horizontal-line{
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 1em 0;
+            padding: 0;
         }
 
         @page {
@@ -30,18 +40,22 @@
 </head>
 <body style="padding-top: 100px">
 
-<p align="center" style="line-height: 1.2;">
-    {{--    <img src="{{ public_path() . '/images/ekhonidaktar_logo_bangla.png' }}" style="height: 60px; width: auto;">--}}
+{{--<p align="center" style="line-height: 1.2;">--}}
+{{--    --}}{{--    <img src="{{ public_path() . '/images/ekhonidaktar_logo_bangla.png' }}" style="height: 60px; width: auto;">--}}
 
-    {{--    <br/>--}}
-    {{--    {{ $doctor->name }}<br/>--}}
-    {{--    <small>{{ $doctor->email }}, {{ $doctor->workplace }}</small>--}}
-    {{--    <br/>--}}
-    {{--    <br/>--}}
-    <span align="center" style="color: #397736; border-bottom: 1px solid #397736;">
-      Checkup Prescription
-    </span>
-</p>
+{{--    --}}{{--    <br/>--}}
+{{--    --}}{{--    {{ $doctor->name }}<br/>--}}
+{{--    --}}{{--    <small>{{ $doctor->email }}, {{ $doctor->workplace }}</small>--}}
+{{--    --}}{{--    <br/>--}}
+{{--    --}}{{--    <br/>--}}
+{{--    <span align="center" style="color: #397736; border-bottom: 1px solid #397736;">--}}
+{{--      Checkup Prescription--}}
+{{--    </span>--}}
+{{--</p>--}}
+
+<br><br><br><br><br>
+<hr class="horizontal-line">
+<br>
 <table>
     <tr>
         <td width="60%" align="left">
@@ -49,44 +63,41 @@
                 <thead>
                 <tr>
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                    <th align="left">Doctor Name</th>
+                    <th align="left" style="font-size: 20px">{{$doctor->name}}</th>
                     {{--                    <th>Dosage</th>--}}
                     {{--                    <th>Duration</th>--}}
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Doctor Type</td>
+                    <td >{{$doctor->doctortype->name}}</td>
                 </tr>
                 <tr>
-                    <td>Postgrad degree</td>
+                    <td>{{$doctor->postgrad}}</td>
                 </tr>
                 <tr>
-                    <td>Medical College</td>
+                    <td>{{$doctor->medical_college}}</td>
                 </tr>
                 <tr>
-                    <td>BMDC ID</td>
+                    <td>BMDC ID: {{$doctor->bmdc_number}}</td>
                 </tr>
                 </tbody>
             </table>
 
         </td>
-        <td align="right">
+        <td align="right" valign="bottom">
             <table class="bordertable" style="margin-top: 30px">
                 <thead>
                 <tr>
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                    <th align="right">Chamber</th>
+                    <th align="right">{{$doctor->workplace}}</th>
                     {{--                    <th>Dosage</th>--}}
                     {{--                    <th>Duration</th>--}}
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Medical College</td>
-                </tr>
-                <tr>
-                    <td>BMDC ID</td>
+                    <td>{{$doctor->email}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -95,16 +106,16 @@
     </tr>
 </table>
 
-
-<table>
+<br><br><br>
+<table >
     <tr>
         <td width="35%" align="left" valign="top">
             <table class="bordertable">
                 <thead>
                 <tr>
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                    <th align="center">Patient</th>
-
+{{--                    <th align="left" width="20%">Date</th>--}}
+                    <td width="80%" style="border: 2px solid black; border-left: 0; border-right: 0"><span><b>Date: </b> {{ date('d F, Y', strtotime($checkup->start_time)) }}</span></td>
                 </tr>
                 </thead>
                 <tbody>
@@ -126,8 +137,9 @@
 
                 <tr align="left">
                     <td>
-                        <span><b>Problem Description: </b> Problem Descripion</span>
+                        <span><b>Problem Description: </b> {{$prescription['disease_description']}}</span>
                     </td>
+                    <hr class="horizontal-line" style="height: 2px">
                 </tr>
                 </tbody>
             </table>
@@ -136,11 +148,11 @@
         <td align="left">
             <table class="bordertable">
                 <thead>
-                <tr>
+                <tr style="border: 2px solid black; border-right: 0; border-left: 0">
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                    <th>Medicine Name</th>
-                    <th>Dosage</th>
-                    <th>Duration</th>
+                    <th align="left" width="40%">Medicine Name</th>
+                    <th align="left" width="40%">Dosage</th>
+                    <th align="left">Duration</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -155,12 +167,13 @@
 
                 </tbody>
             </table>
+            <br>
             <span><b>Special Note: </b> adadoasdasdasd</span>
 
-
+            <br>
             <table class="bordertable" style="margin-top: 30px">
                 <thead>
-                <tr>
+                <tr style="border: 2px solid black; border-right: 0; border-left: 0">
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
                     <th align="left">Test Name</th>
                     {{--                    <th>Dosage</th>--}}
@@ -204,18 +217,30 @@
     {{--    <div class="storeWaterMark" style="opacity: 0.1;">--}}
     {{--        <big>Ekhoni Daktar</big>--}}
     {{--    </div>--}}
+    <hr class="horizontal-line" style="width: 90%; height: 3px">
     <br/>
-    <table>
-        <tr>
-            <td width="70%" align="left">
-                <span style="font-size: 11px; color: #525659;">Developed by: Innova Tech</span>
-            </td>
-            <td align="right">
+    <div style="padding-left: 30px; padding-right: 30px">
+        <table >
+            <tr align="left">
+                <td>
+                    <img src="{{public_path('images/ekhonidaktar_icon.png')}}" style="height: 35px; width: auto; border-radius: 25px">
+                    <img src="{{public_path('images/ekhonidaktar_text _bangla.png')}}" style="height: 35px; width: auto; border-radius: 25px">
+                </td>
+            </tr>
+            <tr>
+                <td width="70%" align="left">
+                    <span style="font-size: 11px; color: #525659;">Developed by: Innova Tech</span>
+                </td>
+                <td align="right">
                 <span style="font-family: Calibri,serif; font-size: 11px; color: #3f51b5;">Powered by:
                     http://ekhonidaktar.com</span>
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <hr class="horizontal-line">
+
 </htmlpagefooter>
 </body>
 </html>

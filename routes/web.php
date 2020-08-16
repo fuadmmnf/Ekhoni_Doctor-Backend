@@ -35,8 +35,9 @@ Route::get('/prescription', function (){
     $data = [
         "doctor" => \App\Doctor::findOrFail(2),
         "patient" => \App\Patient::findOrFail(1),
+        "checkup" => \App\Patientcheckup::findOrFail(1),
         "prescription" => [
-            "disease_description" => "disease description",
+            "disease_description" => "dffffffffffffffffff fffffffffffff fffffff isease description",
             "medicine_descriptions" => [
                 [
                     "name" => "napa",
