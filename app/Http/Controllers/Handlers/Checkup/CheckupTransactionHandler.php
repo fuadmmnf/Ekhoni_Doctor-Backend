@@ -17,12 +17,12 @@ class CheckupTransactionHandler
 {
     private $userCreditLimit = 100;
 
-    private function createUserDebitTransaction(User $user, $amount, $status): Transaction
+    private function createUserDebitTransaction(User $user, $amount): Transaction
     {
         $checkupTransaction = new Transaction();
         $checkupTransaction->user_id = $user->id;
         $checkupTransaction->type = 0; // 0 => debit, 1 => credit
-        $checkupTransaction->status = $status; // 0 => initialized, 1 => complete
+        $checkupTransaction->status = 1; // 0 => initialized, 1 => complete
         $checkupTransaction->amount = $amount;
         do {
             $code = Str::random(16);
@@ -59,7 +59,7 @@ class CheckupTransactionHandler
         $remainingAmountAfterTransaction = $user->balance + $this->userCreditLimit - $rate;
 
         if ($remainingAmountAfterTransaction >= 0) {
-            return $this->createUserDebitTransaction($user, $rate, $status);
+            return $this->createUserDebitTransaction($user, $rate);
         } else {
             return null;
         }
