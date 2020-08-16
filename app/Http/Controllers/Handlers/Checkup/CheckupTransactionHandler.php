@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Handlers;
+namespace App\Http\Controllers\Handlers\Checkup;
 
 
 use App\Doctor;
@@ -38,17 +38,20 @@ class CheckupTransactionHandler
     }
 
 
-    public function checkUserAccountBalanceAndProceedTransaction(Patient $patient, Doctor $doctor, $status): ?Transaction
+    public function checkUserAccountBalanceAndProceedTransaction(Patient $patient, Doctor $doctor, $isAppointment): ?Transaction
     {
         $user = $patient->user;
         $rate = $doctor->offer_rate;
-        if ($status == 0) {
+        if ($isAppointment) {
             $checkupIds = Patientcheckup::where('patient_id', $patient->id)
                 ->where('doctor_id', $doctor->id)
                 ->pluck('id');
-            $patientPreviousAppointment = Doctorappointment::whereIn('patientcheckup_id', $checkupIds)->first();
+            $patientPreviousAppointment = Doctorappointment::whereIn('patientcheckup_id', $checkupIds)
+                ->orderBy('start_time', 'desc')->first();
             if (!$patientPreviousAppointment && $doctor->first_appointment_rate != null) {
                 $rate = $doctor->first_appointment_rate;
+            } elseif ($patientPreviousAppointment && Carbon::now()->diffInDays(Carbon::parse($patientPreviousAppointment->start_time)) < 10){
+                $rate = $doctor->report_followup_rate;
             }
 
         }
@@ -71,7 +74,7 @@ class CheckupTransactionHandler
         $newPatientcheckup->start_time = $start_time;
         $newPatientcheckup->end_time = $end_time;
 
-        $transaction = $this->checkUserAccountBalanceAndProceedTransaction($patient, $doctor, $start_time != null);
+        $transaction = $this->checkUserAccountBalanceAndProceedTransaction($patient, $doctor, $start_time == null);
 
         if ($transaction) {
             $newPatientcheckup->transaction_id = $transaction->id;

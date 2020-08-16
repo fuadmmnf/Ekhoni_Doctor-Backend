@@ -6,8 +6,8 @@ use App\Doctor;
 use App\Doctorappointment;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
+use App\Http\Controllers\Handlers\Checkup\CheckupTransactionHandler;
 use App\Http\Controllers\Handlers\DoctorScheduleHandler;
-use App\Http\Controllers\Handlers\CheckupTransactionHandler;
 use App\Patient;
 use App\Patientcheckup;
 use App\User;
@@ -536,7 +536,7 @@ class DoctorappointmentController extends Controller
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0) ? null : Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
         if (!$newPatientCheckup) {
             return response()->json('Insufficient Balance', 400);
         }
