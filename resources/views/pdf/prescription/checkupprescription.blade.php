@@ -3,9 +3,7 @@
     <title>checkup | prescription</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-        /*body {*/
-        /*    font-family: 'kalpurush', sans-serif;*/
-        /*}*/
+
 
         table {
             border-collapse: collapse;
@@ -19,45 +17,121 @@
         }
 
         .bordertable td, th {
-            border: 0px solid #A8A8A8;
-        }
-
-        .storeWaterMark {
-            text-align: center;
-            font-size: 30px;
-            color: #b8cee3;
-            opacity: 0.1 !important;
+            /*border: 0 phonpx solid #A8A8A8;*/
         }
 
         @page {
             header: page-header;
             footer: page-footer;
-            {{--            background: url({{ public_path('images/ekhonidaktar_logo_bangla.png') }});--}}
-    background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+            background: url({{ public_path('images/ekhonidaktar_logo_english_background.png') }});
+            background-position: right top;
         }
     </style>
 </head>
-<body>
-<p align="center" style="line-height: 1.2;">
-    <img src="{{ public_path() . '/images/ekhonidaktar_logo_bangla.png' }}" style="height: 60px; width: auto;">
+<body style="padding-top: 100px">
 
-    <br/>
-    {{ $doctor->name }}<br/>
-    <small>{{ $doctor->email }}, {{ $doctor->workplace }}</small>
-    <br/>
-    <br/>
+<p align="center" style="line-height: 1.2;">
+    {{--    <img src="{{ public_path() . '/images/ekhonidaktar_logo_bangla.png' }}" style="height: 60px; width: auto;">--}}
+
+    {{--    <br/>--}}
+    {{--    {{ $doctor->name }}<br/>--}}
+    {{--    <small>{{ $doctor->email }}, {{ $doctor->workplace }}</small>--}}
+    {{--    <br/>--}}
+    {{--    <br/>--}}
     <span align="center" style="color: #397736; border-bottom: 1px solid #397736;">
       Checkup Prescription
     </span>
 </p>
 <table>
     <tr>
-        <td width="35%" align="left">
-            <div>
-                Patient Description
-            </div>
+        <td width="60%" align="left">
+            <table class="bordertable" style="margin-top: 30px">
+                <thead>
+                <tr>
+                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                    <th align="left">Doctor Name</th>
+                    {{--                    <th>Dosage</th>--}}
+                    {{--                    <th>Duration</th>--}}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Doctor Type</td>
+                </tr>
+                <tr>
+                    <td>Postgrad degree</td>
+                </tr>
+                <tr>
+                    <td>Medical College</td>
+                </tr>
+                <tr>
+                    <td>BMDC ID</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </td>
+        <td align="right">
+            <table class="bordertable" style="margin-top: 30px">
+                <thead>
+                <tr>
+                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                    <th align="right">Chamber</th>
+                    {{--                    <th>Dosage</th>--}}
+                    {{--                    <th>Duration</th>--}}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Medical College</td>
+                </tr>
+                <tr>
+                    <td>BMDC ID</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+
+<table>
+    <tr>
+        <td width="35%" align="left" valign="top">
+            <table class="bordertable">
+                <thead>
+                <tr>
+                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                    <th align="center">Patient</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr align="left">
+                    <td>
+                        <span><b>Name: </b>Fuad</span>
+                    </td>
+                </tr>
+                <tr align="left">
+                    <td>
+                        <span><b>Gender: </b>@if($patient->gender == 0) Male @else Female @endif</span>
+                    </td>
+                </tr>
+                <tr align="left">
+                    <td>
+                        <span><b>Age: </b>21</span>
+                    </td>
+                </tr>
+
+                <tr align="left">
+                    <td>
+                        <span><b>Problem Description: </b> Problem Descripion</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
         </td>
         <td align="left">
             <table class="bordertable">
@@ -70,16 +144,41 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @foreach($prescription['medicine_descriptions'] as $medicineDescription)
-                        <tr>
-                            {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                            <td>{{ $medicineDescription['name'] }}</td>
-                            <td>{{ $medicineDescription['tag'] }}</td>
-                            <td>{{ $medicineDescription['duration'] }}</td>
-                        </tr>
-                    @endforeach
+                @foreach($prescription['medicine_descriptions'] as $medicineDescription)
+                    <tr>
+                        {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                        <td>{{ $medicineDescription['name'] }}</td>
+                        <td>{{ $medicineDescription['tag'] }}</td>
+                        <td>{{ $medicineDescription['duration'] }}</td>
+                    </tr>
+                @endforeach
+
                 </tbody>
             </table>
+            <span><b>Special Note: </b> adadoasdasdasd</span>
+
+
+            <table class="bordertable" style="margin-top: 30px">
+                <thead>
+                <tr>
+                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                    <th align="left">Test Name</th>
+                    {{--                    <th>Dosage</th>--}}
+                    {{--                    <th>Duration</th>--}}
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($prescription['test_descriptions'] as $testDescription)
+                    <tr>
+                        {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                        <td>{{ $testDescription['name'] }}</td>
+                    </tr>
+                @endforeach
+
+                </tbody>
+            </table>
+
+
         </td>
     </tr>
 </table>
@@ -89,22 +188,22 @@
     <table>
         <tr>
             <td width="50%">
-                <small style="font-size: 12px; color: #525659;">presciption create time: <span
+                <small style="font-size: 12px; color: #525659;">creation time: <span
                         style="font-family: Calibri; font-size: 12px;">{{ date('F d, Y, h:i A') }}</span></small>
             </td>
-            <td align="right" style="color: #525659;">
-                | page: {PAGENO}/{nbpg}
-                </small>
-            </td>
+{{--            <td align="right" style="color: #525659;">--}}
+{{--                | page: {PAGENO}/{nbpg}--}}
+{{--                </small>--}}
+{{--            </td>--}}
         </tr>
     </table>
 </htmlpageheader>
 
 
 <htmlpagefooter name="page-footer">
-    <div class="storeWaterMark" style="opacity: 0.1;">
-        <big>Ekhoni Daktar</big>
-    </div>
+    {{--    <div class="storeWaterMark" style="opacity: 0.1;">--}}
+    {{--        <big>Ekhoni Daktar</big>--}}
+    {{--    </div>--}}
     <br/>
     <table>
         <tr>
