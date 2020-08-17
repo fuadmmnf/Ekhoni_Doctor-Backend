@@ -31,13 +31,14 @@ Route::get('/clear', function (){
 });
 
 
-Route::get('/prescription', function (){
+Route::get('/prescriptions', function (){
     $data = [
         "doctor" => \App\Doctor::findOrFail(2),
         "patient" => \App\Patient::findOrFail(1),
         "checkup" => \App\Patientcheckup::findOrFail(1),
         "prescription" => [
             "disease_description" => "dffffffffffffffffff fffffffffffff fffffff isease description",
+            "special_note" => 'asasdasdiasdisud',
             "medicine_descriptions" => [
                 [
                     "name" => "napa",
@@ -57,6 +58,6 @@ Route::get('/prescription', function (){
             ],
         ]
     ];
-    $pdf = PDF::loadView("pdf.prescription.checkupprescription", $data);
+    $pdf = PDF::loadView("pdf.prescriptions.checkupprescription", $data);
     return $pdf->stream('document.pdf');
 });

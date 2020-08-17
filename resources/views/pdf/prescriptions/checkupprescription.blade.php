@@ -168,7 +168,7 @@
                 </tbody>
             </table>
             <br>
-            <span><b>Special Note: </b> adadoasdasdasd</span>
+            <span><b>Special Note: </b> {{$prescription['special_note']}}</span>
 
             <br>
             <table class="bordertable" style="margin-top: 30px">

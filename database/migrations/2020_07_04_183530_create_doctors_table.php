@@ -34,7 +34,6 @@ class CreateDoctorsTable extends Migration
             $table->string('postgrad')->nullable();
             $table->string('medical_college');
             $table->string('other_trainings')->nullable();
-            $table->dateTime('booking_start_time')->nullable(); // null => available, dateTime => booking process starting_time
             $table->string('password');
             $table->string('image')->nullable();
             $table->timestamps();

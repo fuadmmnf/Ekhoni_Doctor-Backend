@@ -3,16 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Doctor;
-use App\Doctorappointment;
 use App\Doctortype;
-use App\Http\Controllers\Handlers\DoctorScheduleHandler;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Intervention\Image\File;
 
@@ -733,44 +728,44 @@ class DoctorController extends Controller
         return response()->noContent();
     }
 
-
-    /**
-     * _Change Doctor Booking Status_
-     *
-     * Update doctor activation_status. !! token required| super_admin, admin:doctor
-     *
-     * @urlParam  doctor required The ID of doctor.
-     * @bodyParam booking_start_time string required The booking starting time for patient. 'date time string' => booking start time, 'blank string' => booking finished. Example: "2020-07-10T14:19:24.000000Z", ''
-     *
-     * @response  204 ""
-     * @response  400 "another user is currently setting appointment"
-     */
-    public function changeDoctorBookingStatus(Request $request, Doctor $doctor)
-    {
-        if (!$this->user ||
-            !$this->user->hasRole('patient') &&
-            !$this->user->hasRole('super_admin') &&
-            !$this->user->hasRole('admin:doctor')
-
-        ) {
-            return response()->json('Forbidden Access', 403);
-        }
-        $this->validate($request, [
-            'booking_start_time' => 'present| nullable',
-        ]);
-
-        $booking_time = Carbon::parse($request->booking_start_time);
-        if (strlen($request->booking_start_time) == 0) {
-            $doctor->booking_start_time = null;
-        } elseif ($booking_time->diffInMinutes($doctor->booking_start_time) > 30) {
-            $doctor->booking_start_time = $booking_time;
-        } else {
-            return response()->json('another user is currently setting appointment', 400);
-        }
-        $doctor->save();
-
-        return response()->noContent();
-    }
-
+//
+//    /**
+//     * _Change Doctor Booking Status_
+//     *
+//     * Update doctor activation_status. !! token required| super_admin, admin:doctor
+//     *
+//     * @urlParam  doctor required The ID of doctor.
+//     * @bodyParam booking_start_time string required The booking starting time for patient. 'date time string' => booking start time, 'blank string' => booking finished. Example: "2020-07-10T14:19:24.000000Z", ''
+//     *
+//     * @response  204 ""
+//     * @response  400 "another user is currently setting appointment"
+//     */
+//    public function changeDoctorBookingStatus(Request $request, Doctor $doctor)
+//    {
+//        if (!$this->user ||
+//            !$this->user->hasRole('patient') &&
+//            !$this->user->hasRole('super_admin') &&
+//            !$this->user->hasRole('admin:doctor')
+//
+//        ) {
+//            return response()->json('Forbidden Access', 403);
+//        }
+//        $this->validate($request, [
+//            'booking_start_time' => 'present| nullable',
+//        ]);
+//
+//        $booking_time = Carbon::parse($request->booking_start_time);
+//        if (strlen($request->booking_start_time) == 0) {
+//            $doctor->booking_start_time = null;
+//        } elseif ($booking_time->diffInMinutes($doctor->booking_start_time) > 30) {
+//            $doctor->booking_start_time = $booking_time;
+//        } else {
+//            return response()->json('another user is currently setting appointment', 400);
+//        }
+//        $doctor->save();
+//
+//        return response()->noContent();
+//    }
+//
 
 }

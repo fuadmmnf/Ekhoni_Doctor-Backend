@@ -91,11 +91,11 @@ class PatientprescriptionController extends Controller
     /**
      * _Store Patientprescription_
      *
-     * Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescription for registered patients, returns patientprescription instance. !! token required | patient
+     * Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescriptions for registered patients, returns patientprescription instance. !! token required | patient
      *
      *
-     * @bodyParam patient_id int required The patient id associated with prescription.
-     * @bodyParam  prescription image required The prescription image of patient.
+     * @bodyParam patient_id int required The patient id associated with prescriptions.
+     * @bodyParam  prescriptions image required The prescriptions image of patient.
      *
      *
      * @response  201 {
@@ -118,13 +118,13 @@ class PatientprescriptionController extends Controller
 
         $this->validate($request, [
             'patient_id' => 'required| numeric',
-            'prescription' => 'required| image| max:4096',
+            'prescriptions' => 'required| image| max:4096',
         ]);
 
         $patient = Patient::findOrFail($request->patient_id);
 
         if ($patient->user->id != $this->user->id) {
-            return response()->json('User can only provide prescription for own patient', 403);
+            return response()->json('User can only provide prescriptions for own patient', 403);
         }
 
         $newPatientPrescription = new Patientprescription();
@@ -135,9 +135,9 @@ class PatientprescriptionController extends Controller
         } while ($patientprescription);
         $newPatientPrescription->code = $code;
 
-        $prescription = $request->file('prescription');
-        $location = 'assets/images/patients/' . $patient->id . '/prescriptions/' . $newPatientPrescription->code . time() . '.png';
-//        dd($prescription->getExtension());
+        $prescription = $request->file('prescriptions');
+        $location = 'assets/images/patients/' . $patient->code . '/prescriptions/' . time() . '.png';
+//        dd($prescriptions->getExtension());
         Storage::put($location, $prescription->get());
         $newPatientPrescription->prescription_path = $location;
 

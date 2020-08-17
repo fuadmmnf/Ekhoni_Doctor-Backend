@@ -471,17 +471,11 @@ class DoctorappointmentController extends Controller
             ->whereDate('start_time', '>=', Carbon::now())
             ->orderBy('start_time', 'ASC')
             ->paginate(15);
-
-        $upcomingDoctorAppointments->load('patientcheckup');
-//        $upcomingDoctorAppointments = $upcomingDoctorAppointments->map(function ($appointment) {
-//            $appointment->patientcheckup;
-//            return $appointment;
-//        })->values();
-//        $upcomingDoctorAppointments->map(function ($doctorappointment) {
-//            $patientcheckup = Patientcheckup::findOrFail($doctorappointment->patientcheckup_id);
-//            $doctorappointment->patient = $patientcheckup->patient;
-//            return $doctorappointment;
-//        });
+//        $upcomingDoctorAppointments->load('patientcheckup');
+        $upcomingDoctorAppointments->getCollection()->transform(function ($appointment) {
+            $appointment->patientcheckup->patient;
+            return $appointment;
+        });
 
         return response()->json($upcomingDoctorAppointments);
     }
@@ -536,7 +530,7 @@ class DoctorappointmentController extends Controller
 
         $appointmentHandler = new DoctorScheduleHandler();
         $isSlotAvailable = $appointmentHandler->setAppointmentInDoctorSchedule($doctor, Carbon::parse($request->start_time));
-        if(!$isSlotAvailable){
+        if (!$isSlotAvailable) {
             return response()->json(["status" => "Appointment slot booked"], 400);
         }
 
@@ -577,7 +571,6 @@ class DoctorappointmentController extends Controller
 
         $doctor->booking_start_time = null;
         $doctor->save();
-
 
 
         return response()->json($newDoctorAppointment, 201);
