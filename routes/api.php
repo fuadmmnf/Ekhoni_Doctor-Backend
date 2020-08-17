@@ -87,6 +87,7 @@ Route::post('patientprescriptions', 'Api\PatientprescriptionController@store');
 //CheckupPrescription
 Route::get('doctors/{doctor}/checkupprescriptions/pending', 'Api\CheckupprescriptionController@getPendingPrescriptionByDoctor');
 Route::get('patients/{patient}/checkupprescriptions/pending', 'Api\CheckupprescriptionController@getPendingPrescriptionByPatient');
+Route::get('checkupprescriptions/{checkupprescription}/pdf', 'Api\CheckupprescriptionController@servePrescriptionPDF');
 Route::put('checkupprescriptions/{checkupprescription}/pdf', 'Api\CheckupprescriptionController@storeCheckupPrescriptionPDF');
 
 

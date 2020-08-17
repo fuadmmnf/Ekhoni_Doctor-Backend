@@ -171,12 +171,14 @@ class CheckupprescriptionController extends Controller
 
 
 
+
+
+
     public function servePrescriptionPDF(Checkupprescription $checkupprescription){
         $patientcheckup = $checkupprescription->patientcheckup;
-
         if (!$this->user ||
-            !($this->user->hasRole('doctor') && $this->user->id == $patientcheckup->doctor->id) &&
-            !($this->user->hasRole('patient') && $this->user->id == $patientcheckup->patient->id) &&
+            !($this->user->hasRole('doctor') && $this->user->id == $patientcheckup->doctor->user->id) &&
+            !($this->user->hasRole('patient') && $this->user->id == $patientcheckup->patient->user->id) &&
             !$this->user->hasRole('admin:doctor') &&
             !$this->user->hasRole('admin:patient') &&
             !$this->user->hasRole('super_admin')) {
@@ -205,15 +207,16 @@ class CheckupprescriptionController extends Controller
 
         $checkupprescription->status = 1;
         $checkupprescription->contents = $request->contents;
-        $checkupprescription->prescription_path = 'app/assets/reports/prescriptions/' . $checkupprescription->code . time() . '.pdf';
+        $checkupprescription->prescription_path = 'assets/reports/prescriptions/' . $checkupprescription->code . '.pdf';
         $data = [
             "doctor" => $patientcheckup->doctor,
             "patient" => $patientcheckup->patient,
             "checkup" => $patientcheckup,
             "prescription" => $request->prescription
         ];
+        $checkupprescription->contents = json_encode($data);
         $pdf = PDF::loadView("pdf.prescriptions.checkupprescription", $data);
-        $pdf->save(storage_path($checkupprescription->prescription_path));
+        $pdf->save(storage_path('app/' . $checkupprescription->prescription_path));
 
         $checkupprescription->save();
 
