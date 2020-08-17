@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Checkupprescription;
 use App\Doctor;
 use App\Doctorappointment;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
-use App\Http\Controllers\Handlers\CheckupTransactionHandler;
+use App\Http\Controllers\Handlers\Checkup\CheckupTransactionHandler;
 use App\Patient;
 use App\Patientcheckup;
 use Carbon\Carbon;
@@ -32,7 +33,8 @@ class PatientcheckupController extends Controller
     }
 
 
-    public function getDetailsFromCode(Patientcheckup $patientcheckup){
+    public function getDetailsFromCode(Patientcheckup $patientcheckup)
+    {
         $patientcheckup->patient;
         return response()->json($patientcheckup, 200);
     }
@@ -50,7 +52,6 @@ class PatientcheckupController extends Controller
 //    }
 
 
-
     /**
      * _Create Patientcheckup_
      *
@@ -59,7 +60,7 @@ class PatientcheckupController extends Controller
      *
      * @bodyParam patient_id int required The patient id associated with call.
      * @bodyParam  doctor_id string required The doctor id associated with call.
-     * @bodyParam  start_time string required The datetime indicating starting time of call. Can be set blank to indicate checkup instance for doctorappointment. Example: "", "2020-07-10T14:19:24.000000Z"
+     * @bodyParam  start_time string required The datetime indicating starting time of call. Example: "", "2020-07-10T14:19:24.000000Z"
      * @bodyParam  end_time string required The datetime indicating ending time of call. Can be set blank to indicate start of checkup. Example: "", "2020-07-10T14:40:30.000000Z"
      *
      *
@@ -87,22 +88,21 @@ class PatientcheckupController extends Controller
         $this->validate($request, [
             'patient_id' => 'required| numeric',
             'doctor_id' => 'required| numeric',
-            'start_time' => 'present| nullable',
+            'start_time' => 'required',
             'end_time' => 'present| nullable',
         ]);
 
         $patient = Patient::where('id', $request->patient_id)
             ->where('user_id', $this->user->id)->first();
-        if(!$patient){
+        if (!$patient) {
             return response()->json('No patient selected associated with user', 400);
         }
-
 
 
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0)? null: Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, (strlen($request->start_time) == 0) ? null : Carbon::parse($request->start_time), (strlen($request->end_time) == 0) ? null : Carbon::parse($request->end_time));
         if (!$newPatientCheckup) {
             return response()->json('Insufficient Balance', 400);
         }
@@ -136,14 +136,15 @@ class PatientcheckupController extends Controller
         }
 
         $this->validate($request, [
+            'start_time' => 'required',
             'end_time' => 'required',
             'doctor_rating' => 'sometimes| numeric| between: 0,5',
             'patient_rating' => 'sometimes| numeric| between: 0,5',
         ]);
 
-        if ($patientcheckup->end_time == null) {
-            $patientcheckup->end_time = Carbon::parse($request->end_time);
-        }
+        $patientcheckup->start_time = Carbon::parse($request->start_time);
+        $patientcheckup->end_time = Carbon::parse($request->end_time);
+
         if ($request->has('doctor_rating')) {
             $patientcheckup->doctor_rating = min($request->doctor_rating, 5);
         }
@@ -154,12 +155,27 @@ class PatientcheckupController extends Controller
 
         $patientcheckup->save();
 
+
+        //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
+        $prescription = Checkupprescription::where('patientcheckup_id', $patientcheckup->id)->first();
+        if (!$prescription) {
+            $newCheckupPrescription = new Checkupprescription();
+            $newCheckupPrescription->patientcheckup_id = $patientcheckup->id;
+            $newCheckupPrescription->status = 0; //initialized(pending content)
+            do {
+                $code = Str::random(16);
+                $checkupPrescription = Checkupprescription::where('code', $code)->first();
+            } while ($checkupPrescription);
+            $newCheckupPrescription->code = $code;
+            $newCheckupPrescription->save();
+        }
+
         return response()->noContent();
     }
 
 
-
-    public function sendCheckupCallNotification(Patientcheckup $patientcheckup){
+    public function sendCheckupCallNotification(Patientcheckup $patientcheckup)
+    {
         $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
         $pushNotificationHandler = new CheckupCallHandler();
         $data = $pushNotificationHandler->createCallRequest($patientcheckup, $doctorappointment != null);

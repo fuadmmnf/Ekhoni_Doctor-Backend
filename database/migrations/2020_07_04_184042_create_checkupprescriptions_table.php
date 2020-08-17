@@ -18,8 +18,8 @@ class CreateCheckupprescriptionsTable extends Migration
             $table->unsignedBigInteger('patientcheckup_id');
             $table->integer('status'); // 0 => not created, 1 => submitted
             $table->string('code');
-            $table->json('contents');
-            $table->string('prescription_path');
+            $table->json('contents')->nullable();
+            $table->string('prescription_path')->nullable();
             $table->timestamps();
 
             $table->foreign('patientcheckup_id')->references('id')->on('patientcheckups');
