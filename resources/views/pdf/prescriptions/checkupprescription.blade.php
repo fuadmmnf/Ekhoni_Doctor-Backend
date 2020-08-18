@@ -160,7 +160,7 @@
                     <tr>
                         {{-- <th width="9%">ক্রয় আইডি</th> --}}
                         <td>{{ $medicineDescription['name'] }}</td>
-                        <td>{{ $medicineDescription['tag'] }}</td>
+                        <td>{{ join(", ", $medicineDescription['tags']) }}</td>
                         <td>{{ $medicineDescription['duration'] }}</td>
                     </tr>
                 @endforeach

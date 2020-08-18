@@ -39,17 +39,29 @@ class PatientcheckupController extends Controller
         return response()->json($patientcheckup, 200);
     }
 
+
+
+
 //    public function getPatientCheckupsByPatient(Patient $patient)
 //    {
-//        $checkupsByPatient = Patientcheckup::where('patient_id', $patient->id)->get();
+//        $checkupsByPatient = Patientcheckup::where('patient_id', $patient->id)->load('doctor')->paginate(20);
 //        return response()->json($checkupsByPatient);
 //    }
-//
-//    public function getPatientCheckupsByDoctor(Doctor $doctor)
-//    {
-//        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->get();
-//        return response()->json($checkupsByDoctor);
-//    }
+
+    public function getPatientCheckupsByDoctor(Doctor $doctor)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+
+        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->with('patient')->paginate(20);
+        return response()->json($checkupsByDoctor);
+    }
 
 
     /**

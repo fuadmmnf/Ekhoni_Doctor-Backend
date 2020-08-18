@@ -131,11 +131,10 @@ class DoctorScheduleController extends Controller
         $numAppointments = 0;
         while ($time < $newDoctorSchedule->end_time) {
             $appointmentSchedules[] = [
-                "time" => $time->copy(),
+                "time" => $time->copy()->toDateTimeString(),
                 "status" => 0 // 0 available, 1 booked
             ];
-//            $time = $time->addMinutes($scheduleInterval);
-            $time = $time->addMinutes($scheduleInterval);
+            $time->addMinutes($scheduleInterval);
             $numAppointments ++;
         }
         $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);

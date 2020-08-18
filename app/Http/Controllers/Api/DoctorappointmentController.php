@@ -467,6 +467,14 @@ class DoctorappointmentController extends Controller
      */
     public function getUpcomingDoctorAppointments(Doctor $doctor)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
         $upcomingDoctorAppointments = Doctorappointment::where('doctor_id', $doctor->id)
             ->whereDate('start_time', '>=', Carbon::now())
             ->orderBy('start_time', 'ASC')

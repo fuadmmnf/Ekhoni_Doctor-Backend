@@ -42,12 +42,12 @@ Route::get('/prescriptions', function (){
             "medicine_descriptions" => [
                 [
                     "name" => "napa",
-                    "tag" => "day, before lunch, dinner",
+                    "tags" => ["day", "before lunch", "dinner"],
                     "duration" => "15 days"
                 ],
                 [
                     "name" => "paracetamaul",
-                    "tag" => "day, before lunch, dinner",
+                    "tags" => ["day", "before lunch", "dinner"],
                     "duration" => "10 days"
                 ]
             ],
