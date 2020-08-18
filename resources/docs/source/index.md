@@ -220,14 +220,14 @@ Fetch upcoming doctor appointments by user. !! token required| super_admin, admi
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/users/voluptatem/doctorappointments/upcoming" \
+    -G "http://localhost/api/users/ad/doctorappointments/upcoming" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/voluptatem/doctorappointments/upcoming"
+    "http://localhost/api/users/ad/doctorappointments/upcoming"
 );
 
 let headers = {
@@ -326,14 +326,14 @@ Fetch paginated response of completed  doctor appointments by user. !! token req
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/users/tempora/doctorappointments/history" \
+    -G "http://localhost/api/users/voluptate/doctorappointments/history" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/tempora/doctorappointments/history"
+    "http://localhost/api/users/voluptate/doctorappointments/history"
 );
 
 let headers = {
@@ -445,14 +445,14 @@ Fetch paginated response of completed  doctor appointments by patient. !! token 
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/patients/aspernatur/doctorappointments/history" \
+    -G "http://localhost/api/patients/et/doctorappointments/history" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/patients/aspernatur/doctorappointments/history"
+    "http://localhost/api/patients/et/doctorappointments/history"
 );
 
 let headers = {
@@ -564,14 +564,14 @@ Fetch scheduled upcoming doctor appointments starting from current date, paginat
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/doctors/qui/doctorappointments/upcoming" \
+    -G "http://localhost/api/doctors/quibusdam/doctorappointments/upcoming" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/qui/doctorappointments/upcoming"
+    "http://localhost/api/doctors/quibusdam/doctorappointments/upcoming"
 );
 
 let headers = {
@@ -614,14 +614,14 @@ Fetch scheduled doctor appointments, paginated response of doctorappointment ins
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/doctors/voluptas/doctorappointments/animi" \
+    -G "http://localhost/api/doctors/mollitia/doctorappointments/aperiam" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/voluptas/doctorappointments/animi"
+    "http://localhost/api/doctors/mollitia/doctorappointments/aperiam"
 );
 
 let headers = {
@@ -693,7 +693,7 @@ curl -X POST \
     "http://localhost/api/doctorappointments" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patient_id":6,"doctor_id":"nobis","start_time":"\"2020-07-10T14:19:24.000000Z\"","end_time":"\"2020-07-10T14:40:30.000000Z\""}'
+    -d '{"patient_id":11,"doctor_id":"in","start_time":"\"2020-07-10T14:19:24.000000Z\"","end_time":"\"2020-07-10T14:40:30.000000Z\""}'
 
 ```
 
@@ -708,8 +708,8 @@ let headers = {
 };
 
 let body = {
-    "patient_id": 6,
-    "doctor_id": "nobis",
+    "patient_id": 11,
+    "doctor_id": "in",
     "start_time": "\"2020-07-10T14:19:24.000000Z\"",
     "end_time": "\"2020-07-10T14:40:30.000000Z\""
 }
@@ -766,16 +766,16 @@ Doctorappointment update, change appointment status. !! token required | doctor
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/doctorappointments/odio" \
+    "http://localhost/api/doctorappointments/nesciunt" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"status":14}'
+    -d '{"status":8}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctorappointments/odio"
+    "http://localhost/api/doctorappointments/nesciunt"
 );
 
 let headers = {
@@ -784,7 +784,7 @@ let headers = {
 };
 
 let body = {
-    "status": 14
+    "status": 8
 }
 
 fetch(url, {
@@ -831,14 +831,14 @@ Fetch doctor schedules starting from present date to upcoming 30days, Schedule W
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/doctors/repellendus/doctorschedules" \
+    -G "http://localhost/api/doctors/sunt/doctorschedules" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/repellendus/doctorschedules"
+    "http://localhost/api/doctors/sunt/doctorschedules"
 );
 
 let headers = {
@@ -895,7 +895,7 @@ curl -X POST \
     "http://localhost/api/doctorschedules" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"doctor_id":8,"start_time":"\"2020-07-29T14:30:00.000000Z\"","end_time":"\"2020-07-29T18:30:00.000000Z\""}'
+    -d '{"doctor_id":15,"start_time":"\"2020-07-29T14:30:00.000000Z\"","end_time":"\"2020-07-29T18:30:00.000000Z\""}'
 
 ```
 
@@ -910,7 +910,7 @@ let headers = {
 };
 
 let body = {
-    "doctor_id": 8,
+    "doctor_id": 15,
     "start_time": "\"2020-07-29T14:30:00.000000Z\"",
     "end_time": "\"2020-07-29T18:30:00.000000Z\""
 }
@@ -1084,14 +1084,14 @@ Fetch active doctors, paginated response of doctor instances.
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/doctortypes/facilis/doctors/active" \
+    -G "http://localhost/api/doctortypes/dolorum/doctors/active" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctortypes/facilis/doctors/active"
+    "http://localhost/api/doctortypes/dolorum/doctors/active"
 );
 
 let headers = {
@@ -1261,14 +1261,14 @@ Fetch approved doctors, paginated response of doctor instances by doctortype.
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/doctortypes/repellat/doctors/approved" \
+    -G "http://localhost/api/doctortypes/quia/doctors/approved" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctortypes/repellat/doctors/approved"
+    "http://localhost/api/doctortypes/quia/doctors/approved"
 );
 
 let headers = {
@@ -1600,7 +1600,7 @@ curl -X POST \
     "http://localhost/api/doctors" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"doctortype_id":11,"name":"nulla","bmdc_number":"officiis","rate":17,"offer_rate":4,"first_appointment_rate":5,"report_followup_rate":8,"gender":11,"mobile":"modi","email":"eaque","workplace":"quasi","designation":"recusandae","medical_college":"asperiores","post_grad":"ut","other_trainings":"repellat"}'
+    -d '{"doctortype_id":1,"name":"nostrum","bmdc_number":"eum","rate":8,"offer_rate":1,"first_appointment_rate":6,"report_followup_rate":10,"gender":14,"mobile":"reprehenderit","email":"qui","workplace":"laboriosam","designation":"aut","medical_college":"tempore","post_grad":"possimus","other_trainings":"rerum"}'
 
 ```
 
@@ -1615,21 +1615,21 @@ let headers = {
 };
 
 let body = {
-    "doctortype_id": 11,
-    "name": "nulla",
-    "bmdc_number": "officiis",
-    "rate": 17,
-    "offer_rate": 4,
-    "first_appointment_rate": 5,
-    "report_followup_rate": 8,
-    "gender": 11,
-    "mobile": "modi",
-    "email": "eaque",
-    "workplace": "quasi",
-    "designation": "recusandae",
-    "medical_college": "asperiores",
-    "post_grad": "ut",
-    "other_trainings": "repellat"
+    "doctortype_id": 1,
+    "name": "nostrum",
+    "bmdc_number": "eum",
+    "rate": 8,
+    "offer_rate": 1,
+    "first_appointment_rate": 6,
+    "report_followup_rate": 10,
+    "gender": 14,
+    "mobile": "reprehenderit",
+    "email": "qui",
+    "workplace": "laboriosam",
+    "designation": "aut",
+    "medical_college": "tempore",
+    "post_grad": "possimus",
+    "other_trainings": "rerum"
 }
 
 fetch(url, {
@@ -1701,7 +1701,7 @@ curl -X POST \
     "http://localhost/api/doctors/approve" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"doctortype_id":7,"payment_style":12,"name":"sed","bmdc_number":"nemo","rate":2,"offer_rate":10,"first_appointment_rate":19,"report_followup_rate":9,"gender":18,"mobile":"consequatur","email":"velit","workplace":"dolores","designation":"error","medical_college":"sit","post_grad":"officia","other_trainings":"fugit"}'
+    -d '{"doctortype_id":6,"payment_style":8,"name":"aut","bmdc_number":"et","rate":18,"offer_rate":12,"first_appointment_rate":16,"report_followup_rate":1,"gender":2,"mobile":"tempore","email":"id","workplace":"consequatur","designation":"officia","medical_college":"tenetur","post_grad":"ea","other_trainings":"nihil"}'
 
 ```
 
@@ -1716,22 +1716,22 @@ let headers = {
 };
 
 let body = {
-    "doctortype_id": 7,
-    "payment_style": 12,
-    "name": "sed",
-    "bmdc_number": "nemo",
-    "rate": 2,
-    "offer_rate": 10,
-    "first_appointment_rate": 19,
-    "report_followup_rate": 9,
-    "gender": 18,
-    "mobile": "consequatur",
-    "email": "velit",
-    "workplace": "dolores",
-    "designation": "error",
-    "medical_college": "sit",
-    "post_grad": "officia",
-    "other_trainings": "fugit"
+    "doctortype_id": 6,
+    "payment_style": 8,
+    "name": "aut",
+    "bmdc_number": "et",
+    "rate": 18,
+    "offer_rate": 12,
+    "first_appointment_rate": 16,
+    "report_followup_rate": 1,
+    "gender": 2,
+    "mobile": "tempore",
+    "email": "id",
+    "workplace": "consequatur",
+    "designation": "officia",
+    "medical_college": "tenetur",
+    "post_grad": "ea",
+    "other_trainings": "nihil"
 }
 
 fetch(url, {
@@ -1807,7 +1807,7 @@ curl -X PUT \
     "http://localhost/api/doctors/status" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"status":13}'
+    -d '{"status":4}'
 
 ```
 
@@ -1822,7 +1822,7 @@ let headers = {
 };
 
 let body = {
-    "status": 13
+    "status": 4
 }
 
 fetch(url, {
@@ -1860,16 +1860,16 @@ Update doctor attributes !! token required | super_admin, admin:doctor, doctor
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/doctors/molestias" \
+    "http://localhost/api/doctors/quibusdam" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"rate":10,"offer_rate":4,"first_appointment_rate":15,"report_followup_rate":20,"workplace":"unde","designation":"et","other_trainings":"est"}'
+    -d '{"rate":2,"offer_rate":10,"first_appointment_rate":2,"report_followup_rate":1,"workplace":"quos","designation":"dolorum","other_trainings":"quasi"}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/molestias"
+    "http://localhost/api/doctors/quibusdam"
 );
 
 let headers = {
@@ -1878,13 +1878,13 @@ let headers = {
 };
 
 let body = {
-    "rate": 10,
-    "offer_rate": 4,
-    "first_appointment_rate": 15,
-    "report_followup_rate": 20,
-    "workplace": "unde",
-    "designation": "et",
-    "other_trainings": "est"
+    "rate": 2,
+    "offer_rate": 10,
+    "first_appointment_rate": 2,
+    "report_followup_rate": 1,
+    "workplace": "quos",
+    "designation": "dolorum",
+    "other_trainings": "quasi"
 }
 
 fetch(url, {
@@ -1933,16 +1933,16 @@ Update doctor activation_status. !! token required| super_admin, admin:doctor
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/doctors/quia/approve" \
+    "http://localhost/api/doctors/sit/approve" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"activation_status":4}'
+    -d '{"activation_status":16}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/quia/approve"
+    "http://localhost/api/doctors/sit/approve"
 );
 
 let headers = {
@@ -1951,7 +1951,7 @@ let headers = {
 };
 
 let body = {
-    "activation_status": 4
+    "activation_status": 16
 }
 
 fetch(url, {
@@ -1985,72 +1985,6 @@ Parameter | Type | Status | Description
     
 <!-- END_67a7291e52b830e20aa1fbc1d0bd0608 -->
 
-<!-- START_bbc335ee3377c8abc50fab7c54dda238 -->
-## _Change Doctor Booking Status_
-
-Update doctor activation_status. !! token required| super_admin, admin:doctor
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost/api/doctors/sequi/booking" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"booking_start_time":"\"2020-07-10T14:19:24.000000Z\", ''"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/doctors/sequi/booking"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "booking_start_time": "\"2020-07-10T14:19:24.000000Z\", ''"
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (204):
-
-```json
-""
-```
-> Example response (400):
-
-```json
-"another user is currently setting appointment"
-```
-
-### HTTP Request
-`PUT api/doctors/{doctor}/booking`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `doctor` |  required  | The ID of doctor.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `booking_start_time` | string |  required  | The booking starting time for patient. 'date time string' => booking start time, 'blank string' => booking finished.
-    
-<!-- END_bbc335ee3377c8abc50fab7c54dda238 -->
-
 <!-- START_63a6c69c88c8517ab164a0b05a45fe86 -->
 ## _Change Doctor Image_
 
@@ -2060,16 +1994,16 @@ Update doctor image (Multipart Request)!! token required | super_admin, admin:do
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/doctors/fuga/image" \
+    "http://localhost/api/doctors/qui/image" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"image":"et"}'
+    -d '{"image":"odio"}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/fuga/image"
+    "http://localhost/api/doctors/qui/image"
 );
 
 let headers = {
@@ -2078,7 +2012,7 @@ let headers = {
 };
 
 let body = {
-    "image": "et"
+    "image": "odio"
 }
 
 fetch(url, {
@@ -2160,6 +2094,48 @@ fetch(url, {
 
 <!-- END_af81d850b7324e640d08a2399bc642bd -->
 
+<!-- START_b8636a5bd1035ce0a5c1a846ac1ed61e -->
+## api/doctors/{doctor}/patientcheckups/history
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/doctors/1/patientcheckups/history" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/doctors/1/patientcheckups/history"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (403):
+
+```json
+"Forbidden Access"
+```
+
+### HTTP Request
+`GET api/doctors/{doctor}/patientcheckups/history`
+
+
+<!-- END_b8636a5bd1035ce0a5c1a846ac1ed61e -->
+
 <!-- START_3004f34a51c1a5bf28d7841387b1bd4e -->
 ## _Create Patientcheckup_
 
@@ -2172,7 +2148,7 @@ curl -X POST \
     "http://localhost/api/patientcheckups" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patient_id":10,"doctor_id":"laboriosam","start_time":"\"\", \"2020-07-10T14:19:24.000000Z\"","end_time":"\"\", \"2020-07-10T14:40:30.000000Z\""}'
+    -d '{"patient_id":3,"doctor_id":"in","start_time":"\"\", \"2020-07-10T14:19:24.000000Z\"","end_time":"\"\", \"2020-07-10T14:40:30.000000Z\""}'
 
 ```
 
@@ -2187,8 +2163,8 @@ let headers = {
 };
 
 let body = {
-    "patient_id": 10,
-    "doctor_id": "laboriosam",
+    "patient_id": 3,
+    "doctor_id": "in",
     "start_time": "\"\", \"2020-07-10T14:19:24.000000Z\"",
     "end_time": "\"\", \"2020-07-10T14:40:30.000000Z\""
 }
@@ -2231,13 +2207,16 @@ Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
     `patient_id` | integer |  required  | The patient id associated with call.
         `doctor_id` | string |  required  | The doctor id associated with call.
-        `start_time` | string |  required  | The datetime indicating starting time of call. Can be set blank to indicate checkup instance for doctorappointment.
+        `start_time` | string |  required  | The datetime indicating starting time of call.
         `end_time` | string |  required  | The datetime indicating ending time of call. Can be set blank to indicate start of checkup.
     
 <!-- END_3004f34a51c1a5bf28d7841387b1bd4e -->
 
 <!-- START_f224ac60602821cd7b9caf17eeccb62a -->
-## api/patientcheckups/{patientcheckup}/call
+## _Create Access Token_
+
+Create Patientcheckup joining information and update to firestore for call notification. !! token required | patient | doctor
+
 > Example request:
 
 ```bash
@@ -2266,10 +2245,26 @@ fetch(url, {
 ```
 
 
+> Example response (201):
+
+```json
+{
+    "access_token": "skadbi1212hdiu92basoicasic",
+    "room_name": "demo room",
+    "caller_name": "patient name\/ doctor name",
+    "checkup_code": "asd1e012jf2f21f",
+    "time": "2020-07-11T09:46:43.000000Z"
+}
+```
 
 ### HTTP Request
 `POST api/patientcheckups/{patientcheckup}/call`
 
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `code` |  required  | The patientcheckup code for which the call room information is generated
 
 <!-- END_f224ac60602821cd7b9caf17eeccb62a -->
 
@@ -2282,16 +2277,16 @@ Patientcheckup update patient and doctor ratings and endtime. !! token required 
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/patientcheckups/enim" \
+    "http://localhost/api/patientcheckups/modi" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"end_time":0,"doctor_rating":11,"patient_rating":6}'
+    -d '{"end_time":0,"doctor_rating":8,"patient_rating":12}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/patientcheckups/enim"
+    "http://localhost/api/patientcheckups/modi"
 );
 
 let headers = {
@@ -2301,8 +2296,8 @@ let headers = {
 
 let body = {
     "end_time": 0,
-    "doctor_rating": 11,
-    "patient_rating": 6
+    "doctor_rating": 8,
+    "patient_rating": 12
 }
 
 fetch(url, {
@@ -2351,14 +2346,14 @@ Fetch default user patient. !! token required | admin:user, patient
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/users/magni/patients/default" \
+    -G "http://localhost/api/users/iste/patients/default" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/magni/patients/default"
+    "http://localhost/api/users/iste/patients/default"
 );
 
 let headers = {
@@ -2413,14 +2408,14 @@ Fetch Patients By User. !! token required | admin:user, patient
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/users/dicta/patients" \
+    -G "http://localhost/api/users/cupiditate/patients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/dicta/patients"
+    "http://localhost/api/users/cupiditate/patients"
 );
 
 let headers = {
@@ -2480,7 +2475,7 @@ curl -X POST \
     "http://localhost/api/patients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"eaque","age":5,"gender":13,"address":"nobis","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"fugiat","weight":"et"}'
+    -d '{"name":"sed","age":16,"gender":18,"address":"labore","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"sint","weight":"non"}'
 
 ```
 
@@ -2495,15 +2490,15 @@ let headers = {
 };
 
 let body = {
-    "name": "eaque",
-    "age": 5,
-    "gender": 13,
-    "address": "nobis",
+    "name": "sed",
+    "age": 16,
+    "gender": 18,
+    "address": "labore",
     "blood_group": "\"B+ve\"",
     "blood_pressure": "\"90-150\"",
     "cholesterol_level": "\"dont know the readings :p\"",
-    "height": "fugiat",
-    "weight": "et"
+    "height": "sint",
+    "weight": "non"
 }
 
 fetch(url, {
@@ -2549,16 +2544,16 @@ Update patient image (Multipart Request)!! token required | super_admin, admin:u
 
 ```bash
 curl -X POST \
-    "http://localhost/api/patients/unde/image" \
+    "http://localhost/api/patients/reprehenderit/image" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"image":"ipsa"}'
+    -d '{"image":"amet"}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/patients/unde/image"
+    "http://localhost/api/patients/reprehenderit/image"
 );
 
 let headers = {
@@ -2567,7 +2562,7 @@ let headers = {
 };
 
 let body = {
-    "image": "ipsa"
+    "image": "amet"
 }
 
 fetch(url, {
@@ -2610,16 +2605,16 @@ Patient update endpoint. User associated with token must match with patient user
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/patients/debitis" \
+    "http://localhost/api/patients/in" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"corrupti","address":"et","age":"fugiat","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"rerum","weight":"cum"}'
+    -d '{"name":"eum","address":"rerum","age":"accusantium","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"voluptatem","weight":"possimus"}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/patients/debitis"
+    "http://localhost/api/patients/in"
 );
 
 let headers = {
@@ -2628,14 +2623,14 @@ let headers = {
 };
 
 let body = {
-    "name": "corrupti",
-    "address": "et",
-    "age": "fugiat",
+    "name": "eum",
+    "address": "rerum",
+    "age": "accusantium",
     "blood_group": "\"B+ve\"",
     "blood_pressure": "\"90-150\"",
     "cholesterol_level": "\"dont know the readings :p\"",
-    "height": "rerum",
-    "weight": "cum"
+    "height": "voluptatem",
+    "weight": "possimus"
 }
 
 fetch(url, {
@@ -2689,14 +2684,14 @@ Fetch patient prescriptinos. !! token required | doctor, patient
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/patients/officia/prescriptions" \
+    -G "http://localhost/api/patients/ducimus/prescriptions" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/patients/officia/prescriptions"
+    "http://localhost/api/patients/ducimus/prescriptions"
 );
 
 let headers = {
@@ -2794,7 +2789,7 @@ Parameter | Status | Description
 <!-- START_78bab5eaed235b36f3d6a6372d8efb33 -->
 ## _Store Patientprescription_
 
-Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescription for registered patients, returns patientprescription instance. !! token required | patient
+Patientprescription store endpoint [Must be multipart/form-data request with image file], User must provide prescriptions for registered patients, returns patientprescription instance. !! token required | patient
 
 > Example request:
 
@@ -2803,7 +2798,7 @@ curl -X POST \
     "http://localhost/api/patientprescriptions" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patient_id":19,"prescription":"error"}'
+    -d '{"patient_id":8,"prescriptions":"voluptatem"}'
 
 ```
 
@@ -2818,8 +2813,8 @@ let headers = {
 };
 
 let body = {
-    "patient_id": 19,
-    "prescription": "error"
+    "patient_id": 8,
+    "prescriptions": "voluptatem"
 }
 
 fetch(url, {
@@ -2851,8 +2846,8 @@ fetch(url, {
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `patient_id` | integer |  required  | The patient id associated with prescription.
-        `prescription` | image |  required  | The prescription image of patient.
+    `patient_id` | integer |  required  | The patient id associated with prescriptions.
+        `prescriptions` | image |  required  | The prescriptions image of patient.
     
 <!-- END_78bab5eaed235b36f3d6a6372d8efb33 -->
 
@@ -2872,7 +2867,7 @@ curl -X POST \
     "http://localhost/api/transactions" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"type":1,"amount":18,"status":13}'
+    -d '{"type":19,"amount":1,"status":6}'
 
 ```
 
@@ -2887,9 +2882,9 @@ let headers = {
 };
 
 let body = {
-    "type": 1,
-    "amount": 18,
-    "status": 13
+    "type": 19,
+    "amount": 1,
+    "status": 6
 }
 
 fetch(url, {
@@ -2938,16 +2933,16 @@ Update transaction status to completed. user_id of transaction has to be same wi
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/transactions/qui/status" \
+    "http://localhost/api/transactions/aliquid/status" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"status":15}'
+    -d '{"status":10}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/transactions/qui/status"
+    "http://localhost/api/transactions/aliquid/status"
 );
 
 let headers = {
@@ -2956,7 +2951,7 @@ let headers = {
 };
 
 let body = {
-    "status": 15
+    "status": 10
 }
 
 fetch(url, {
@@ -2999,14 +2994,14 @@ Fetch completed transaction of user, paginated response. !! token required | sup
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/users/quas/transactions/complete" \
+    -G "http://localhost/api/users/iusto/transactions/complete" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/quas/transactions/complete"
+    "http://localhost/api/users/iusto/transactions/complete"
 );
 
 let headers = {
@@ -3183,7 +3178,7 @@ Change the user object to modify the is_agent & agent_percentage field. !! token
 
 ```bash
 curl -X PUT \
-    "http://localhost/api/users/error/agent" \
+    "http://localhost/api/users/quis/agent" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"is_agent":true,"agent_percentage":2.5}'
@@ -3192,7 +3187,7 @@ curl -X PUT \
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/users/error/agent"
+    "http://localhost/api/users/quis/agent"
 );
 
 let headers = {
@@ -3292,14 +3287,14 @@ Fetch pending doctor checkupprescriptions. !! token required| super_admin, admin
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/doctors/velit/checkupprescriptions/pending" \
+    -G "http://localhost/api/doctors/iure/checkupprescriptions/pending" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/doctors/velit/checkupprescriptions/pending"
+    "http://localhost/api/doctors/iure/checkupprescriptions/pending"
 );
 
 let headers = {
@@ -3370,7 +3365,7 @@ fetch(url, {
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `doctor` |  required  | The doctor id associated with the prescription.
+    `doctor` |  required  | The doctor id associated with the prescriptions.
 
 <!-- END_00ad29745cfa3a140a189cf4f45b667b -->
 
@@ -3383,14 +3378,14 @@ Fetch pending patient checkupprescriptions. !! token required| super_admin, admi
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/patients/exercitationem/checkupprescriptions/pending" \
+    -G "http://localhost/api/patients/et/checkupprescriptions/pending" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost/api/patients/exercitationem/checkupprescriptions/pending"
+    "http://localhost/api/patients/et/checkupprescriptions/pending"
 );
 
 let headers = {
@@ -3461,9 +3456,51 @@ fetch(url, {
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `patient` |  required  | The patient id associated with the prescription.
+    `patient` |  required  | The patient id associated with the prescriptions.
 
 <!-- END_e349e02a62e75874e94fa58d449141fe -->
+
+<!-- START_b7e23fffa952c3a35ffbff8dd488d6bb -->
+## api/checkupprescriptions/{checkupprescription}/pdf
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/checkupprescriptions/1/pdf" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/checkupprescriptions/1/pdf"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (403):
+
+```json
+"Forbidden Access"
+```
+
+### HTTP Request
+`GET api/checkupprescriptions/{checkupprescription}/pdf`
+
+
+<!-- END_b7e23fffa952c3a35ffbff8dd488d6bb -->
 
 <!-- START_1745addaf588c12225ac5744755daf96 -->
 ## api/checkupprescriptions/{checkupprescription}/pdf

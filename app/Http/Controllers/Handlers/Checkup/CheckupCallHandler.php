@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Handlers\Checkup;
 
 use App\Patientcheckup;
+use Carbon\Carbon;
 use Kreait\Firebase\Factory;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
@@ -49,7 +50,7 @@ class CheckupCallHandler
             'room_name' => $room,
             'caller_name' => ($isAppointment)? $doctor->name: $patient->name,
             'checkup_code' => $patientcheckup->code,
-            'time' => time()
+            'time' => Carbon::now()
         ];
 
         $factory = (new Factory)->withServiceAccount(base_path() . '/' . env('FIREBASE_CREDENTIALS'));

@@ -714,13 +714,13 @@ class DoctorController extends Controller
             'image' => 'required| image',
         ]);
         if ($request->hasFile('image')) {
-            $image_path = public_path('/images/users/' . $doctor->image);
+            $image_path = public_path('/images/users/doctors/' . $doctor->image);
             if (File::exists($image_path)) {
                 File::delete($image_path);
             }
             $image = $request->file('image');
             $filename = $doctor->code . '_' . time() . '.' . $image->getClientOriginalExtension();
-            $location = public_path('/images/users/' . $filename);
+            $location = public_path('/images/users/doctors/' . $filename);
             Image::make($image)->resize(250, 250)->save($location);
             $doctor->image = $filename;
         }

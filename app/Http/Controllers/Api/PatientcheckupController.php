@@ -59,19 +59,25 @@ class PatientcheckupController extends Controller
         }
 
 
-        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)
+        $checkupsByDoctorIds = Patientcheckup::where('doctor_id', $doctor->id)
             ->whereNotNull('start_time')
+            ->pluck('id');
+
+        $checkupPrescriptionDone = Checkupprescription::where('status', 1)
+            ->whereIn('patientcheckup_id', $checkupsByDoctorIds)
             ->paginate(20);
-        $checkupsByDoctor->getCollection()->transform(function ($checkup) {
+        $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
+            $checkup = $checkupPrescription->patientcheckup;
+            unset($checkupPrescription->patientcheckup);
             return [
                 "id" => $checkup->id,
                 "start_time" => $checkup->start_time,
                 "patient" => $checkup->patient,
                 "amount" => $checkup->transaction->amount,
-                "checkupprescription" => Checkupprescription::where('patientcheckup_id', $checkup->id)->first()
+                "checkupprescription" => $checkupPrescription
             ];
         });
-        return response()->json($checkupsByDoctor);
+        return response()->json($checkupPrescriptionDone);
     }
 
 
@@ -196,7 +202,24 @@ class PatientcheckupController extends Controller
         return response()->noContent();
     }
 
-
+    /**
+     * _Create Access Token_
+     *
+     * Create Patientcheckup joining information and update to firestore for call notification. !! token required | patient | doctor
+     *
+     * @urlParam code required The patientcheckup code for which the call room information is generated
+     *
+     *
+     * @response  201 {
+     * "access_token": "skadbi1212hdiu92basoicasic",
+     * "room_name": "demo room",
+     * "caller_name": "patient name/ doctor name",
+     * "checkup_code": "asd1e012jf2f21f",
+     * "time": "2020-07-11T09:46:43.000000Z"
+     * }
+     *
+     *
+     */
     public function sendCheckupCallNotification(Patientcheckup $patientcheckup)
     {
         $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
