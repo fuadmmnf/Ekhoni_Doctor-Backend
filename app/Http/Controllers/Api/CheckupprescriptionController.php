@@ -185,7 +185,7 @@ class CheckupprescriptionController extends Controller
 
             return response()->json('Forbidden Access', 403);
         }
-
+//        return response()->download(storage_path('app/' . $checkupprescription->prescription_path), 'prescription' . time() . '.pdf', ['Content-Type' => 'application/pdf',]);
         return response(Storage::get($checkupprescription->prescription_path))->header('Content-type','application/pdf');
     }
 
@@ -214,7 +214,7 @@ class CheckupprescriptionController extends Controller
             "checkup" => $patientcheckup,
             "prescription" => $request->prescription
         ];
-        $checkupprescription->contents = json_encode($data);
+        $checkupprescription->contents = json_encode($data["prescription"]);
         $pdf = PDF::loadView("pdf.prescriptions.checkupprescription", $data);
         $pdf->save(storage_path('app/' . $checkupprescription->prescription_path));
 

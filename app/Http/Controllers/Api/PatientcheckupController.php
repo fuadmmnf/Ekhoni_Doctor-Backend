@@ -59,7 +59,18 @@ class PatientcheckupController extends Controller
         }
 
 
-        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)->with('patient')->paginate(20);
+        $checkupsByDoctor = Patientcheckup::where('doctor_id', $doctor->id)
+            ->whereNotNull('start_time')
+            ->paginate(20);
+        $checkupsByDoctor->getCollection()->transform(function ($checkup) {
+            return [
+                "id" => $checkup->id,
+                "start_time" => $checkup->start_time,
+                "patient" => $checkup->patient,
+                "amount" => $checkup->transaction->amount,
+                "checkupprescription" => Checkupprescription::where('patientcheckup_id', $checkup->id)->first()
+            ];
+        });
         return response()->json($checkupsByDoctor);
     }
 
