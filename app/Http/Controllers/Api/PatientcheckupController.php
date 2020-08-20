@@ -36,6 +36,7 @@ class PatientcheckupController extends Controller
     public function getDetailsFromCode(Patientcheckup $patientcheckup)
     {
         $patientcheckup->patient;
+        $patientcheckup->patient->patientprescriptions;
         return response()->json($patientcheckup, 200);
     }
 
@@ -207,8 +208,8 @@ class PatientcheckupController extends Controller
      *
      * Create Patientcheckup joining information and update to firestore for call notification. !! token required | patient | doctor
      *
-     * @bodyParam  patientcheckup_code required The patientcheckup code for which the call room information is generated
-     * @bodyParam is_patientcall required The boolean representation to detect from which end call is generated.
+     * @bodyParam  patientcheckup_code string required The patientcheckup code for which the call room information is generated
+     * @bodyParam is_patientcall bool required The boolean representation to detect from which end call is generated.
      *
      * @response  201 {
      * "access_token": "skadbi1212hdiu92basoicasic",

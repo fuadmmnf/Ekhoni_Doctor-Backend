@@ -462,7 +462,6 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'other_trainings' => 'present| nullable',
-            'monogram' => 'required| image',
         ]);
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, false);

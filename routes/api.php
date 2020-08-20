@@ -82,7 +82,7 @@ Route::put('patients/{patient}', 'Api\PatientController@update');
 
 //PatientPrescription
 Route::get('patients/{patient}/prescriptions', 'Api\PatientprescriptionController@getPatientPrescriptionByPatient');
-Route::get('patientprescriptions/{patientprescription}/image', 'Api\PatientprescriptionController@servePrescriptionImage');
+Route::get('patientprescriptions/{patientprescription:code}/image', 'Api\PatientprescriptionController@servePrescriptionImage');
 Route::post('patientprescriptions', 'Api\PatientprescriptionController@store');
 
 //CheckupPrescription
