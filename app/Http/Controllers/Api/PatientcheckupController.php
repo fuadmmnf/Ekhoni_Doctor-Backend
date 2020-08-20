@@ -207,8 +207,8 @@ class PatientcheckupController extends Controller
      *
      * Create Patientcheckup joining information and update to firestore for call notification. !! token required | patient | doctor
      *
-     * @urlParam code required The patientcheckup code for which the call room information is generated
-     *
+     * @bodyParam  patientcheckup_code required The patientcheckup code for which the call room information is generated
+     * @bodyParam is_patientcall required The boolean representation to detect from which end call is generated.
      *
      * @response  201 {
      * "access_token": "skadbi1212hdiu92basoicasic",
@@ -220,11 +220,15 @@ class PatientcheckupController extends Controller
      *
      *
      */
-    public function sendCheckupCallNotification(Patientcheckup $patientcheckup)
+    public function sendCheckupCallNotification(Request $request)
     {
-        $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
+        $this->validate($request, [
+            "patientcheckup_code" => "required",
+            "is_patientcall" => "required| boolean"
+        ]);
+        $patientcheckup = Patientcheckup::where('code', $request->patientcheckup_code)->firstOrFail();
         $pushNotificationHandler = new CheckupCallHandler();
-        $data = $pushNotificationHandler->createCallRequest($patientcheckup, $doctorappointment != null);
+        $data = $pushNotificationHandler->createCallRequest($patientcheckup, !$request->is_patientcall);
         return response()->json($data, 201);
     }
 }

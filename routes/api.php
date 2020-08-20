@@ -53,7 +53,7 @@ Route::post('doctortypes', 'Api\DoctortypeController@store');
 Route::get('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupController@getDetailsFromCode');
 Route::get('doctors/{doctor}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByDoctor');
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
-Route::post('patientcheckups/{patientcheckup:code}/call', 'Api\PatientcheckupController@sendCheckupCallNotification');
+Route::post('patientcheckups/call', 'Api\PatientcheckupController@sendCheckupCallNotification');
 Route::put('patientcheckups/{patientcheckup}', 'Api\PatientcheckupController@update');
 
 

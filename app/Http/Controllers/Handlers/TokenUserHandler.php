@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class TokenUserHandler
 {
 
-    public function createUser($mobile, $deviceId): User {
+    public function createUser($mobile): User {
         $newUser = new User();
 
 
@@ -25,9 +25,9 @@ class TokenUserHandler
         while($user_code);
         $newUser->code = $code;
         $newUser->password = Hash::make($newUser->mobile. $newUser->code);
-        if (strlen($deviceId)) {
-            $newUser->device_ids = json_encode(array($deviceId));
-        }
+//        if (strlen($deviceId)) {
+//            $newUser->device_ids = json_encode(array($deviceId));
+//        }
         $newUser->save();
         $newUser->token = $newUser->createToken($newUser->mobile . $newUser->code)->plainTextToken;
 
@@ -35,17 +35,17 @@ class TokenUserHandler
     }
 
 
-    public function regenerateUserToken($user, $deviceId){
+    public function regenerateUserToken($user){
 //        $user->tokens()->delete();
-        if (strlen($deviceId)) {
-            $deviceIds = json_decode($user->device_ids)?? array();
-            if (!in_array($deviceId, $deviceIds)) {
-                $deviceIds[] = $deviceId;
-                $user->device_ids = json_encode($deviceIds);
-                $user->save();
-            }
-
-        }
+//        if (strlen($deviceId)) {
+//            $deviceIds = json_decode($user->device_ids)?? array();
+//            if (!in_array($deviceId, $deviceIds)) {
+//                $deviceIds[] = $deviceId;
+//                $user->device_ids = json_encode($deviceIds);
+//                $user->save();
+//            }
+//
+//        }
 
         $user->token = $user->createToken($user->mobile . $user->code)->plainTextToken;
         return $user;

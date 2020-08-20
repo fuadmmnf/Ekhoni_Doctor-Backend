@@ -340,7 +340,7 @@ class PatientController extends Controller
         $filename = $patient->code . '_' . time() . '.' . $image->getClientOriginalExtension();
         $location = public_path('/images/users/patients/' ) . $filename;
         Image::make($image)->resize(250, 250)->save($location);
-        $patient->image = $filename;
+        $patient->image = 'images/users/patients/' . $filename;
 
         $patient->save();
         return response()->json($patient);

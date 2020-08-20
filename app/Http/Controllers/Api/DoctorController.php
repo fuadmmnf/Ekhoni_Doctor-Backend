@@ -722,7 +722,7 @@ class DoctorController extends Controller
             $filename = $doctor->code . '_' . time() . '.' . $image->getClientOriginalExtension();
             $location = public_path('/images/users/doctors/' . $filename);
             Image::make($image)->resize(250, 250)->save($location);
-            $doctor->image = $filename;
+            $doctor->image = 'images/users/doctors/' . $filename;
         }
         $doctor->save();
         return response()->noContent();
