@@ -135,13 +135,13 @@ class UserController extends Controller
 
         //retrive existing user
         if ($user) {
-            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, $request->device_id));
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user));
             return response()->json($user, 200);
         }
 
         //create general user
         if ($request->is_patient) {
-            $newUser = $tokenUserHandler->createUser($request->mobile, $request->device_id);
+            $newUser = $tokenUserHandler->createUser($request->mobile);
             $newUser->assignRole('patient');
 
 //        unset($newUser->roles);
