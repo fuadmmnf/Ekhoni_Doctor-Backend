@@ -30,22 +30,21 @@ class TokenUserHandler
 //        }
         $newUser->save();
         $newUser->token = $newUser->createToken($newUser->mobile . $newUser->code)->plainTextToken;
-
         return $newUser;
     }
 
 
-    public function regenerateUserToken($user){
+    public function regenerateUserToken($user, $deviceId){
         $user->tokens()->delete();
-//        if (strlen($deviceId)) {
-//            $deviceIds = json_decode($user->device_ids)?? array();
-//            if (!in_array($deviceId, $deviceIds)) {
-//                $deviceIds[] = $deviceId;
-//                $user->device_ids = json_encode($deviceIds);
-//                $user->save();
-//            }
-//
-//        }
+        if (strlen($deviceId)) {
+            $deviceIds = json_decode($user->device_ids)?? array();
+            if (!in_array($deviceId, $deviceIds)) {
+                $deviceIds[] = $deviceId;
+                $user->device_ids = json_encode($deviceIds);
+                $user->save();
+            }
+
+        }
 
         $user->token = $user->createToken($user->mobile . $user->code)->plainTextToken;
         return $user;

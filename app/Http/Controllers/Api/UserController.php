@@ -38,13 +38,54 @@ class UserController extends Controller
         return $user;
     }
 
-    public function fetchUserTypeFromToken()
+
+    /**
+     * _Fetch User_
+     *
+     * Get User. !!token_required
+     *
+     *
+     * @urlParam  user required The user id.
+     *
+     *
+     * @response  200 {
+     * "id": 4,
+     * "mobile": "8801156572072",
+     * "code": "WjUGehPy9542R2hx",
+     * "status": 0,
+     * "is_agent": 0,
+     * "agent_percentage": 0,
+     * "balance": 0,
+     * "device_ids": "[\"fb805ef2-2747-4ea6-bf8c-128a32aa5d40\"]",
+     * "created_at": "2020-08-06T11:24:40.000000Z",
+     * "updated_at": "2020-08-06T11:49:32.000000Z",
+     * "token": "33|xRwEzBwe74QeWiWUoboxgOQtFBsr82qgf6iknRoOxphBX8Pp4PwgAy6nHw1ZGyMcpYPEe62S7VphC3km",
+     * "roles": [
+     * {
+     * "id": 7,
+     * "name": "doctor",
+     * "guard_name": "web",
+     * "created_at": "2020-07-28T19:18:47.000000Z",
+     * "updated_at": "2020-07-28T19:18:47.000000Z",
+     * "pivot": {
+     * "model_id": 4,
+     * "role_id": 7,
+     * "model_type": "App\\User"
+     * }
+     * }
+     * ],
+     * "doctor": {
+     * }
+     * }
+     */
+    public function getUser(Request $request, User $user)
     {
-        if (!$this->user) {
-            return response()->json('Unauthorized', 401);
+        if (!$this->user || $this->user->id != $user->id) {
+            return response()->json('Forbidden Access', 403);
         }
 
         $user = $this->getUserType($this->user);
+        $user->token = $request->bearerToken();
         return response()->json($user);
     }
 
@@ -135,7 +176,7 @@ class UserController extends Controller
 
         //retrive existing user
         if ($user) {
-            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user));
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, ''));
             return response()->json($user, 200);
         }
 
