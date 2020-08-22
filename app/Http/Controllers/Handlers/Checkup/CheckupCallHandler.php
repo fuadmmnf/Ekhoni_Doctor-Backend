@@ -11,6 +11,17 @@ use Twilio\Jwt\Grants\VideoGrant;
 
 class CheckupCallHandler
 {
+
+    private $db;
+    /**
+     * CheckupCallHandler constructor.
+     */
+    public function __construct()
+    {
+        $factory = (new Factory)->withServiceAccount(base_path() . '/' . env('FIREBASE_CREDENTIALS'));
+        $this->db = $factory->createFirestore()->database();
+    }
+
     private function generate_token($room)
     {
         // Substitute your Twilio Account SID and API Key details
@@ -39,7 +50,7 @@ class CheckupCallHandler
     }
 
 
-    public function createCallRequest(Patientcheckup $patientcheckup, $isAppointment){
+    public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling){
         $doctor = $patientcheckup->doctor;
         $patient = $patientcheckup->patient;
         $room = $doctor->bmdc_number . '_' . $patient->code;
@@ -48,19 +59,28 @@ class CheckupCallHandler
         $data = [
             'access_token' => $access_token,
             'room_name' => $room,
-            'caller_name' => ($isAppointment)? $doctor->name: $patient->name,
+            'caller_name' => ($isDoctorCalling)? $doctor->name: $patient->name,
             'checkup_code' => $patientcheckup->code,
             'time' => Carbon::now()
         ];
 
-        $factory = (new Factory)->withServiceAccount(base_path() . '/' . env('FIREBASE_CREDENTIALS'));
-        $addedDocRef = $factory->createFirestore()->database()
-            ->collection($isAppointment? 'doctorcall': 'patientcall')
-            ->document(($isAppointment)? $patient->user->code: $doctor->user->code)
+        $addedDocRef = $this->db->collection($isDoctorCalling? 'doctorcall': 'patientcall')
+            ->document(($isDoctorCalling)? $patient->user->code: $doctor->user->code)
             ->set($data);
 
         error_log(json_encode($addedDocRef));
         return $data;
+    }
+
+    public function terminateCallSession(Patientcheckup $patientcheckup)
+    {
+        $this->db->collection("doctorcall")
+        ->document($patientcheckup->patient->user->code)
+        ->delete();
+
+        $this->db->collection("patientcall")
+        ->document($patientcheckup->doctor->user->code)
+        ->delete();
     }
 
 }

@@ -54,7 +54,7 @@ Route::get('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupControlle
 Route::get('doctors/{doctor}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByDoctor');
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::post('patientcheckups/call', 'Api\PatientcheckupController@sendCheckupCallNotification');
-Route::put('patientcheckups/{patientcheckup}', 'Api\PatientcheckupController@update');
+Route::put('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupController@update');
 
 
 //DoctorSchedule

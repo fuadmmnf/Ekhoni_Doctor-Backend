@@ -421,7 +421,7 @@ class DoctorController extends Controller
      * @bodyParam  workplace string required The workplace of doctor.
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  medical_college string required The graduation college of doctor.
-     * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
+     * @bodyParam  postgrad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
      *
      *
@@ -487,7 +487,7 @@ class DoctorController extends Controller
      * @bodyParam  workplace string required The workplace of doctor.
      * @bodyParam  designation string required The designation of doctor.
      * @bodyParam  medical_college string required The graduation college of doctor.
-     * @bodyParam  post_grad string required Post Grad degree of doctor [can be blank].
+     * @bodyParam  postgrad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
      *
      *

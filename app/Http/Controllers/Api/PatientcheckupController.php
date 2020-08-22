@@ -168,22 +168,32 @@ class PatientcheckupController extends Controller
         $this->validate($request, [
             'start_time' => 'required',
             'end_time' => 'required',
-            'doctor_rating' => 'sometimes| numeric| between: 0,5',
-            'patient_rating' => 'sometimes| numeric| between: 0,5',
+            'checkup_tags' => 'sometimes| array',
+            'doctor_rating' => 'sometimes| numeric',
+            'patient_rating' => 'sometimes| numeric',
         ]);
 
-        $patientcheckup->start_time = Carbon::parse($request->start_time);
-        $patientcheckup->end_time = Carbon::parse($request->end_time);
+        if ($this->user->hasRole('doctor')) {
+            $patientcheckup->start_time = Carbon::parse($request->start_time);
+            $patientcheckup->end_time = Carbon::parse($request->end_time);
+            $patientcheckup->checkup_tags = json_encode($request->checkup_tags);
+            if ($request->has('patient_rating')) {
+                $patientcheckup->patient_rating = min($request->patient_rating, 5);
+            }
 
-        if ($request->has('doctor_rating')) {
-            $patientcheckup->doctor_rating = min($request->doctor_rating, 5);
-        }
+            $doctorappointment = $patientcheckup->doctorappointment;
+            $doctorappointment->status = 1;
+            $doctorappointment->save();
 
-        if ($request->has('patient_rating')) {
-            $patientcheckup->patient_rating = min($request->patient_rating, 5);
+        } else {
+            if ($request->has('doctor_rating')) {
+                $patientcheckup->doctor_rating = min($request->doctor_rating, 5);
+            }
         }
 
         $patientcheckup->save();
+        $pushNotificationHandler = new CheckupCallHandler();
+        $pushNotificationHandler->terminateCallSession($patientcheckup);
 
 
         //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
