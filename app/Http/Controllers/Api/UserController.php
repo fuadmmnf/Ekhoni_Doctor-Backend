@@ -159,6 +159,7 @@ class UserController extends Controller
             'mobile' => 'required| min:11| max: 14',
             'otp_code' => 'required',
             'is_patient' => 'required| boolean',
+            'device_id' => 'sometimes'
         ]);
 
         $otprequest = Otpcode::where('mobile', $request->mobile)
@@ -176,13 +177,13 @@ class UserController extends Controller
 
         //retrive existing user
         if ($user) {
-            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, ''));
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, $request->has('device_id')? $request->device_id: ""));
             return response()->json($user, 200);
         }
 
         //create general user
         if ($request->is_patient) {
-            $newUser = $tokenUserHandler->createUser($request->mobile);
+            $newUser = $tokenUserHandler->createUser($request->mobile, $request->has('device_id')? $request->device_id: "");
             $newUser->assignRole('patient');
 
 //        unset($newUser->roles);

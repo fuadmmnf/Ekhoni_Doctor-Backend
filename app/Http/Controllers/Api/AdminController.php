@@ -77,7 +77,7 @@ class AdminController extends Controller
             return response()->json('invalid credentials', 401);
         }
         $tokenUserHandler = new TokenUserHandler();
-        return response()->json($tokenUserHandler->regenerateUserToken($user), 200);
+        return response()->json($tokenUserHandler->regenerateUserToken($user, $request->has('device_id')? $request->device_id: ""), 200);
     }
 
     /**
@@ -117,7 +117,7 @@ class AdminController extends Controller
         }
 
         $tokenUserHandler = new TokenUserHandler();
-        $user = $tokenUserHandler->createUser($request->mobile);
+        $user = $tokenUserHandler->createUser($request->mobile, $request->has('device_id')? $request->device_id: "");
         $newAdmin = new Admin();
         $newAdmin->user_id = $user->id;
         $newAdmin->name = $request->name;

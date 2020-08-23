@@ -373,7 +373,7 @@ class DoctorController extends Controller
     private function createDoctor(Request $doctorRequest, $isApproved): Doctor
     {
         $tokenUserHandler = new TokenUserHandler();
-        $user = $tokenUserHandler->createUser($doctorRequest->mobile);
+        $user = $tokenUserHandler->createUser($doctorRequest->mobile, $doctorRequest->has('device_id')? $doctorRequest->device_id: "");
 
         if ($isApproved) {
             $user->assignRole('doctor');
@@ -423,6 +423,7 @@ class DoctorController extends Controller
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  postgrad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
+     * @bodyParam  device_id string Phone device id for FCM.
      *
      *
      * @response  201 {
@@ -462,6 +463,7 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'other_trainings' => 'present| nullable',
+            'device_id' => 'sometimes'
         ]);
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, false);
@@ -489,7 +491,6 @@ class DoctorController extends Controller
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  postgrad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
-     *
      *
      * @response  201 {
      * "user_id": 10,

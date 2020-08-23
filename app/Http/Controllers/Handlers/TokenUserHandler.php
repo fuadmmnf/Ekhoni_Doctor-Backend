@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class TokenUserHandler
 {
 
-    public function createUser($mobile): User {
+    public function createUser($mobile, $deviceId): User {
         $newUser = new User();
 
 
@@ -25,9 +25,9 @@ class TokenUserHandler
         while($user_code);
         $newUser->code = $code;
         $newUser->password = Hash::make($newUser->mobile. $newUser->code);
-//        if (strlen($deviceId)) {
-//            $newUser->device_ids = json_encode(array($deviceId));
-//        }
+        if (strlen($deviceId)) {
+            $newUser->device_ids = json_encode(array($deviceId));
+        }
         $newUser->save();
         $newUser->token = $newUser->createToken($newUser->mobile . $newUser->code)->plainTextToken;
         return $newUser;
