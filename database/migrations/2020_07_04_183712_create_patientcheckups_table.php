@@ -21,9 +21,8 @@ class CreatePatientcheckupsTable extends Migration
             $table->string('code')->unique();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
-            $table->double('doctor_rating')->default(5);
-            $table->double('patient_rating')->default(5);
-            $table->jsonb('checkup_tags')->nullable();
+            $table->jsonb('patient_tags')->nullable();
+            $table->jsonb('doctor_tags')->nullable();
 
             $table->timestamps();
 

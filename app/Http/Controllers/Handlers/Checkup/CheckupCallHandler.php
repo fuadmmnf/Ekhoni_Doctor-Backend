@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers\Handlers\Checkup;
 
+use App\Doctor;
+use App\Doctorschedule;
 use App\Patientcheckup;
 use Carbon\Carbon;
 use Kreait\Firebase\Factory;
@@ -13,6 +15,7 @@ class CheckupCallHandler
 {
 
     private $db;
+
     /**
      * CheckupCallHandler constructor.
      */
@@ -50,8 +53,12 @@ class CheckupCallHandler
     }
 
 
-    public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling){
+    public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling)
+    {
         $doctor = $patientcheckup->doctor;
+        $doctor->status = 1; // in call
+        $doctor->save();
+
         $patient = $patientcheckup->patient;
         $room = $doctor->bmdc_number . '_' . $patient->code;
         $access_token = $this->generate_token($room);
@@ -59,13 +66,13 @@ class CheckupCallHandler
         $data = [
             'access_token' => $access_token,
             'room_name' => $room,
-            'caller_name' => ($isDoctorCalling)? $doctor->name: $patient->name,
+            'caller_name' => ($isDoctorCalling) ? $doctor->name : $patient->name,
             'checkup_code' => $patientcheckup->code,
             'time' => Carbon::now()
         ];
 
-        $addedDocRef = $this->db->collection($isDoctorCalling? 'doctorcall': 'patientcall')
-            ->document(($isDoctorCalling)? $patient->user->code: $doctor->user->code)
+        $addedDocRef = $this->db->collection($isDoctorCalling ? 'doctorcall' : 'patientcall')
+            ->document(($isDoctorCalling) ? $patient->user->code : $doctor->user->code)
             ->set($data);
 
         error_log(json_encode($addedDocRef));
@@ -75,12 +82,25 @@ class CheckupCallHandler
     public function terminateCallSession(Patientcheckup $patientcheckup)
     {
         $this->db->collection("doctorcall")
-        ->document($patientcheckup->patient->user->code)
-        ->delete();
+            ->document($patientcheckup->patient->user->code)
+            ->delete();
 
         $this->db->collection("patientcall")
-        ->document($patientcheckup->doctor->user->code)
-        ->delete();
+            ->document($patientcheckup->doctor->user->code)
+            ->delete();
+
+
     }
 
+
+    public function checkDoctorSchedulesAndSetActiveStatus(Doctor $doctor)
+    {
+        $currentTime = Carbon::now();
+        $doctorSchedule = Doctorschedule::where('doctor_id', $doctor->id)
+            ->where('end_time', '>', $currentTime)
+            ->where('start_time', '<', $currentTime)
+            ->first();
+        $doctor->status = $doctorSchedule != null;
+        $doctor->save();
+    }
 }

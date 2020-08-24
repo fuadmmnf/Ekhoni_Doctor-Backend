@@ -141,6 +141,24 @@ class PatientcheckupController extends Controller
     }
 
 
+    private function createCheckupPrescription(Patientcheckup $patientcheckup){
+        //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
+        $prescription = Checkupprescription::where('patientcheckup_id', $patientcheckup->id)->first();
+        if (!$prescription) {
+            $newCheckupPrescription = new Checkupprescription();
+            $newCheckupPrescription->patientcheckup_id = $patientcheckup->id;
+            $newCheckupPrescription->status = 0; //initialized(pending content)
+            do {
+                $code = Str::random(16);
+                $checkupPrescription = Checkupprescription::where('code', $code)->first();
+            } while ($checkupPrescription);
+            $newCheckupPrescription->code = $code;
+            $newCheckupPrescription->save();
+        }
+    }
+
+
+
     /**
      * _Update Checkup_
      *
@@ -148,9 +166,10 @@ class PatientcheckupController extends Controller
      *
      *
      * @urlParam patientcheckup required The patientcheckup id.
-     * @bodyParam end_time int string Call end time. Example: "2020-07-10T21:45:47.000000Z"
-     * @bodyParam doctor_rating int The doctor service rating provided by patient [0-5].
-     * @bodyParam  patient_rating int The patient behavior rating provided by doctor [0-5].
+     * @bodyParam start_time string required Call start time. Example: "2020-07-10T21:45:47.000000Z"
+     * @bodyParam end_time string required Call end time. Example: "2020-07-10T21:45:47.000000Z"
+     * @bodyParam doctor_tags json_array The doctor service tags.
+     * @bodyParam  patient_tags json_array The patient behavior tags.
      *
      * @response  204 ""
      *
@@ -168,48 +187,33 @@ class PatientcheckupController extends Controller
         $this->validate($request, [
             'start_time' => 'required',
             'end_time' => 'required',
-            'checkup_tags' => 'sometimes| array',
-            'doctor_rating' => 'sometimes| numeric',
-            'patient_rating' => 'sometimes| numeric',
+            'patient_tags' => 'sometimes| array',
+            'doctor_tags' => 'sometimes| numeric',
         ]);
 
         if ($this->user->hasRole('doctor')) {
             $patientcheckup->start_time = Carbon::parse($request->start_time);
             $patientcheckup->end_time = Carbon::parse($request->end_time);
-            $patientcheckup->checkup_tags = json_encode($request->checkup_tags);
-            if ($request->has('patient_rating')) {
-                $patientcheckup->patient_rating = min($request->patient_rating, 5);
+            if ($request->has('patient_tags')) {
+                $patientcheckup->patient_tags = json_encode($request->patient_tags);
             }
+
 
             $doctorappointment = $patientcheckup->doctorappointment;
             $doctorappointment->status = 1;
             $doctorappointment->save();
 
         } else {
-            if ($request->has('doctor_rating')) {
-                $patientcheckup->doctor_rating = min($request->doctor_rating, 5);
+            if ($request->has('doctor_tags')) {
+                $patientcheckup->doctor_tags = json_encode($request->doctor_tags);
             }
         }
 
         $patientcheckup->save();
         $pushNotificationHandler = new CheckupCallHandler();
         $pushNotificationHandler->terminateCallSession($patientcheckup);
-
-
-        //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
-        $prescription = Checkupprescription::where('patientcheckup_id', $patientcheckup->id)->first();
-        if (!$prescription) {
-            $newCheckupPrescription = new Checkupprescription();
-            $newCheckupPrescription->patientcheckup_id = $patientcheckup->id;
-            $newCheckupPrescription->status = 0; //initialized(pending content)
-            do {
-                $code = Str::random(16);
-                $checkupPrescription = Checkupprescription::where('code', $code)->first();
-            } while ($checkupPrescription);
-            $newCheckupPrescription->code = $code;
-            $newCheckupPrescription->save();
-        }
-
+        $pushNotificationHandler->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
+        $this->createCheckupPrescription($patientcheckup);
         return response()->noContent();
     }
 
