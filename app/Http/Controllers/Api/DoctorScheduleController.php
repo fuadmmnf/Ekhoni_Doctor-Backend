@@ -125,7 +125,7 @@ class DoctorScheduleController extends Controller
 
 //        $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
         $scheduleInterval = 20;
-        $time = $newDoctorSchedule->start_time;
+        $time = $newDoctorSchedule->start_time->copy();
         $appointmentSchedules = array();
 
         $numAppointments = 0;
