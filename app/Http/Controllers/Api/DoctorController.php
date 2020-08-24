@@ -7,10 +7,9 @@ use App\Doctortype;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
-use Intervention\Image\File;
 
 /**
  * @group  Doctor management
@@ -714,17 +713,17 @@ class DoctorController extends Controller
         $this->validate($request, [
             'image' => 'required| image',
         ]);
-        $image_path = public_path('/images/users/doctors/' . $doctor->image);
+        $image_path = public_path($doctor->image);
         if (File::exists($image_path)) {
             File::delete($image_path);
         }
         $image = $request->file('image');
         $filename = $doctor->code . '_' . time() . '.' . $image->getClientOriginalExtension();
-        $location = public_path('/images/users/doctors/' . $filename);
-        Storage::disk('public')->put(public_path($location), $image->get());
+        $location = public_path('images/users/doctors/' . $filename);
+        File::put($location, $image->get());
         $doctor->image = 'images/users/doctors/' . $filename;
         $doctor->save();
-        return response()->noContent();
+        return response()->json($doctor->image, 200);
     }
 
 //

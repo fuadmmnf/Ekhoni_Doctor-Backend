@@ -39,11 +39,11 @@ Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
 Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
 Route::post('doctors', 'Api\DoctorController@store');
 Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');
+Route::post('doctors/{doctor}/image', 'Api\DoctorController@changeDoctorMonogram');
 Route::put('doctors/status', 'Api\DoctorController@changeActiveStatus');
 Route::put('doctors/{doctor}', 'Api\DoctorController@update');
 Route::put('doctors/{doctor}/approve', 'Api\DoctorController@evaluateDoctorJoiningRequest');
 Route::put('doctors/{doctor}/booking', 'Api\DoctorController@changeDoctorBookingStatus');
-Route::put('doctors/{doctor}/image', 'Api\DoctorController@changeDoctorMonogram');
 
 
 //Doctortype
