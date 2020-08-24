@@ -698,7 +698,7 @@ class DoctorController extends Controller
      * @bodyParam  image file required The doctor image file.
      *
      *
-     * @response  204 ""
+     * @response  200 "images/users/doctors/1902jid.jpg"
      */
     public function changeDoctorMonogram(Request $request, Doctor $doctor)
     {
