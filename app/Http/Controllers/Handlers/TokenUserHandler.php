@@ -35,7 +35,7 @@ class TokenUserHandler
 
 
     public function regenerateUserToken($user, $deviceId){
-        $user->tokens()->delete();
+//        $user->tokens()->delete();
         if (strlen($deviceId)) {
             $deviceIds = json_decode($user->device_ids)?? array();
             if (!in_array($deviceId, $deviceIds)) {
