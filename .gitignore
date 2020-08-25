@@ -4,7 +4,7 @@
 /public/hot
 /public/storage
 /public/docs
-/public/**
+/public
 /storage/*.key
 ekhoni-daktar-99596-2eded06c49c4.json
 .env
