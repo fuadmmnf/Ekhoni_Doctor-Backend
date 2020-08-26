@@ -188,7 +188,7 @@ class PatientcheckupController extends Controller
             'start_time' => 'required',
             'end_time' => 'required',
             'patient_tags' => 'sometimes| array',
-            'doctor_tags' => 'sometimes| numeric',
+            'doctor_tags' => 'sometimes| array',
         ]);
 
         if ($this->user->hasRole('doctor')) {
@@ -198,10 +198,11 @@ class PatientcheckupController extends Controller
                 $patientcheckup->patient_tags = json_encode($request->patient_tags);
             }
 
-
             $doctorappointment = $patientcheckup->doctorappointment;
-            $doctorappointment->status = 1;
-            $doctorappointment->save();
+            if($doctorappointment){
+                $doctorappointment->status = 1;
+                $doctorappointment->save();
+            }
 
         } else {
             if ($request->has('doctor_tags')) {
