@@ -198,7 +198,7 @@ class PatientcheckupController extends Controller
                 $patientcheckup->patient_tags = json_encode($request->patient_tags);
             }
 
-            $doctorappointment = $patientcheckup->doctorappointment;
+            $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
             if($doctorappointment){
                 $doctorappointment->status = 1;
                 $doctorappointment->save();

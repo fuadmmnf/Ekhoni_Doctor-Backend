@@ -258,11 +258,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/users/id/doctorappointments/upcoming" \
+    -G "http://localhost/api/users/tenetur/doctorappointments/upcoming" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/id/doctorappointments/upcoming"
+    "http://localhost/api/users/tenetur/doctorappointments/upcoming"
 );
 
 let headers = {
@@ -363,11 +363,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/users/quo/doctorappointments/history" \
+    -G "http://localhost/api/users/culpa/doctorappointments/history" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/quo/doctorappointments/history"
+    "http://localhost/api/users/culpa/doctorappointments/history"
 );
 
 let headers = {
@@ -481,11 +481,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/patients/dolor/doctorappointments/history" \
+    -G "http://localhost/api/patients/blanditiis/doctorappointments/history" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/patients/dolor/doctorappointments/history"
+    "http://localhost/api/patients/blanditiis/doctorappointments/history"
 );
 
 let headers = {
@@ -599,11 +599,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/doctors/error/doctorappointments/upcoming" \
+    -G "http://localhost/api/doctors/beatae/doctorappointments/upcoming" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/error/doctorappointments/upcoming"
+    "http://localhost/api/doctors/beatae/doctorappointments/upcoming"
 );
 
 let headers = {
@@ -648,11 +648,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/doctors/nihil/doctorappointments/aut" \
+    -G "http://localhost/api/doctors/ut/doctorappointments/quibusdam" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/nihil/doctorappointments/aut"
+    "http://localhost/api/doctors/ut/doctorappointments/quibusdam"
 );
 
 let headers = {
@@ -730,7 +730,7 @@ fetch(url, {
     "http://localhost/api/doctorappointments" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patient_id":10,"doctor_id":"quia","start_time":"\"2020-07-10T14:19:24.000000Z\"","end_time":"\"2020-07-10T14:40:30.000000Z\""}'
+    -d '{"patient_id":12,"doctor_id":"itaque","start_time":"\"2020-07-10T14:19:24.000000Z\"","end_time":"\"2020-07-10T14:40:30.000000Z\""}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/doctorappointments"
@@ -742,8 +742,8 @@ let headers = {
 };
 
 let body = {
-    "patient_id": 10,
-    "doctor_id": "quia",
+    "patient_id": 12,
+    "doctor_id": "itaque",
     "start_time": "\"2020-07-10T14:19:24.000000Z\"",
     "end_time": "\"2020-07-10T14:40:30.000000Z\""
 }
@@ -819,13 +819,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/doctorappointments/corporis" \
+    "http://localhost/api/doctorappointments/praesentium" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"status":13}'
+    -d '{"status":3}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctorappointments/corporis"
+    "http://localhost/api/doctorappointments/praesentium"
 );
 
 let headers = {
@@ -834,7 +834,7 @@ let headers = {
 };
 
 let body = {
-    "status": 13
+    "status": 3
 }
 
 fetch(url, {
@@ -896,11 +896,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/doctors/dicta/doctorschedules" \
+    -G "http://localhost/api/doctors/aut/doctorschedules" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/dicta/doctorschedules"
+    "http://localhost/api/doctors/aut/doctorschedules"
 );
 
 let headers = {
@@ -959,7 +959,7 @@ fetch(url, {
     "http://localhost/api/doctorschedules" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"doctor_id":12,"start_time":"\"2020-07-29T14:30:00.000000Z\"","end_time":"\"2020-07-29T18:30:00.000000Z\""}'
+    -d '{"doctor_id":19,"start_time":"\"2020-07-29T14:30:00.000000Z\"","end_time":"\"2020-07-29T18:30:00.000000Z\""}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/doctorschedules"
@@ -971,7 +971,7 @@ let headers = {
 };
 
 let body = {
-    "doctor_id": 12,
+    "doctor_id": 19,
     "start_time": "\"2020-07-29T14:30:00.000000Z\"",
     "end_time": "\"2020-07-29T18:30:00.000000Z\""
 }
@@ -1145,11 +1145,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/doctortypes/dolorem/doctors/active" \
+    -G "http://localhost/api/doctortypes/tenetur/doctors/active" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctortypes/dolorem/doctors/active"
+    "http://localhost/api/doctortypes/tenetur/doctors/active"
 );
 
 let headers = {
@@ -1308,11 +1308,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/doctortypes/omnis/doctors/approved" \
+    -G "http://localhost/api/doctortypes/modi/doctors/approved" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctortypes/omnis/doctors/approved"
+    "http://localhost/api/doctortypes/modi/doctors/approved"
 );
 
 let headers = {
@@ -1607,7 +1607,7 @@ fetch(url, {
     "http://localhost/api/doctors" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"doctortype_id":4,"name":"corporis","bmdc_number":"voluptate","rate":18,"offer_rate":18,"first_appointment_rate":20,"report_followup_rate":5,"gender":5,"mobile":"eos","email":"sunt","workplace":"porro","designation":"ducimus","medical_college":"cumque","postgrad":"laudantium","other_trainings":"sit","device_id":"quo"}'
+    -d '{"doctortype_id":8,"name":"eos","bmdc_number":"dolores","rate":11,"offer_rate":1,"first_appointment_rate":5,"report_followup_rate":15,"gender":17,"mobile":"illo","email":"et","workplace":"excepturi","designation":"itaque","medical_college":"consequuntur","postgrad":"occaecati","other_trainings":"qui","device_id":"enim"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/doctors"
@@ -1619,22 +1619,22 @@ let headers = {
 };
 
 let body = {
-    "doctortype_id": 4,
-    "name": "corporis",
-    "bmdc_number": "voluptate",
-    "rate": 18,
-    "offer_rate": 18,
-    "first_appointment_rate": 20,
-    "report_followup_rate": 5,
-    "gender": 5,
-    "mobile": "eos",
-    "email": "sunt",
-    "workplace": "porro",
-    "designation": "ducimus",
-    "medical_college": "cumque",
-    "postgrad": "laudantium",
-    "other_trainings": "sit",
-    "device_id": "quo"
+    "doctortype_id": 8,
+    "name": "eos",
+    "bmdc_number": "dolores",
+    "rate": 11,
+    "offer_rate": 1,
+    "first_appointment_rate": 5,
+    "report_followup_rate": 15,
+    "gender": 17,
+    "mobile": "illo",
+    "email": "et",
+    "workplace": "excepturi",
+    "designation": "itaque",
+    "medical_college": "consequuntur",
+    "postgrad": "occaecati",
+    "other_trainings": "qui",
+    "device_id": "enim"
 }
 
 fetch(url, {
@@ -1787,7 +1787,7 @@ fetch(url, {
     "http://localhost/api/doctors/approve" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"doctortype_id":12,"payment_style":2,"name":"quidem","bmdc_number":"quam","rate":1,"offer_rate":13,"first_appointment_rate":15,"report_followup_rate":14,"gender":3,"mobile":"omnis","email":"vel","workplace":"optio","designation":"dolores","medical_college":"iure","postgrad":"laboriosam","other_trainings":"quidem"}'
+    -d '{"doctortype_id":16,"payment_style":3,"name":"quia","bmdc_number":"provident","rate":4,"offer_rate":9,"first_appointment_rate":10,"report_followup_rate":13,"gender":4,"mobile":"dolor","email":"qui","workplace":"aut","designation":"eos","medical_college":"laboriosam","postgrad":"quo","other_trainings":"omnis"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/doctors/approve"
@@ -1799,22 +1799,22 @@ let headers = {
 };
 
 let body = {
-    "doctortype_id": 12,
-    "payment_style": 2,
-    "name": "quidem",
-    "bmdc_number": "quam",
-    "rate": 1,
-    "offer_rate": 13,
-    "first_appointment_rate": 15,
-    "report_followup_rate": 14,
-    "gender": 3,
-    "mobile": "omnis",
-    "email": "vel",
-    "workplace": "optio",
-    "designation": "dolores",
-    "medical_college": "iure",
-    "postgrad": "laboriosam",
-    "other_trainings": "quidem"
+    "doctortype_id": 16,
+    "payment_style": 3,
+    "name": "quia",
+    "bmdc_number": "provident",
+    "rate": 4,
+    "offer_rate": 9,
+    "first_appointment_rate": 10,
+    "report_followup_rate": 13,
+    "gender": 4,
+    "mobile": "dolor",
+    "email": "qui",
+    "workplace": "aut",
+    "designation": "eos",
+    "medical_college": "laboriosam",
+    "postgrad": "quo",
+    "other_trainings": "omnis"
 }
 
 fetch(url, {
@@ -1967,13 +1967,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost/api/doctors/quia/image" \
+    "http://localhost/api/doctors/distinctio/image" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"image":"similique"}'
+    -d '{"image":"qui"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/quia/image"
+    "http://localhost/api/doctors/distinctio/image"
 );
 
 let headers = {
@@ -1982,7 +1982,7 @@ let headers = {
 };
 
 let body = {
-    "image": "similique"
+    "image": "qui"
 }
 
 fetch(url, {
@@ -2045,7 +2045,7 @@ fetch(url, {
     "http://localhost/api/doctors/status" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"status":19}'
+    -d '{"status":11}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/doctors/status"
@@ -2057,7 +2057,7 @@ let headers = {
 };
 
 let body = {
-    "status": 19
+    "status": 11
 }
 
 fetch(url, {
@@ -2100,13 +2100,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/doctors/quia" \
+    "http://localhost/api/doctors/sit" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"rate":15,"offer_rate":16,"first_appointment_rate":5,"report_followup_rate":17,"workplace":"culpa","designation":"minus","other_trainings":"aliquam"}'
+    -d '{"rate":20,"offer_rate":12,"first_appointment_rate":7,"report_followup_rate":1,"workplace":"impedit","designation":"inventore","other_trainings":"hic"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/quia"
+    "http://localhost/api/doctors/sit"
 );
 
 let headers = {
@@ -2115,13 +2115,13 @@ let headers = {
 };
 
 let body = {
-    "rate": 15,
-    "offer_rate": 16,
-    "first_appointment_rate": 5,
-    "report_followup_rate": 17,
-    "workplace": "culpa",
-    "designation": "minus",
-    "other_trainings": "aliquam"
+    "rate": 20,
+    "offer_rate": 12,
+    "first_appointment_rate": 7,
+    "report_followup_rate": 1,
+    "workplace": "impedit",
+    "designation": "inventore",
+    "other_trainings": "hic"
 }
 
 fetch(url, {
@@ -2217,13 +2217,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/doctors/ducimus/approve" \
+    "http://localhost/api/doctors/aut/approve" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"activation_status":18}'
+    -d '{"activation_status":11}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/ducimus/approve"
+    "http://localhost/api/doctors/aut/approve"
 );
 
 let headers = {
@@ -2232,7 +2232,7 @@ let headers = {
 };
 
 let body = {
-    "activation_status": 18
+    "activation_status": 11
 }
 
 fetch(url, {
@@ -2361,7 +2361,7 @@ fetch(url, {
     "http://localhost/api/patientcheckups" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patient_id":15,"doctor_id":"quia","start_time":"\"\", \"2020-07-10T14:19:24.000000Z\"","end_time":"\"\", \"2020-07-10T14:40:30.000000Z\""}'
+    -d '{"patient_id":10,"doctor_id":"illum","start_time":"\"\", \"2020-07-10T14:19:24.000000Z\"","end_time":"\"\", \"2020-07-10T14:40:30.000000Z\""}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/patientcheckups"
@@ -2373,8 +2373,8 @@ let headers = {
 };
 
 let body = {
-    "patient_id": 15,
-    "doctor_id": "quia",
+    "patient_id": 10,
+    "doctor_id": "illum",
     "start_time": "\"\", \"2020-07-10T14:19:24.000000Z\"",
     "end_time": "\"\", \"2020-07-10T14:40:30.000000Z\""
 }
@@ -2453,7 +2453,7 @@ fetch(url, {
     "http://localhost/api/patientcheckups/call" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patientcheckup_code":"itaque","is_patientcall":false}'
+    -d '{"patientcheckup_code":"at","is_patientcall":true}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/patientcheckups/call"
@@ -2465,8 +2465,8 @@ let headers = {
 };
 
 let body = {
-    "patientcheckup_code": "itaque",
-    "is_patientcall": false
+    "patientcheckup_code": "at",
+    "is_patientcall": true
 }
 
 fetch(url, {
@@ -2521,13 +2521,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/patientcheckups/in" \
+    "http://localhost/api/patientcheckups/fugit" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"end_time":0,"doctor_rating":4,"patient_rating":19}'
+    -d '{"start_time":"\"2020-07-10T21:45:47.000000Z\"","end_time":"\"2020-07-10T21:45:47.000000Z\"","doctor_tags":"et","patient_tags":"voluptatum"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/patientcheckups/in"
+    "http://localhost/api/patientcheckups/fugit"
 );
 
 let headers = {
@@ -2536,9 +2536,10 @@ let headers = {
 };
 
 let body = {
-    "end_time": 0,
-    "doctor_rating": 4,
-    "patient_rating": 19
+    "start_time": "\"2020-07-10T21:45:47.000000Z\"",
+    "end_time": "\"2020-07-10T21:45:47.000000Z\"",
+    "doctor_tags": "et",
+    "patient_tags": "voluptatum"
 }
 
 fetch(url, {
@@ -2583,22 +2584,28 @@ fetch(url, {
 </thead>
 <tbody>
 <tr>
+<td><code>start_time</code></td>
+<td>string</td>
+<td>required</td>
+<td>Call start time.</td>
+</tr>
+<tr>
 <td><code>end_time</code></td>
-<td>integer</td>
-<td>optional</td>
-<td>string Call end time.</td>
+<td>string</td>
+<td>required</td>
+<td>Call end time.</td>
 </tr>
 <tr>
-<td><code>doctor_rating</code></td>
-<td>integer</td>
+<td><code>doctor_tags</code></td>
+<td>json_array</td>
 <td>optional</td>
-<td>The doctor service rating provided by patient [0-5].</td>
+<td>The doctor service tags.</td>
 </tr>
 <tr>
-<td><code>patient_rating</code></td>
-<td>integer</td>
+<td><code>patient_tags</code></td>
+<td>json_array</td>
 <td>optional</td>
-<td>The patient behavior rating provided by doctor [0-5].</td>
+<td>The patient behavior tags.</td>
 </tr>
 </tbody>
 </table>
@@ -2612,11 +2619,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/users/dicta/patients/default" \
+    -G "http://localhost/api/users/officia/patients/default" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/dicta/patients/default"
+    "http://localhost/api/users/officia/patients/default"
 );
 
 let headers = {
@@ -2673,11 +2680,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/users/dolor/patients" \
+    -G "http://localhost/api/users/repellendus/patients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/dolor/patients"
+    "http://localhost/api/users/repellendus/patients"
 );
 
 let headers = {
@@ -2739,7 +2746,7 @@ fetch(url, {
     "http://localhost/api/patients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"est","age":1,"gender":6,"address":"consequatur","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"enim","weight":"officiis"}'
+    -d '{"name":"illum","age":6,"gender":2,"address":"cumque","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"unde","weight":"consequatur"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/patients"
@@ -2751,15 +2758,15 @@ let headers = {
 };
 
 let body = {
-    "name": "est",
-    "age": 1,
-    "gender": 6,
-    "address": "consequatur",
+    "name": "illum",
+    "age": 6,
+    "gender": 2,
+    "address": "cumque",
     "blood_group": "\"B+ve\"",
     "blood_pressure": "\"90-150\"",
     "cholesterol_level": "\"dont know the readings :p\"",
-    "height": "enim",
-    "weight": "officiis"
+    "height": "unde",
+    "weight": "consequatur"
 }
 
 fetch(url, {
@@ -2850,13 +2857,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost/api/patients/ut/image" \
+    "http://localhost/api/patients/velit/image" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"image":"et"}'
+    -d '{"image":"sunt"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/patients/ut/image"
+    "http://localhost/api/patients/velit/image"
 );
 
 let headers = {
@@ -2865,7 +2872,7 @@ let headers = {
 };
 
 let body = {
-    "image": "et"
+    "image": "sunt"
 }
 
 fetch(url, {
@@ -2925,13 +2932,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/patients/fugiat" \
+    "http://localhost/api/patients/excepturi" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"a","address":"deserunt","age":"quam","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"fugit","weight":"et"}'
+    -d '{"name":"fugit","address":"repudiandae","age":"accusantium","blood_group":"\"B+ve\"","blood_pressure":"\"90-150\"","cholesterol_level":"\"dont know the readings :p\"","height":"earum","weight":"dolore"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/patients/fugiat"
+    "http://localhost/api/patients/excepturi"
 );
 
 let headers = {
@@ -2940,14 +2947,14 @@ let headers = {
 };
 
 let body = {
-    "name": "a",
-    "address": "deserunt",
-    "age": "quam",
+    "name": "fugit",
+    "address": "repudiandae",
+    "age": "accusantium",
     "blood_group": "\"B+ve\"",
     "blood_pressure": "\"90-150\"",
     "cholesterol_level": "\"dont know the readings :p\"",
-    "height": "fugit",
-    "weight": "et"
+    "height": "earum",
+    "weight": "dolore"
 }
 
 fetch(url, {
@@ -3051,11 +3058,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/patients/aut/prescriptions" \
+    -G "http://localhost/api/patients/libero/prescriptions" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/patients/aut/prescriptions"
+    "http://localhost/api/patients/libero/prescriptions"
 );
 
 let headers = {
@@ -3163,7 +3170,7 @@ fetch(url, {
     "http://localhost/api/patientprescriptions" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"patient_id":9,"prescriptions":"ipsam"}'
+    -d '{"patient_id":15,"prescriptions":"velit"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/patientprescriptions"
@@ -3175,8 +3182,8 @@ let headers = {
 };
 
 let body = {
-    "patient_id": 9,
-    "prescriptions": "ipsam"
+    "patient_id": 15,
+    "prescriptions": "velit"
 }
 
 fetch(url, {
@@ -3237,7 +3244,7 @@ fetch(url, {
     "http://localhost/api/transactions" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"type":13,"amount":18,"status":5}'
+    -d '{"type":6,"amount":7,"status":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/transactions"
@@ -3249,9 +3256,9 @@ let headers = {
 };
 
 let body = {
-    "type": 13,
-    "amount": 18,
-    "status": 5
+    "type": 6,
+    "amount": 7,
+    "status": 1
 }
 
 fetch(url, {
@@ -3315,13 +3322,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/transactions/itaque/status" \
+    "http://localhost/api/transactions/possimus/status" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"status":16}'
+    -d '{"status":9}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/transactions/itaque/status"
+    "http://localhost/api/transactions/possimus/status"
 );
 
 let headers = {
@@ -3330,7 +3337,7 @@ let headers = {
 };
 
 let body = {
-    "status": 16
+    "status": 9
 }
 
 fetch(url, {
@@ -3390,11 +3397,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/users/ut/transactions/complete" \
+    -G "http://localhost/api/users/ipsam/transactions/complete" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/ut/transactions/complete"
+    "http://localhost/api/users/ipsam/transactions/complete"
 );
 
 let headers = {
@@ -3441,11 +3448,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/users/repudiandae" \
+    -G "http://localhost/api/users/sed" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/repudiandae"
+    "http://localhost/api/users/sed"
 );
 
 let headers = {
@@ -3660,13 +3667,13 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost/api/users/incidunt/agent" \
+    "http://localhost/api/users/id/agent" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"is_agent":true,"agent_percentage":2.5}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/users/incidunt/agent"
+    "http://localhost/api/users/id/agent"
 );
 
 let headers = {
@@ -3774,11 +3781,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/doctors/vero/checkupprescriptions/pending" \
+    -G "http://localhost/api/doctors/voluptas/checkupprescriptions/pending" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/doctors/vero/checkupprescriptions/pending"
+    "http://localhost/api/doctors/voluptas/checkupprescriptions/pending"
 );
 
 let headers = {
@@ -3864,11 +3871,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/patients/fuga/checkupprescriptions/pending" \
+    -G "http://localhost/api/patients/molestiae/checkupprescriptions/pending" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/patients/fuga/checkupprescriptions/pending"
+    "http://localhost/api/patients/molestiae/checkupprescriptions/pending"
 );
 
 let headers = {
