@@ -9,4 +9,16 @@ const functions = require('firebase-functions');
 // });
 exports.myFunction = functions.firestore
     .document('doctorcall/{doc_id}')
-    .onWrite((change, context) => { /* ... */ });
+    .onWrite((change, context) => {
+        const newValue = snap.data();
+        const deviceIds = newValue.receiving_device;
+
+        const fcmMessage = {
+            'registration_ids': deviceIds,
+            'notification': {
+                'body': '',
+                'title': ''
+            },
+            'data': {}
+        }
+    });

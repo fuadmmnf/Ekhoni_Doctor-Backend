@@ -23,6 +23,7 @@ class CreatePatientcheckupsTable extends Migration
             $table->dateTime('end_time')->nullable();
             $table->jsonb('patient_tags')->nullable();
             $table->jsonb('doctor_tags')->nullable();
+            $table->jsonb('call_log')->nullable();
 
             $table->timestamps();
 

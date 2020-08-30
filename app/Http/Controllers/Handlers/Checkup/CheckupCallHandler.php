@@ -52,6 +52,37 @@ class CheckupCallHandler
         return $token->toJWT();
     }
 
+    private function sendPushNotification($deviceIds, $title, $message, $data)
+    {
+
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $header = [
+            'authorization: key=' . config('firebase.gcm_key'),
+            'content-type: application/json'
+        ];
+
+        $postdata = '{
+            "to" : ' . $deviceIds . ',
+                "notification" : {
+                    "title":"' . $title . '",
+                    "text" : "' . $message . '"
+                },
+            "data" : ' . json_encode($data) . '
+        }';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return $result;
+    }
 
     public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling)
     {
@@ -68,14 +99,21 @@ class CheckupCallHandler
             'room_name' => $room,
             'caller_name' => ($isDoctorCalling) ? $doctor->name : $patient->name,
             'checkup_code' => $patientcheckup->code,
-            'time' => Carbon::now()
+            'time' => Carbon::now()->toDateTimeString()
         ];
 
         $addedDocRef = $this->db->collection($isDoctorCalling ? 'doctorcall' : 'patientcall')
             ->document(($isDoctorCalling) ? $patient->user->code : $doctor->user->code)
             ->set($data);
 
-        error_log(json_encode($addedDocRef));
+
+        $this->sendPushNotification(($isDoctorCalling)? $patient->user->device_ids: $doctor->user->device_ids, "Incoming Call", "Call will prevail for 30seconds", $data);
+
+        $callLogs = $patientcheckup->call_log ? json_decode($patientcheckup->call_log, true) : [];
+        $callLogs[] = Carbon::now();
+        $patientcheckup->call_log = json_encode($callLogs);
+        $patientcheckup->save();
+
         return $data;
     }
 
@@ -103,4 +141,6 @@ class CheckupCallHandler
         $doctor->status = $doctorSchedule != null;
         $doctor->save();
     }
+
+
 }

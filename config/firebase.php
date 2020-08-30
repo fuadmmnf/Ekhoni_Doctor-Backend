@@ -30,6 +30,7 @@ return [
      * first time you try to access a component of the Firebase Admin SDK.
      *
      */
+    'gcm_key' => env('FIREBASE_SERVER_KEY'),
     'credentials' => [
         'file' => env('FIREBASE_CREDENTIALS'),
 

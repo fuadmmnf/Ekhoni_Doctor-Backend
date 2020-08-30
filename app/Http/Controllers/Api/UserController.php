@@ -141,6 +141,7 @@ class UserController extends Controller
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
      * @bodyParam otp_code string required The 4 digit access otp token sent via sms. Example: 1234
      * @bodyParam is_patient boolean required The boolean representation to indicate if request in from general user. So that if user not found new user will be created. Example: true
+     * @bodyParam device_id string The FCM token of user device.
      *
      *
      * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
