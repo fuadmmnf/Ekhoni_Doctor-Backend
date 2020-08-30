@@ -79,6 +79,12 @@ class CheckupCallHandler
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         $result = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            error_log('GCM error: ' . curl_error($ch));
+        }
+
+
         curl_close($ch);
 
         return $result;
