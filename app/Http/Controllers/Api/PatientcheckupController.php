@@ -219,6 +219,43 @@ class PatientcheckupController extends Controller
     }
 
     /**
+     * _Update Patientcheckup status_
+     *
+     * Patientcheckup update call status, used if call not picked or ignored. !! token required | patient, doctor
+     *
+     *
+     * @urlParam patientcheckup required The patientcheckup id.
+     * @bodyParam start_time string required Call start time. Example: "2020-07-10T21:45:47.000000Z"
+     * @bodyParam end_time string required Call end time. Example: "2020-07-10T21:45:47.000000Z"
+     * @bodyParam doctor_tags json_array The doctor service tags.
+     * @bodyParam  patient_tags json_array The patient behavior tags.
+     *
+     * @response  204 ""
+     *
+     *
+     */
+    public function endCallSession(Request $request, Patientcheckup $patientcheckup){
+        if (!$this->user ||
+            !$this->user->hasRole('patient') &&
+            !$this->user->hasRole('doctor')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $this->validate($request, [
+            'status' => 'required| numeric',
+        ]);
+
+        $patientcheckup->status = $request->status;
+        $pushNotificationHandler = new CheckupCallHandler();
+        $pushNotificationHandler->terminateCallSession($patientcheckup);
+        $pushNotificationHandler->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
+        $patientcheckup->save();
+
+        return response()->noContent();
+    }
+
+    /**
      * _Create Access Token_
      *
      * Create Patientcheckup joining information and update to firestore for call notification. !! token required | patient | doctor

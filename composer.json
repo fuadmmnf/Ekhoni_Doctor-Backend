@@ -24,7 +24,8 @@
         "mpociot/laravel-apidoc-generator": "^4.8",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "spatie/laravel-permission": "^3.13",
-        "twilio/sdk": "^6.9"
+        "twilio/sdk": "^6.9",
+      "ext-curl": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
