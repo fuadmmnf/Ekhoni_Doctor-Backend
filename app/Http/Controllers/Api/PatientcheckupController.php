@@ -168,6 +168,7 @@ class PatientcheckupController extends Controller
      * @urlParam patientcheckup required The patientcheckup id.
      * @bodyParam start_time string required Call start time. Example: "2020-07-10T21:45:47.000000Z"
      * @bodyParam end_time string required Call end time. Example: "2020-07-10T21:45:47.000000Z"
+     * @bodyParam status int required Call checkup status. 0=>ongoing, 1=>complete, 2=>incomplete, 3=>not received.
      * @bodyParam doctor_tags json_array The doctor service tags.
      * @bodyParam  patient_tags json_array The patient behavior tags.
      *
@@ -187,6 +188,7 @@ class PatientcheckupController extends Controller
         $this->validate($request, [
             'start_time' => 'required',
             'end_time' => 'required',
+            'status' => 'required| numeric',
             'patient_tags' => 'sometimes| array',
             'doctor_tags' => 'sometimes| array',
         ]);
@@ -197,6 +199,7 @@ class PatientcheckupController extends Controller
             if ($request->has('patient_tags')) {
                 $patientcheckup->patient_tags = json_encode($request->patient_tags);
             }
+
 
             $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
             if($doctorappointment){
@@ -209,7 +212,7 @@ class PatientcheckupController extends Controller
                 $patientcheckup->doctor_tags = json_encode($request->doctor_tags);
             }
         }
-
+        $patientcheckup->status = $request->status;
         $patientcheckup->save();
         $pushNotificationHandler = new CheckupCallHandler();
         $pushNotificationHandler->terminateCallSession($patientcheckup);
