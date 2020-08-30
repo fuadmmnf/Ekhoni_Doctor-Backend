@@ -225,10 +225,7 @@ class PatientcheckupController extends Controller
      *
      *
      * @urlParam patientcheckup required The patientcheckup id.
-     * @bodyParam start_time string required Call start time. Example: "2020-07-10T21:45:47.000000Z"
-     * @bodyParam end_time string required Call end time. Example: "2020-07-10T21:45:47.000000Z"
-     * @bodyParam doctor_tags json_array The doctor service tags.
-     * @bodyParam  patient_tags json_array The patient behavior tags.
+     * @bodyParam status int required Call status. 0=>ongoing, 1=>complete, 2=>incomplete, 3=>not received
      *
      * @response  204 ""
      *
