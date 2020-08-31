@@ -120,8 +120,8 @@ class CheckupCallHandler
 
         $receivingUser = ($isDoctorCalling)? $patient->user: $doctor->user;
         $data['type'] = 1; //1=> call, 2=>others
-        Notification::send($receivingUser, new FcmNotification($data));
-//        $res = $receivingUser->notify(new FcmNotification());
+//        Notification::send($receivingUser, new FcmNotification($data));
+        $receivingUser->notify(new FcmNotification($data));
 //        Log::debug($res);
 
         $callLogs = $patientcheckup->call_log ? json_decode($patientcheckup->call_log, true) : [];

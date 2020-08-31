@@ -13,11 +13,11 @@ use NotificationChannels\Fcm\Resources\ApnsFcmOptions;
 
 class FcmNotification extends Notification
 {
-    private $data;
+    protected $data;
 
-    public function __construct(array $data)
+    public function __construct($arr)
     {
-        $this->data = $data;
+        $this->data = $arr;
     }
 
     public function via($notifiable)
