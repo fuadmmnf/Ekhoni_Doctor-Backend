@@ -18,11 +18,11 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
+        '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
@@ -30,10 +30,10 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         '9cdd7b9056abc3081735233ba9dd9c7f' => __DIR__ . '/..' . '/facade/flare-client-php/src/helpers.php',
+        'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'b6ec61354e97f32c0ae683041c78392a' => __DIR__ . '/..' . '/scrivo/highlight.php/HighlightUtilities/functions.php',
         'ed962a97bd972bc82007176b647d4e36' => __DIR__ . '/..' . '/facade/ignition/src/helpers.php',
-        'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e8d8290bf1a9fb22ceb9abc966d831ec' => __DIR__ . '/..' . '/mpociot/documentarian/includes/helpers.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
@@ -109,6 +109,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Spatie\\Permission\\' => 18,
+            'Spatie\\Enum\\' => 12,
             'Silly\\' => 6,
         ),
         'R' => 
@@ -137,6 +138,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'N' => 
         array (
             'NunoMaduro\\Collision\\' => 21,
+            'NotificationChannels\\Fcm\\' => 25,
         ),
         'M' => 
         array (
@@ -403,6 +405,10 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         array (
             0 => __DIR__ . '/..' . '/spatie/laravel-permission/src',
         ),
+        'Spatie\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/enum/src',
+        ),
         'Silly\\' => 
         array (
             0 => __DIR__ . '/..' . '/mnapoli/silly/src',
@@ -466,6 +472,10 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'NunoMaduro\\Collision\\' => 
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
+        ),
+        'NotificationChannels\\Fcm\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src',
         ),
         'Mpociot\\Documentarian\\' => 
         array (
@@ -4951,6 +4961,25 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'Mpociot\\Reflection\\DocBlock\\Tag\\VersionTag' => __DIR__ . '/..' . '/mpociot/reflection-docblock/src/Mpociot/Reflection/DocBlock/Tag/VersionTag.php',
         'Mpociot\\Reflection\\DocBlock\\Type\\Collection' => __DIR__ . '/..' . '/mpociot/reflection-docblock/src/Mpociot/Reflection/DocBlock/Type/Collection.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'NotificationChannels\\Fcm\\Exceptions\\CouldNotSendNotification' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Exceptions/CouldNotSendNotification.php',
+        'NotificationChannels\\Fcm\\FcmChannel' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/FcmChannel.php',
+        'NotificationChannels\\Fcm\\FcmMessage' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/FcmMessage.php',
+        'NotificationChannels\\Fcm\\FcmServiceProvider' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/FcmServiceProvider.php',
+        'NotificationChannels\\Fcm\\Resources\\AndroidConfig' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/AndroidConfig.php',
+        'NotificationChannels\\Fcm\\Resources\\AndroidFcmOptions' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/AndroidFcmOptions.php',
+        'NotificationChannels\\Fcm\\Resources\\AndroidMessagePriority' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/AndroidMessagePriority.php',
+        'NotificationChannels\\Fcm\\Resources\\AndroidNotification' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/AndroidNotification.php',
+        'NotificationChannels\\Fcm\\Resources\\ApnsConfig' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/ApnsConfig.php',
+        'NotificationChannels\\Fcm\\Resources\\ApnsFcmOptions' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/ApnsFcmOptions.php',
+        'NotificationChannels\\Fcm\\Resources\\Color' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/Color.php',
+        'NotificationChannels\\Fcm\\Resources\\FcmOptions' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/FcmOptions.php',
+        'NotificationChannels\\Fcm\\Resources\\FcmResource' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/FcmResource.php',
+        'NotificationChannels\\Fcm\\Resources\\LightSettings' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/LightSettings.php',
+        'NotificationChannels\\Fcm\\Resources\\Notification' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/Notification.php',
+        'NotificationChannels\\Fcm\\Resources\\NotificationPriority' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/NotificationPriority.php',
+        'NotificationChannels\\Fcm\\Resources\\Visibility' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/Visibility.php',
+        'NotificationChannels\\Fcm\\Resources\\WebpushConfig' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/WebpushConfig.php',
+        'NotificationChannels\\Fcm\\Resources\\WebpushFcmOptions' => __DIR__ . '/..' . '/laravel-notification-channels/fcm/src/Resources/WebpushFcmOptions.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/CollisionServiceProvider.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\Commands\\TestCommand' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\ExceptionHandler' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/ExceptionHandler.php',
@@ -6212,6 +6241,13 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'Silly\\HyphenatedInputResolver' => __DIR__ . '/..' . '/mnapoli/silly/src/HyphenatedInputResolver.php',
         'Silly\\Input\\InputArgument' => __DIR__ . '/..' . '/mnapoli/silly/src/Input/InputArgument.php',
         'Silly\\Input\\InputOption' => __DIR__ . '/..' . '/mnapoli/silly/src/Input/InputOption.php',
+        'Spatie\\Enum\\Enum' => __DIR__ . '/..' . '/spatie/enum/src/Enum.php',
+        'Spatie\\Enum\\Enumerable' => __DIR__ . '/..' . '/spatie/enum/src/Enumerable.php',
+        'Spatie\\Enum\\Exceptions\\DuplicatedIndexException' => __DIR__ . '/..' . '/spatie/enum/src/Exceptions/DuplicatedIndexException.php',
+        'Spatie\\Enum\\Exceptions\\DuplicatedValueException' => __DIR__ . '/..' . '/spatie/enum/src/Exceptions/DuplicatedValueException.php',
+        'Spatie\\Enum\\Exceptions\\InvalidIndexException' => __DIR__ . '/..' . '/spatie/enum/src/Exceptions/InvalidIndexException.php',
+        'Spatie\\Enum\\Exceptions\\InvalidNameException' => __DIR__ . '/..' . '/spatie/enum/src/Exceptions/InvalidNameException.php',
+        'Spatie\\Enum\\Exceptions\\InvalidValueException' => __DIR__ . '/..' . '/spatie/enum/src/Exceptions/InvalidValueException.php',
         'Spatie\\Permission\\Commands\\CacheReset' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Commands/CacheReset.php',
         'Spatie\\Permission\\Commands\\CreatePermission' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Commands/CreatePermission.php',
         'Spatie\\Permission\\Commands\\CreateRole' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Commands/CreateRole.php',

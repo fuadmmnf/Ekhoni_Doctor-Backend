@@ -39,6 +39,18 @@ class User extends Authenticatable
 //        'email_verified_at' => 'datetime',
 //    ];
 
+
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string
+     */
+    public function routeNotificationForFcm()
+    {
+        return json_decode($this->device_ids, true);
+    }
+
+
     public function admin(){
         return $this->hasOne('App\Admin');
     }
