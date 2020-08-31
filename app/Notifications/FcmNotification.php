@@ -13,6 +13,13 @@ use NotificationChannels\Fcm\Resources\ApnsFcmOptions;
 
 class FcmNotification extends Notification
 {
+    protected $data;
+
+    public function __construct(array $data)
+    {
+        $this->$data = $data;
+    }
+
     public function via($notifiable)
     {
         return [FcmChannel::class];
@@ -21,11 +28,10 @@ class FcmNotification extends Notification
     public function toFcm($notifiable)
     {
         return FcmMessage::create()
-            ->setData(['data1' => 'value', 'data2' => 'value2'])
+            ->setData($this->data)
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('Account Activated')
-                ->setBody('Your account has been activated.')
-                ->setImage('http://example.com/url-to-image-here.png'))
+                ->setTitle('Incoming Call')
+                ->setBody('Your Phone is ringing.'))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))

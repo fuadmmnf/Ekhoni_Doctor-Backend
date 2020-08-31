@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -47,7 +48,8 @@ class User extends Authenticatable
      */
     public function routeNotificationForFcm()
     {
-        return json_decode($this->device_ids, true);
+        $tokens = json_decode($this->device_ids);
+        return $tokens;
     }
 
 

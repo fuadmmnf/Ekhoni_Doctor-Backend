@@ -8,6 +8,8 @@ use App\Doctorschedule;
 use App\Notifications\FcmNotification;
 use App\Patientcheckup;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Kreait\Firebase\Factory;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
@@ -117,8 +119,10 @@ class CheckupCallHandler
 //        $this->sendPushNotification(($isDoctorCalling)? $patient->user->device_ids: $doctor->user->device_ids, "Incoming Call", "Call will prevail for 30seconds", $data);
 
         $receivingUser = ($isDoctorCalling)? $patient->user: $doctor->user;
-        $receivingUser->notify(new FcmNotification);
-
+        $data['type'] = 1; //1=> call, 2=>others
+        Notification::send($receivingUser, new FcmNotification($data));
+//        $res = $receivingUser->notify(new FcmNotification());
+//        Log::debug($res);
 
         $callLogs = $patientcheckup->call_log ? json_decode($patientcheckup->call_log, true) : [];
         $callLogs[] = Carbon::now();
