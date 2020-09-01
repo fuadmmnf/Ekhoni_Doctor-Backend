@@ -29,9 +29,9 @@ class FcmNotification extends Notification
     {
         return FcmMessage::create()
             ->setData($this->callInfo)
-            ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('Incoming Call')
-                ->setBody('You have an incoming call.'))
+//            ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
+//                ->setTitle('Incoming Call')
+//                ->setBody('You have an incoming call.'))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
