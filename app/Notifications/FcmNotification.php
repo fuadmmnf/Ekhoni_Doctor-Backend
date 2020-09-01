@@ -28,17 +28,17 @@ class FcmNotification extends Notification
     public function toFcm($notifiable)
     {
         return FcmMessage::create()
-            ->setData($this->callInfo)
+            ->setData($this->callInfo);
 //            ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
 //                ->setTitle('Incoming Call')
 //                ->setBody('You have an incoming call.'))
-            ->setAndroid(
-                AndroidConfig::create()
-                    ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
-                    ->setNotification(AndroidNotification::create()->setColor('#0A0A0A'))
-                    ->setPriority(AndroidMessagePriority::HIGH())
-            )->setApns(
-                ApnsConfig::create()
-                    ->setFcmOptions(ApnsFcmOptions::create()->setAnalyticsLabel('analytics_ios')));
+//            ->setAndroid(
+//                AndroidConfig::create()
+//                    ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
+//                    ->setNotification(AndroidNotification::create()->setColor('#0A0A0A'))
+//                    ->setPriority(AndroidMessagePriority::HIGH())
+//            )->setApns(
+//                ApnsConfig::create()
+//                    ->setFcmOptions(ApnsFcmOptions::create()->setAnalyticsLabel('analytics_ios')));
     }
 }
