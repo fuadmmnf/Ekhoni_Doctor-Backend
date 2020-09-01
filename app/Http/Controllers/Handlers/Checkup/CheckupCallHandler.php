@@ -119,7 +119,7 @@ class CheckupCallHandler
 //        $this->sendPushNotification(($isDoctorCalling)? $patient->user->device_ids: $doctor->user->device_ids, "Incoming Call", "Call will prevail for 30seconds", $data);
 
         $receivingUser = ($isDoctorCalling)? $patient->user: $doctor->user;
-        $data['type'] = 1; //1=> call, 2=>others
+        $data['type'] = '1'; //1=> call, 2=>others
         $fcm = new FcmNotification();
         $fcm->setCallInfo($data);
         Notification::send($receivingUser, $fcm);
