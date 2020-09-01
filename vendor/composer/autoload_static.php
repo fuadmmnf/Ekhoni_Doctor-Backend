@@ -779,6 +779,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'App\\Http\\Middleware\\TrustHosts' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustHosts.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Notifications\\FcmNotification' => __DIR__ . '/../..' . '/app/Notifications/FcmNotification.php',
         'App\\Otpcode' => __DIR__ . '/../..' . '/app/Otpcode.php',
         'App\\Patient' => __DIR__ . '/../..' . '/app/Patient.php',
         'App\\Patientcheckup' => __DIR__ . '/../..' . '/app/Patientcheckup.php',

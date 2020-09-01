@@ -7,19 +7,18 @@ use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 use NotificationChannels\Fcm\Resources\AndroidConfig;
 use NotificationChannels\Fcm\Resources\AndroidFcmOptions;
+use NotificationChannels\Fcm\Resources\AndroidMessagePriority;
 use NotificationChannels\Fcm\Resources\AndroidNotification;
 use NotificationChannels\Fcm\Resources\ApnsConfig;
 use NotificationChannels\Fcm\Resources\ApnsFcmOptions;
 
 class FcmNotification extends Notification
 {
-    protected $data;
+    private $callInfo;
 
-    public function __construct($arr)
-    {
-        $this->data = $arr;
+    public function setCallInfo($callInfo){
+        $this->callInfo = $callInfo;
     }
-
     public function via($notifiable)
     {
         return [FcmChannel::class];
@@ -28,14 +27,15 @@ class FcmNotification extends Notification
     public function toFcm($notifiable)
     {
         return FcmMessage::create()
-            ->setData($this->data)
+            ->setData(['data1' => 'value', 'data2' => 'value2'])
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('Incoming Call')
-                ->setBody('Your Phone is ringing.'))
+                ->setTitle('Account Activated')
+                ->setBody('Your account has been activated.'))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
                     ->setNotification(AndroidNotification::create()->setColor('#0A0A0A'))
+                    ->setPriority(AndroidMessagePriority::HIGH())
             )->setApns(
                 ApnsConfig::create()
                     ->setFcmOptions(ApnsFcmOptions::create()->setAnalyticsLabel('analytics_ios')));

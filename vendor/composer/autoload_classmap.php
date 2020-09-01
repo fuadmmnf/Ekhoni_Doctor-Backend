@@ -41,6 +41,7 @@ return array(
     'App\\Http\\Middleware\\TrustHosts' => $baseDir . '/app/Http/Middleware/TrustHosts.php',
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Notifications\\FcmNotification' => $baseDir . '/app/Notifications/FcmNotification.php',
     'App\\Otpcode' => $baseDir . '/app/Otpcode.php',
     'App\\Patient' => $baseDir . '/app/Patient.php',
     'App\\Patientcheckup' => $baseDir . '/app/Patientcheckup.php',
