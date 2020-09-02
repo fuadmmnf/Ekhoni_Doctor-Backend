@@ -575,7 +575,7 @@ class DoctorController extends Controller
 
         $doctor->activation_status = $request->activation_status;
         if ($request->activation_status == 1) {
-            $this->user->assignRole('doctor');
+            $doctor->user->assignRole('doctor');
         } else {
             $this->user->tokens()->delete();
         }
