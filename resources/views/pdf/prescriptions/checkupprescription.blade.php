@@ -121,7 +121,7 @@
                 <tbody>
                 <tr align="left">
                     <td>
-                        <span><b>Name: </b>Fuad</span>
+                        <span><b>Name: </b>{{$patient->name}}</span>
                     </td>
                 </tr>
                 <tr align="left">
