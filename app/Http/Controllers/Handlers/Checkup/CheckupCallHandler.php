@@ -101,15 +101,17 @@ class CheckupCallHandler
 
         $patient = $patientcheckup->patient;
         $room = $doctor->bmdc_number . '_' . $patient->code;
-        $access_token = $this->generate_token($room);
 
         $data = [
-            'access_token' => $access_token,
+            'access_token' => $this->generate_token($room),
             'room_name' => $room,
             'caller_name' => ($isDoctorCalling) ? $doctor->name : $patient->name,
             'checkup_code' => $patientcheckup->code,
             'time' => Carbon::now()->toDateTimeString()
         ];
+
+
+
 
         $addedDocRef = $this->db->collection($isDoctorCalling ? 'doctorcall' : 'patientcall')
             ->document(($isDoctorCalling) ? $patient->user->code : $doctor->user->code)
@@ -131,6 +133,8 @@ class CheckupCallHandler
         $patientcheckup->call_log = json_encode($callLogs);
         $patientcheckup->save();
 
+
+        $data['access_token'] = $this->generate_token($room);
         return $data;
     }
 
