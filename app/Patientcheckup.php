@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class Patientcheckup extends Model
@@ -25,4 +26,8 @@ class Patientcheckup extends Model
 //    public function doctorappointment(){
 //        return $this->be('App\Doctorappointment');
 //    }
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }
