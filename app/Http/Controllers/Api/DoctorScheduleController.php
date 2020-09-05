@@ -68,8 +68,8 @@ class DoctorScheduleController extends Controller
 
         $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
             $scheduleSlots = json_decode($doctorSchedule->schedule_slots, true);
-            foreach ($scheduleSlots as $scheduleSlot){
-                if($scheduleSlot['status'] == 0){
+            foreach ($scheduleSlots as $scheduleSlot) {
+                if ($scheduleSlot['status'] == 0) {
                     return true;
                 }
             }
@@ -116,12 +116,26 @@ class DoctorScheduleController extends Controller
 //            'max_appointments_per_day' => 'required| numeric',
         ]);
 
+
         $doctor = Doctor::findOrFail($request->doctor_id);
+        $startTime = Carbon::parse($request->start_time);
+        $endTime = Carbon::parse($request->end_time);
+
+        $doctorSchedules = Doctorschedule::where('doctor_id', $doctor->id)
+            ->whereDate('start_time', $startTime)
+            ->get();
+
+        foreach ($doctorSchedules as $doctorSchedule) {
+            if ((Carbon::parse($doctorSchedule->start_time)->lte($startTime) && Carbon::parse($doctorSchedule->end_time)->gte($startTime)) ||
+                (Carbon::parse($doctorSchedule->start_time)->lte($endTime) && Carbon::parse($doctorSchedule->end_time)->gte($endTime))) {
+                return response()->json('Conflicting schedules, failed to create new schedule', 400);
+            }
+        }
 
         $newDoctorSchedule = new Doctorschedule();
         $newDoctorSchedule->doctor_id = $doctor->id;
-        $newDoctorSchedule->start_time = Carbon::parse($request->start_time);
-        $newDoctorSchedule->end_time = Carbon::parse($request->end_time);
+        $newDoctorSchedule->start_time = $startTime;
+        $newDoctorSchedule->end_time = $endTime;
 
 //        $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
         $scheduleInterval = 20;
@@ -130,7 +144,7 @@ class DoctorScheduleController extends Controller
         $appointmentSchedules = array();
 
         $numAppointments = 0;
-        while ($time < $newDoctorSchedule->end_time && $isTimeLeftForAppointment < $newDoctorSchedule->end_time) {
+        while ($time < $newDoctorSchedule->end_time && $isTimeLeftForAppointment <= $newDoctorSchedule->end_time) {
             $appointmentSchedules[] = [
                 "time" => $time->copy()->toDateTimeString(),
                 "status" => 0 // 0 available, 1 booked
@@ -138,7 +152,7 @@ class DoctorScheduleController extends Controller
             $time->addMinutes($scheduleInterval);
             $isTimeLeftForAppointment->addMinutes($scheduleInterval);
 
-            $numAppointments ++;
+            $numAppointments++;
         }
         $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);
         $newDoctorSchedule->max_appointments_per_day = $numAppointments;

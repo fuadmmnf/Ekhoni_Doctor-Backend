@@ -72,7 +72,7 @@ class PatientprescriptionController extends Controller
      * Fetch patient prescriptino image. !! token required | doctor, patient
      *
      *
-     * @urlParam patientprescription required The Id of patientprescription. Example: 14
+     * @urlParam patientprescription required The code of patientprescription. Example: 1of1oh12g
      *
      *
      */

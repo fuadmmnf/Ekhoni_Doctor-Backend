@@ -536,6 +536,13 @@ class DoctorappointmentController extends Controller
 
         $doctor = Doctor::findOrFail($request->doctor_id);
 
+        $checkupTransactionHandler = new CheckupTransactionHandler();
+
+        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
+        if (!$newPatientCheckup) {
+            return response()->json('Insufficient Balance', 400);
+        }
+
         $appointmentHandler = new DoctorScheduleHandler();
         $isSlotAvailable = $appointmentHandler->setAppointmentInDoctorSchedule($doctor, Carbon::parse($request->start_time));
         if (!$isSlotAvailable) {
@@ -543,12 +550,7 @@ class DoctorappointmentController extends Controller
         }
 
 
-        $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
-        if (!$newPatientCheckup) {
-            return response()->json('Insufficient Balance', 400);
-        }
 //        $doctor = Doctor::findOrFail($request->doctor_id);
         $transaction = $newPatientCheckup->transaction;
 
