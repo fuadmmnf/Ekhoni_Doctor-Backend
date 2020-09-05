@@ -99,6 +99,9 @@ class DoctorScheduleController extends Controller
      * "created_at": "2020-07-25T21:11:49.000000Z",
      * "id": 6
      * }
+     *
+     * @response 204 ""
+     * @response 400 {"message": "Conflicting schedules, failed to create new schedule"}
      */
     public function store(Request $request)
     {
