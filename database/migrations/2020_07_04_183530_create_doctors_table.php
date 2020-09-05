@@ -34,6 +34,7 @@ class CreateDoctorsTable extends Migration
             $table->string('postgrad')->nullable();
             $table->string('medical_college');
             $table->string('other_trainings')->nullable();
+            $table->string('portfolio')->nullable();
             $table->string('password');
             $table->string('image')->nullable();
             $table->timestamps();

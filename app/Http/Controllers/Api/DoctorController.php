@@ -63,6 +63,7 @@ class DoctorController extends Controller
      * "postgrad": "dmc",
      * "medical_college": "dmc",
      * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "portfolio": "adqdi1fi1n "
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T15:49:23.000000Z",
@@ -122,6 +123,7 @@ class DoctorController extends Controller
      * "postgrad": "dmc",
      * "medical_college": "dmc",
      * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "portfolio": "adqdi1fi1n "
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T15:49:23.000000Z",
@@ -181,6 +183,7 @@ class DoctorController extends Controller
      * "postgrad": "dmc",
      * "medical_college": "dmc",
      * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "portfolio": "adqdi1fi1n "
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -238,6 +241,7 @@ class DoctorController extends Controller
      * "postgrad": "dmc",
      * "medical_college": "dmc",
      * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "portfolio": "adqdi1fi1n "
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -292,6 +296,7 @@ class DoctorController extends Controller
      * "postgrad": "dmc",
      * "medical_college": "dmc",
      * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "portfolio": "adqdi1fi1n "
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:57:19.000000Z",
@@ -337,6 +342,7 @@ class DoctorController extends Controller
      * "postgrad": "dmc",
      * "medical_college": "dmc",
      * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "portfolio": "adqdi1fi1n "
      * "device_ids": null,
      * "booking_start_time": null,
      * "created_at": "2020-07-10T14:19:24.000000Z",
@@ -398,6 +404,7 @@ class DoctorController extends Controller
         $newDoctor->report_followup_rate = ($doctorRequest->has('report_followup_rate')) ? $doctorRequest->report_followup_rate : null;
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->other_trainings = $doctorRequest->other_trainings;
+        $newDoctor->portfolio = $doctorRequest->portfolio;
         $newDoctor->password = Hash::make($newDoctor->mobile . $newDoctor->code);
         $newDoctor->save();
         return $newDoctor;
@@ -423,6 +430,7 @@ class DoctorController extends Controller
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  postgrad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
+     * @bodyParam  portfolio string required Doctor details & achievements [can be blank].
      * @bodyParam  device_id string Phone device id for FCM.
      *
      *
@@ -463,6 +471,7 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'other_trainings' => 'present| nullable',
+            'portfolio' => 'present| nullable',
             'device_id' => 'sometimes'
         ]);
         Doctortype::findOrFail($request->doctortype_id);
@@ -491,6 +500,7 @@ class DoctorController extends Controller
      * @bodyParam  medical_college string required The graduation college of doctor.
      * @bodyParam  postgrad string required Post Grad degree of doctor [can be blank].
      * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
+     * @bodyParam  portfolio string required Doctor details & achievements [can be blank].
      *
      * @response  201 {
      * "user_id": 10,
@@ -540,6 +550,7 @@ class DoctorController extends Controller
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'other_trainings' => 'present| nullable',
+            'portfolio' => 'present| nullable',
         ]);
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, true);
@@ -619,14 +630,14 @@ class DoctorController extends Controller
      *
      *
      * @urlParam  doctor required The ID of the doctor.
-     * @bodyParam  rate int required The usual rate of doctor per call/appointment.
+     * @bodyParam  rate int  The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
      * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
-     * @bodyParam  workplace string required The
-     * workplace of doctor.
-     * @bodyParam  designation string required The designation of doctor.
-     * @bodyParam  other_trainings string required Other degrees of doctor [can be blank].
+     * @bodyParam  workplace string  The workplace of doctor.
+     * @bodyParam  designation string  The designation of doctor.
+     * @bodyParam  other_trainings string  Other degrees of doctor [can be blank].
+     * @bodyParam  portfolio string  Doctor achievements [can be blank].
      *
      *
      * @response  204 ""
@@ -648,6 +659,7 @@ class DoctorController extends Controller
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
             'other_trainings' => 'sometimes',
+            'portfolio' => 'sometimes',
         ]);
 
         if ($request->has('rate')) {
@@ -679,6 +691,10 @@ class DoctorController extends Controller
         }
         if ($request->has('other_trainings')) {
             $doctor->other_trainings = $request->other_trainings;
+        }
+
+        if ($request->has('portfolio')) {
+            $doctor->portfolio = $request->portfolio;
         }
 
 
