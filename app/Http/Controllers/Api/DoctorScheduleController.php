@@ -126,9 +126,13 @@ class DoctorScheduleController extends Controller
             ->get();
 
         foreach ($doctorSchedules as $doctorSchedule) {
-            if ((Carbon::parse($doctorSchedule->start_time)->lte($startTime) && Carbon::parse($doctorSchedule->end_time)->gte($startTime)) ||
-                (Carbon::parse($doctorSchedule->start_time)->lte($endTime) && Carbon::parse($doctorSchedule->end_time)->gte($endTime))) {
-                return response()->json('Conflicting schedules, failed to create new schedule', 400);
+            if (Carbon::parse($doctorSchedule->start_time)->lte($startTime) && Carbon::parse($doctorSchedule->end_time)->gte($startTime)) {
+                return response()->noContent();
+
+            }
+            if (Carbon::parse($doctorSchedule->start_time)->lte($endTime) && Carbon::parse($doctorSchedule->end_time)->gte($endTime)) {
+                return response()->json(["message" => "Conflicting schedules, failed to create new schedule"], 400);
+
             }
         }
 
