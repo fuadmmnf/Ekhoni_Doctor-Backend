@@ -3,12 +3,14 @@
 
 namespace App\Http\Controllers\Handlers\Checkup;
 
+use App\Checkupprescription;
 use App\Doctor;
 use App\Doctorschedule;
 use App\Patientcheckup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Twilio\Jwt\AccessToken;
@@ -57,43 +59,7 @@ class CheckupCallHandler
         return $token->toJWT();
     }
 
-//    private function sendPushNotification($deviceIds, $title, $message, $data)
-//    {
-//
-//        $url = "https://fcm.googleapis.com/fcm/send";
-//        $header = [
-//            'authorization: key=' . config('firebase.gcm_key'),
-//            'content-type: application/json'
-//        ];
-//
-//        $postdata = '{
-//            "to" : ' . $deviceIds . ',
-//                "notification" : {
-//                    "title":"' . $title . '",
-//                    "text" : "' . $message . '"
-//                },
-//            "data" : ' . json_encode($data) . '
-//        }';
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $url);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-//
-//        $result = curl_exec($ch);
-//
-//        if (curl_errno($ch)) {
-//            error_log('GCM error: ' . curl_error($ch));
-//        }
-//
-//
-//        curl_close($ch);
-//
-//        return $result;
-//    }
+
 
     public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling)
     {
@@ -117,9 +83,6 @@ class CheckupCallHandler
             ->document(($isDoctorCalling) ? $patient->user->code : $doctor->user->code)
             ->set($data);
 
-
-//        $this->sendPushNotification(($isDoctorCalling)? $patient->user->device_ids: $doctor->user->device_ids, "Incoming Call", "Call will prevail for 30seconds", $data);
-
         $receivingUser = ($isDoctorCalling) ? $patient->user : $doctor->user;
         $data['type'] = '1'; //1=> call, 2=>others
 
@@ -139,6 +102,7 @@ class CheckupCallHandler
         $patientcheckup->call_log = json_encode($callLogs);
         $patientcheckup->save();
 
+        $this->createCheckupPrescription($patientcheckup);
 
         $data['access_token'] = $this->generate_token($room);
         return $data;
@@ -174,5 +138,19 @@ class CheckupCallHandler
 
     }
 
-
+    private function createCheckupPrescription(Patientcheckup $patientcheckup){
+        //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
+        $prescription = Checkupprescription::where('patientcheckup_id', $patientcheckup->id)->first();
+        if (!$prescription) {
+            $newCheckupPrescription = new Checkupprescription();
+            $newCheckupPrescription->patientcheckup_id = $patientcheckup->id;
+            $newCheckupPrescription->status = 0; //initialized(pending content)
+            do {
+                $code = Str::random(16);
+                $checkupPrescription = Checkupprescription::where('code', $code)->first();
+            } while ($checkupPrescription);
+            $newCheckupPrescription->code = $code;
+            $newCheckupPrescription->save();
+        }
+    }
 }

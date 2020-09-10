@@ -141,21 +141,7 @@ class PatientcheckupController extends Controller
     }
 
 
-    private function createCheckupPrescription(Patientcheckup $patientcheckup){
-        //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
-        $prescription = Checkupprescription::where('patientcheckup_id', $patientcheckup->id)->first();
-        if (!$prescription) {
-            $newCheckupPrescription = new Checkupprescription();
-            $newCheckupPrescription->patientcheckup_id = $patientcheckup->id;
-            $newCheckupPrescription->status = 0; //initialized(pending content)
-            do {
-                $code = Str::random(16);
-                $checkupPrescription = Checkupprescription::where('code', $code)->first();
-            } while ($checkupPrescription);
-            $newCheckupPrescription->code = $code;
-            $newCheckupPrescription->save();
-        }
-    }
+
 
 
 
@@ -217,7 +203,6 @@ class PatientcheckupController extends Controller
         $pushNotificationHandler = new CheckupCallHandler();
         $pushNotificationHandler->terminateCallSession($patientcheckup);
         $pushNotificationHandler->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
-        $this->createCheckupPrescription($patientcheckup);
         return response()->noContent();
     }
 
