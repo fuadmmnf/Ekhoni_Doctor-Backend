@@ -41,18 +41,6 @@ class User extends Authenticatable
 //    ];
 
 
-    /**
-     * Specifies the user's FCM token
-     *
-     * @return string
-     */
-    public function routeNotificationForFcm()
-    {
-        $tokens = json_decode($this->device_ids);
-        return $tokens;
-    }
-
-
     public function admin(){
         return $this->hasOne('App\Admin');
     }

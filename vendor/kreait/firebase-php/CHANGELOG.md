@@ -2,7 +2,28 @@
 
 ## [Unreleased]
 
-## [5.7.0]  2020-07-19
+## [5.8.1] - 2020-09-05
+### Fixed
+* The `HttpClientOptions` introduced in 5.8.0 caused a misconfiguration in the underlying
+  HTTP Client by trying to be too fancy (I'm sorry). 
+  ([#466](https://github.com/kreait/firebase-php/issues/466))
+  
+  _This is technically a breaking change because the return type of some public methods
+  of the `HttpClientOptions` has changed - but since they are meant to be used for service
+  creation, it is very unlikely that they have been used outside the SDK internals, so
+  the risk of breaking an existing application with this change is so low, that I'll
+  take the risk of getting shouted at for it._ 
+
+## [5.8.0] - 2020-08-23
+### Added
+* It is now possible to remove emails from users in the auth database.
+  ([#459](https://github.com/kreait/firebase-php/issues/459)).
+* You can configure the behavior of the HTTP Client performing the API 
+  requests by passing an instance of `Kreait\Firebase\Http\HttpClientOptions` 
+  to the factory before creating a service.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#http-client-options))
+
+## [5.7.0] - 2020-07-19
 ### Added
 * Added `Kreait\Firebase\RemoteConfig\DefaultValue` now has an added `value()` method to 
   retrieve a default value's value.
@@ -74,7 +95,9 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.7.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.8.1...HEAD
+[5.8.1]: https://github.com/kreait/firebase-php/compare/5.8.0...5.8.1
+[5.8.0]: https://github.com/kreait/firebase-php/compare/5.7.0...5.8.0
 [5.7.0]: https://github.com/kreait/firebase-php/compare/5.6.0...5.7.0
 [5.6.0]: https://github.com/kreait/firebase-php/compare/5.5.0...5.6.0
 [5.5.0]: https://github.com/kreait/firebase-php/compare/5.4.0...5.5.0

@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Handlers\Checkup;
 
 use App\Doctor;
 use App\Doctorschedule;
-use App\Notifications\FcmNotification;
 use App\Patientcheckup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
 
@@ -18,6 +18,7 @@ class CheckupCallHandler
 {
 
     private $db;
+    private $fcm;
 
     /**
      * CheckupCallHandler constructor.
@@ -26,6 +27,7 @@ class CheckupCallHandler
     {
         $factory = (new Factory)->withServiceAccount(base_path() . '/' . env('FIREBASE_CREDENTIALS'));
         $this->db = $factory->createFirestore()->database();
+        $this->fcm = $factory->createMessaging();
     }
 
     private function generate_token($room)
@@ -111,8 +113,6 @@ class CheckupCallHandler
         ];
 
 
-
-
         $addedDocRef = $this->db->collection($isDoctorCalling ? 'doctorcall' : 'patientcall')
             ->document(($isDoctorCalling) ? $patient->user->code : $doctor->user->code)
             ->set($data);
@@ -120,13 +120,19 @@ class CheckupCallHandler
 
 //        $this->sendPushNotification(($isDoctorCalling)? $patient->user->device_ids: $doctor->user->device_ids, "Incoming Call", "Call will prevail for 30seconds", $data);
 
-        $receivingUser = ($isDoctorCalling)? $patient->user: $doctor->user;
+        $receivingUser = ($isDoctorCalling) ? $patient->user : $doctor->user;
         $data['type'] = '1'; //1=> call, 2=>others
-        $fcm = new FcmNotification();
-        $fcm->setCallInfo($data);
-        Notification::send($receivingUser, $fcm);
-//        $receivingUser->notify(new FcmNotification($data));
-//        Log::debug($res);
+
+        $message = CloudMessage::new();
+        $sendReport = $this->fcm->sendMulticast($message, json_decode($receivingUser->device_ids));
+//        error_log($sendReport->successes()->count());
+//        error_log($sendReport->failures()->count());
+        if ($sendReport->hasFailures()) {
+            foreach ($sendReport->failures()->getItems() as $failure) {
+                Log::error($failure->error()->getMessage());
+            }
+        }
+
 
         $callLogs = $patientcheckup->call_log ? json_decode($patientcheckup->call_log, true) : [];
         $callLogs[] = Carbon::now();
@@ -161,6 +167,11 @@ class CheckupCallHandler
             ->first();
         $doctor->status = $doctorSchedule != null;
         $doctor->save();
+    }
+
+    private function sendCallNotification($data, $receiver)
+    {
+
     }
 
 
