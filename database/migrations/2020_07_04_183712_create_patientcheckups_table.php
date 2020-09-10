@@ -18,7 +18,7 @@ class CreatePatientcheckupsTable extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('transaction_id');
-            $table->integer('status')->nullable(); // 0=>ongoing, 1=>complete, 2=>incomplete, 3=>not received
+            $table->integer('status')->default(0); // 0=>pending, 1=>complete, 2=>incomplete, 3=>not received
             $table->string('code')->unique();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();

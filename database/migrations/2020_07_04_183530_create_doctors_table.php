@@ -23,6 +23,7 @@ class CreateDoctorsTable extends Migration
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
             $table->integer('status')->default(0); //0 unavailable, 1 available, 2 in call
             $table->integer('is_featured')->default(0); //0 no, 1 yes
+            $table->double('pending_amount')->default(0);
             $table->double('commission')->default(0.0);
             $table->double('rate');
             $table->double('offer_rate');
