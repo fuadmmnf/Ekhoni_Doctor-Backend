@@ -48,9 +48,7 @@ class CheckupTransactionHandler
                 ->pluck('id');
             $patientPreviousAppointment = Doctorappointment::whereIn('patientcheckup_id', $checkupIds)
                 ->orderBy('start_time', 'desc')->first();
-            if (!$patientPreviousAppointment && $doctor->first_appointment_rate != null) {
-                $rate = $doctor->first_appointment_rate;
-            } elseif ($patientPreviousAppointment && $doctor->report_followup_rate != null && Carbon::now()->diffInDays(Carbon::parse($patientPreviousAppointment->start_time)) < 10){
+            if ($patientPreviousAppointment && $doctor->report_followup_rate != null && Carbon::now()->diffInDays(Carbon::parse($patientPreviousAppointment->start_time)) < 10) {
                 $rate = $doctor->report_followup_rate;
             }
 

@@ -488,9 +488,9 @@ class DoctorController extends Controller
      * @bodyParam  payment_style int required The payment process of doctor selected by admin. 0 => patient transaction, 1 => paid by organization
      * @bodyParam  name string required The fullname of doctor.
      * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
+     * @bodyParam  commission double required The commission percentage of doctor per call/appointment.
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
-     * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
      * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
      * @bodyParam  mobile string required The mobile of doctor. Must be unique across users table.
@@ -538,9 +538,9 @@ class DoctorController extends Controller
             'payment_style' => 'required| numeric',
             'name' => 'required',
             'bmdc_number' => 'required| unique:doctors',
+            'commission' => 'required| numeric',
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
-            'first_appointment_rate' => 'sometimes| numeric',
             'report_followup_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
@@ -555,6 +555,7 @@ class DoctorController extends Controller
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, true);
         $newDoctor->activation_status = 1;
+        $newDoctor->commission = $request->commission;
         $newDoctor->payment_style = $request->payment_style;
         $newDoctor->save();
 
@@ -569,7 +570,10 @@ class DoctorController extends Controller
      *
      * @urlParam  doctor required The ID of doctor.
      * @bodyParam activation_status int required The activation indicatior. 0 => not approved, 1 => approved
-     *
+     * @bodyParam  commission double required The commission percentage of doctor per call/appointment.
+     * @bodyParam  rate int required The usual rate of doctor per call/appointment.
+     * @bodyParam  offer_rate int required The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
+     * @bodyParam  report_followup_rate int required The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @response  204 ""
      */
     public function evaluateDoctorJoiningRequest(Request $request, Doctor $doctor)
@@ -582,6 +586,10 @@ class DoctorController extends Controller
 
         $this->validate($request, [
             'activation_status' => 'required| integer| between: 0,1',
+            'commission' => 'required| numeric',
+            'rate' => 'required| numeric',
+            'offer_rate' => 'required| numeric',
+            'report_followup_rate' => 'required| numeric'
         ]);
 
         $doctor->activation_status = $request->activation_status;
@@ -630,6 +638,7 @@ class DoctorController extends Controller
      *
      *
      * @urlParam  doctor required The ID of the doctor.
+     * @bodyParam  commission double required The commission percentage of doctor per call/appointment.
      * @bodyParam  rate int  The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
@@ -652,15 +661,19 @@ class DoctorController extends Controller
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
+            'commission' => 'sometimes| numeric',
             'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
-            'first_appointment_rate' => 'sometimes| numeric',
             'report_followup_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
             'other_trainings' => 'sometimes',
             'portfolio' => 'sometimes',
         ]);
+
+        if ($request->has('commission')) {
+            $doctor->commission = $request->commission;
+        }
 
         if ($request->has('rate')) {
             $doctor->rate = $request->rate;
@@ -671,9 +684,6 @@ class DoctorController extends Controller
             $doctor->offer_rate = $request->offer_rate;
         }
 
-        if ($request->has('first_appointment_rate')) {
-            $doctor->first_appointment_rate = $request->first_appointment_rate;
-        }
 
         if ($request->has('report_followup_rate')) {
             $doctor->report_followup_rate = $request->report_followup_rate;
