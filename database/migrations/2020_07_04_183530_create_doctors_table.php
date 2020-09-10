@@ -27,6 +27,7 @@ class CreateDoctorsTable extends Migration
             $table->double('commission')->default(0.0);
             $table->double('rate');
             $table->double('offer_rate');
+            $table->double('followup_rate')->nullable();
             $table->double('report_followup_rate')->nullable();
             $table->integer('gender'); // 0 => male, 1 => female
             $table->string('email');

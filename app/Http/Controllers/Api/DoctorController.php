@@ -400,6 +400,7 @@ class DoctorController extends Controller
         $newDoctor->designation = $doctorRequest->designation;
         $newDoctor->medical_college = $doctorRequest->medical_college;
         $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
+        $newDoctor->followup_rate = ($doctorRequest->has('followup_rate')) ? $doctorRequest->followup_rate : $doctorRequest->offer_rate;
         $newDoctor->first_appointment_rate = ($doctorRequest->has('first_appointment_rate')) ? $doctorRequest->first_appointment_rate : null;
         $newDoctor->report_followup_rate = ($doctorRequest->has('report_followup_rate')) ? $doctorRequest->report_followup_rate : null;
         $newDoctor->postgrad = $doctorRequest->postgrad;
@@ -420,6 +421,7 @@ class DoctorController extends Controller
      * @bodyParam  bmdc_number string required The registered bmdc_number of doctor. Unique for doctors.
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not presen it will be set to usual rate.
+     * @bodyParam  followup_rate int The rate of doctor if patient calls more than once. If not present it will be set to offer rate.
      * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
      * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @bodyParam  gender int required The gender of doctor. 0 => male, 1 => female
@@ -541,6 +543,7 @@ class DoctorController extends Controller
             'commission' => 'required| numeric',
             'rate' => 'required| numeric',
             'offer_rate' => 'sometimes| numeric',
+            'followup_rate' => 'sometimes| numeric',
             'report_followup_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
@@ -573,6 +576,7 @@ class DoctorController extends Controller
      * @bodyParam  commission double required The commission percentage of doctor per call/appointment.
      * @bodyParam  rate int required The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int required The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
+     * @bodyParam  followup_rate int required The rate of doctor if patient calls more than once. If not present it will be set to offer rate.
      * @bodyParam  report_followup_rate int required The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @response  204 ""
      */
@@ -589,6 +593,7 @@ class DoctorController extends Controller
             'commission' => 'required| numeric',
             'rate' => 'required| numeric',
             'offer_rate' => 'required| numeric',
+            'followup_rate' => 'required| numeric',
             'report_followup_rate' => 'required| numeric'
         ]);
 
@@ -641,7 +646,7 @@ class DoctorController extends Controller
      * @bodyParam  commission double required The commission percentage of doctor per call/appointment.
      * @bodyParam  rate int  The usual rate of doctor per call/appointment.
      * @bodyParam  offer_rate int The discounted rate of doctor per call/appointment. If not present it will be set to usual rate.
-     * @bodyParam  first_appointment_rate int The initial appointment rate of doctor per patient. If not present it will be set to offer rate.
+     * @bodyParam  followup_rate int The rate of doctor if patient calls more than once. If not present it will be set to offer rate.
      * @bodyParam  report_followup_rate int The rate of doctor appointment within a specific checkup period per patient. If not present it will be set to offer rate.
      * @bodyParam  workplace string  The workplace of doctor.
      * @bodyParam  designation string  The designation of doctor.
@@ -664,6 +669,7 @@ class DoctorController extends Controller
             'commission' => 'sometimes| numeric',
             'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
+            'followup_rate' => 'sometimes| numeric',
             'report_followup_rate' => 'sometimes| numeric',
             'workplace' => 'sometimes',
             'designation' => 'sometimes',
@@ -682,6 +688,11 @@ class DoctorController extends Controller
 
         if ($request->has('offer_rate')) {
             $doctor->offer_rate = $request->offer_rate;
+        }
+
+
+        if ($request->has('followup_rate')) {
+            $doctor->followup_rate = $request->followup_rate;
         }
 
 
