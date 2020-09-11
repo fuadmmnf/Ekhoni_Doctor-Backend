@@ -86,7 +86,7 @@ class CheckupCallHandler
         $receivingUser = ($isDoctorCalling) ? $patient->user : $doctor->user;
         $data['type'] = '1'; //1=> call, 2=>others
 
-        $message = CloudMessage::new();
+        $message = CloudMessage::new()->withData($data);
         $sendReport = $this->fcm->sendMulticast($message, json_decode($receivingUser->device_ids));
 //        error_log($sendReport->successes()->count());
 //        error_log($sendReport->failures()->count());
