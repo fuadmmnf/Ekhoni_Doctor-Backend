@@ -23,6 +23,7 @@ Route::get('users/{user}', 'Api\UserController@getUser');
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
 Route::put('users/{user}/agent', 'Api\UserController@changeUserAgentPermission');
+Route::put('users/{user}/password', 'Api\UserController@changePassword');
 
 //Admin
 Route::post('admins', 'Api\AdminController@store');
@@ -32,7 +33,7 @@ Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 //Doctor
 Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
-Route::get('doctors/active', 'Api\DoctorController@getActiveDoctors');
+Route::get('doctortypes/{doctortype}/doctors/scheduleleft', 'Api\DoctorController@getAvailableScheduleDoctorsWithSlots');
 Route::get('doctortypes/{doctortype}/doctors/approved', 'Api\DoctorController@getAllApprovedDoctorsByDoctortype');
 Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
@@ -92,7 +93,6 @@ Route::get('doctors/{doctor}/checkupprescriptions/pending', 'Api\Checkupprescrip
 Route::get('patients/{patient}/checkupprescriptions/pending', 'Api\CheckupprescriptionController@getPendingPrescriptionByPatient');
 Route::get('checkupprescriptions/{checkupprescription}/pdf', 'Api\CheckupprescriptionController@servePrescriptionPDF');
 Route::put('checkupprescriptions/{checkupprescription}/pdf', 'Api\CheckupprescriptionController@storeCheckupPrescriptionPDF');
-
 
 
 //Transaction

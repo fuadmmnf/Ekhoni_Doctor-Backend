@@ -241,4 +241,36 @@ class UserController extends Controller
     }
 
 
+    public function changePassword(Request $request, User $user)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('doctor') &&
+            $this->user->id != $user->id
+
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $this->validate($request, [
+            'old_password' => 'required',
+            'password' => 'required| min: 6| confirmed'
+        ]);
+
+        if(Hash::check($request->old_password, $user->password)){
+            $user->password = Hash::make($request->password);
+            $user->save();
+            $user->tokens()->delete();
+            $tokenUserHandler = new TokenUserHandler();
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, ""));
+
+            return response()->json($user);
+        }
+        return response()->json('', 401);
+    }
+
+    public function handleForgottenPassword(){
+
+    }
 }
