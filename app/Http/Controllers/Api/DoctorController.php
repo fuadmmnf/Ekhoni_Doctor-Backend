@@ -406,8 +406,12 @@ class DoctorController extends Controller
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->other_trainings = $doctorRequest->other_trainings;
         $newDoctor->portfolio = $doctorRequest->portfolio;
-        $newDoctor->password = Hash::make($newDoctor->mobile . $newDoctor->code);
+        $newDoctor->password = Hash::make(($isApproved)? $newDoctor->mobile . $newDoctor->code: $doctorRequest->password);
         $newDoctor->save();
+
+        $user->password = $newDoctor->password;
+        $user->save();
+
         return $newDoctor;
     }
 

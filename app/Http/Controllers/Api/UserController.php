@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Otpcode;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -158,18 +159,23 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'mobile' => 'required| min:11| max: 14',
-            'otp_code' => 'required',
+            'otp_code' => 'sometimes',
+            'password' => 'sometimes| min: 6',
             'is_patient' => 'required| boolean',
+            'device_first_login' => 'required| boolean',
             'device_id' => 'sometimes'
         ]);
 
-        $otprequest = Otpcode::where('mobile', $request->mobile)
-            ->where('code', $request->otp_code)
-            ->first();
+        if ($request->is_patient || $request->device_first_login) {
+            $otprequest = Otpcode::where('mobile', $request->mobile)
+                ->where('code', $request->otp_code)
+                ->first();
 
-        if (!$otprequest) {
-            return response()->json('otp verification code mismatch', 401);
+            if (!$otprequest) {
+                return response()->json('otp verification code mismatch', 401);
+            }
         }
+
 
         Otpcode::where('mobile', $request->mobile)->delete();
 
@@ -178,13 +184,16 @@ class UserController extends Controller
 
         //retrive existing user
         if ($user) {
-            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, $request->has('device_id')? $request->device_id: ""));
+            if (!$request->is_patient && Hash::check($request->password, $user->password)) {
+                return response()->json("No Such User Found", 401);
+            }
+            $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, $request->has('device_id') ? $request->device_id : ""));
             return response()->json($user, 200);
         }
 
         //create general user
         if ($request->is_patient) {
-            $newUser = $tokenUserHandler->createUser($request->mobile, $request->has('device_id')? $request->device_id: "");
+            $newUser = $tokenUserHandler->createUser($request->mobile, $request->has('device_id') ? $request->device_id : "");
             $newUser->assignRole('patient');
 
 //        unset($newUser->roles);
