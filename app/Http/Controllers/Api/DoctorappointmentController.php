@@ -532,10 +532,11 @@ class DoctorappointmentController extends Controller
         if (!$patient) {
             return response()->json('No patient selected associated with user', 400);
         }
-
+        if ($this->user->id != $patient->user->id) {
+            return response()->json('User associated with token does not have patient associated with checkup', 400);
+        }
 
         $doctor = Doctor::findOrFail($request->doctor_id);
-
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
         $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
@@ -551,17 +552,7 @@ class DoctorappointmentController extends Controller
 
 
 
-//        $doctor = Doctor::findOrFail($request->doctor_id);
         $transaction = $newPatientCheckup->transaction;
-
-
-        if ($this->user->id != $patient->user->id) {
-            return response()->json('User associated with token does not have patient associated with checkup', 400);
-        }
-//        if ($request->doctor_id != $patientCheckup->doctor->id) {
-//            return response()->json('doctor_id and patientCheckup doctor id mismatch', 400);
-//        }
-
 
         $newDoctorAppointment = new Doctorappointment();
         $newDoctorAppointment->doctor_id = $doctor->id;

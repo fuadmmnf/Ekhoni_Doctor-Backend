@@ -36,19 +36,21 @@ class DoctorScheduleHandler
 //        return $activeDoctorAppointments->count() > 0;
 //    }
 
-    public function setAppointmentInDoctorSchedule(Doctor $doctor, Carbon $start_time){
+    public function setAppointmentInDoctorSchedule(Doctor $doctor, Carbon $start_time)
+    {
         $doctorSchedule = Doctorschedule::where('doctor_id', $doctor->id)
-            ->whereDate('start_time', '=', $start_time)
+            ->whereDate('start_time', $start_time)
             ->first();
 
         $scheduleSlots = json_decode($doctorSchedule->schedule_slots);
-        for ($i=0; $i<count($scheduleSlots); $i++){
-            if($scheduleSlots[$i]->status == 1){
+        for ($i = 0; $i < count($scheduleSlots); $i++) {
+            if ($scheduleSlots[$i]->status == 1) {
                 continue;
             }
-            if(abs(Carbon::parse($scheduleSlots[$i]->time)->diffInMinutes($start_time)) < 1){
+            if (abs(Carbon::parse($scheduleSlots[$i]->time)->diffInMinutes($start_time)) < 1) {
                 $scheduleSlots[$i]->status = 1;
                 $doctorSchedule->schedule_slots = json_encode($scheduleSlots);
+                $doctorSchedule->slots_left = max(0, $doctorSchedule->slots_left - 1);
                 $doctorSchedule->save();
                 return true;
             }

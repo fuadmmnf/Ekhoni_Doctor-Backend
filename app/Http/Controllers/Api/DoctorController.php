@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Doctor;
+use App\Doctorschedule;
 use App\Doctortype;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -82,72 +84,36 @@ class DoctorController extends Controller
      * "total": 1
      * }
      */
-    public function getActiveDoctorsByDoctorType(Doctortype $doctortype)
+    public function getActiveDoctorsByDoctorType($doctortype_id)
     {
-        $availableDoctorsByType = Doctor::where('doctortype_id', $doctortype->id)
-            ->where('activation_status', 1)
-            ->where('status', 1)->paginate(10);
-
+        $availableDoctorsByType = Doctor::query();
+        $availableDoctorsByType->where('activation_status', 1)
+            ->where('status', 1);
+        if ($doctortype_id != 0) {
+            $availableDoctorsByType->where('doctortype_id', $doctortype_id);
+        }
+        $availableDoctorsByType->paginate(10);
         return response()->json($availableDoctorsByType);
     }
 
 
-    /**
-     * Fetch Paginated Active Doctors
-     *
-     * Fetch active doctors, paginated response of doctor instances.
-     *
-     *
-     * @response  200 {
-     * "current_page": 1,
-     * "data": [
-     * {
-     * "id": 6,
-     * "user_id": 12,
-     * "doctortype_id": 2,
-     * "name": "doctorname",
-     * "bmdc_number": "0000000002",
-     * "payment_style": 1,
-     * "activation_status": 1,
-     * "status": 1,
-     * "is_featured": 0,
-     * "rate": 100,
-     * "offer_rate": 100,
-     * "start_time": null,
-     * "end_time": null,
-     * "max_appointments_per_day": null,
-     * "gender": 0,
-     * "email": "doctor@google.com",
-     * "workplace": "dmc",
-     * "designation": "trainee doctor",
-     * "postgrad": "dmc",
-     * "medical_college": "dmc",
-     * "other_trainings": "sdaosdmoaismdioasmdioas",
-     * "portfolio": "adqdi1fi1n "
-     * "device_ids": null,
-     * "booking_start_time": null,
-     * "created_at": "2020-07-10T15:49:23.000000Z",
-     * "updated_at": "2020-07-10T16:03:21.000000Z"
-     * }
-     * ],
-     * "first_page_url": "http://127.0.0.1:8000/api/doctors/active?page=1",
-     * "from": 1,
-     * "last_page": 1,
-     * "last_page_url": "http://127.0.0.1:8000/api/doctors/active?page=1",
-     * "next_page_url": null,
-     * "path": "http://127.0.0.1:8000/api/doctors/active",
-     * "per_page": 10,
-     * "prev_page_url": null,
-     * "to": 1,
-     * "total": 1
-     * }
-     */
-    public function getActiveDoctors()
+    public function getAvailableScheduleDoctorsWithSlots($doctortype_id)
     {
-        $availableDoctors = Doctor::where('activation_status', 1)
-            ->where('status', 1)->paginate(10);
+        $doctorIds = Doctorschedule::where('slots_left', '>' . 0)
+            ->where('start_time', '<=', Carbon::now())
+            ->where('end_time', '>=', Carbon::now())
+            ->where('slots_left', '>', 0)
+            ->pluck('doctor_id');
 
-        return response()->json($availableDoctors);
+        $availableScheduleDoctors = Doctor::query();
+        $availableScheduleDoctors->whereIn('id', $doctorIds)
+            ->where('activation_status', 1);
+        if ($doctortype_id != 0) {
+            $availableScheduleDoctors->where('doctortype_id', $doctortype_id);
+        }
+
+        $availableScheduleDoctors->paginate(10);
+        return response()->json($availableScheduleDoctors);
     }
 
 
@@ -406,7 +372,7 @@ class DoctorController extends Controller
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->other_trainings = $doctorRequest->other_trainings;
         $newDoctor->portfolio = $doctorRequest->portfolio;
-        $newDoctor->password = Hash::make(($isApproved)? $newDoctor->mobile . $newDoctor->code: $doctorRequest->password);
+        $newDoctor->password = Hash::make(($isApproved) ? $newDoctor->mobile . $newDoctor->code : $doctorRequest->password);
         $newDoctor->save();
 
         $user->password = $newDoctor->password;

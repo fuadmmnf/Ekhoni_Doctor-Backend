@@ -73,14 +73,18 @@
                     <td >{{$doctor->doctortype->name}}</td>
                 </tr>
                 <tr>
+                    <td>BMDC ID: {{$doctor->bmdc_number}}</td>
+                </tr>
+                <tr>
                     <td>{{$doctor->postgrad}}</td>
                 </tr>
                 <tr>
                     <td>{{$doctor->medical_college}}</td>
                 </tr>
                 <tr>
-                    <td>BMDC ID: {{$doctor->bmdc_number}}</td>
+                    <td>{{$doctor->workplace}}</td>
                 </tr>
+
                 </tbody>
             </table>
 

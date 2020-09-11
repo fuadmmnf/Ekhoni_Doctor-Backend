@@ -144,7 +144,7 @@ class DoctorScheduleController extends Controller
         $newDoctorSchedule->start_time = $startTime;
         $newDoctorSchedule->end_time = $endTime;
 
-//        $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
+//  ->default(0)      $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
         $scheduleInterval = 20;
         $time = $newDoctorSchedule->start_time->copy();
         $isTimeLeftForAppointment = $newDoctorSchedule->start_time->copy()->addMinutes($scheduleInterval);
@@ -163,7 +163,7 @@ class DoctorScheduleController extends Controller
         }
         $newDoctorSchedule->schedule_slots = json_encode($appointmentSchedules);
         $newDoctorSchedule->max_appointments_per_day = $numAppointments;
-
+        $newDoctorSchedule->slots_left = $numAppointments;
         $newDoctorSchedule->save();
         return response()->json($newDoctorSchedule, 201);
     }
