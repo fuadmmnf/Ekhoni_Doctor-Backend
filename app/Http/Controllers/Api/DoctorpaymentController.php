@@ -29,7 +29,7 @@ class DoctorpaymentController extends Controller
         }
 
         $doctorPayments = Doctorpayments::where('doctor_id', $doctor->id)
-            ->sortBy('date', 'DESC')
+            ->orderBy('date', 'DESC')
             ->paginate(10);
         return response()->json($doctorPayments);
     }
