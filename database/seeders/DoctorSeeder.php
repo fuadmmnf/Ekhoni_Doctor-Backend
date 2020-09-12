@@ -29,7 +29,7 @@ class DoctorSeeder extends Seeder
         $user_role = 'doctor';
 
 
-        $mobile = '01156572071';
+        $mobile = '8801156572071';
         $tokenUserHandler = new TokenUserHandler();
         $user = $tokenUserHandler->createUser($mobile, '');
         $newDoctor = new \App\Doctor();

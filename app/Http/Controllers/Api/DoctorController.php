@@ -358,24 +358,21 @@ class DoctorController extends Controller
         $newDoctor->doctortype_id = $doctorType->id;
         $newDoctor->name = $doctorRequest->name;
         $newDoctor->bmdc_number = $doctorRequest->bmdc_number;
-        $newDoctor->rate = $doctorRequest->rate;
-        $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
         $newDoctor->gender = $doctorRequest->gender;
         $newDoctor->email = $doctorRequest->email;
         $newDoctor->workplace = $doctorRequest->workplace;
         $newDoctor->designation = $doctorRequest->designation;
         $newDoctor->medical_college = $doctorRequest->medical_college;
+        $newDoctor->rate = $doctorRequest->rate;
         $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
         $newDoctor->followup_rate = ($doctorRequest->has('followup_rate')) ? $doctorRequest->followup_rate : $doctorRequest->offer_rate;
-        $newDoctor->first_appointment_rate = ($doctorRequest->has('first_appointment_rate')) ? $doctorRequest->first_appointment_rate : null;
         $newDoctor->report_followup_rate = ($doctorRequest->has('report_followup_rate')) ? $doctorRequest->report_followup_rate : null;
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->other_trainings = $doctorRequest->other_trainings;
         $newDoctor->portfolio = $doctorRequest->portfolio;
-        $newDoctor->password = Hash::make(($isApproved) ? $newDoctor->mobile . $newDoctor->code : $doctorRequest->password);
         $newDoctor->save();
         unset($user->token);
-        $user->password = $newDoctor->password;
+        $user->password = Hash::make(($isApproved) ? $newDoctor->mobile . $newDoctor->code : $doctorRequest->password);
         $user->save();
 
         return $newDoctor;
@@ -438,6 +435,7 @@ class DoctorController extends Controller
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
+            'password' => 'required| min: 6| confirmed',
             'workplace' => 'required',
             'designation' => 'required',
             'medical_college' => 'required',
