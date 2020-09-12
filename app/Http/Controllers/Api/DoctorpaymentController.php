@@ -18,6 +18,22 @@ class DoctorpaymentController extends Controller
     }
 
 
+    public function getDoctorPayments(Doctor $doctor)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !($this->user->hasRole('doctor') && $this->user->id == $doctor->user->id)
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $doctorPayments = Doctorpayments::where('doctor_id', $doctor->id)
+            ->sortBy('date', 'DESC')
+            ->paginate(10);
+        return response()->json($doctorPayments);
+    }
+
     public function store(Request $request)
     {
         if (!$this->user ||
@@ -40,7 +56,7 @@ class DoctorpaymentController extends Controller
         $newDoctorPayment->doctor_id = $doctor->id;
         $newDoctorPayment->amount = $request->amount;
         $newDoctorPayment->date = Carbon::parse($request->date);
-        if($request->has('additional_info')){
+        if ($request->has('additional_info')) {
             $newDoctorPayment->additional_info = $request->additional_info;
         }
         $newDoctorPayment->save();

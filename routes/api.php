@@ -54,6 +54,7 @@ Route::post('doctortypes', 'Api\DoctortypeController@store');
 //PatientCheckup
 Route::get('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupController@getDetailsFromCode');
 Route::get('doctors/{doctor}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByDoctor');
+Route::get('doctors/{doctor}/patientcheckups/missed/today', 'Api\PatientcheckupController@getMissedPatientCheckupsByDoctor');
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::post('patientcheckups/call', 'Api\PatientcheckupController@sendCheckupCallNotification');
 Route::put('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupController@update');
@@ -103,6 +104,7 @@ Route::get('users/{user}/transactions/complete', 'Api\TransactionController@load
 
 
 //Doctorpayments
+Route::get('doctors/{doctor}/doctorpayments', 'Api\DoctorpaymentController@getDoctorPayments');
 Route::post('doctorpayments', 'Api\DoctorpaymentController@store');
 //twilio
 //Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');

@@ -66,6 +66,7 @@ class PatientcheckupController extends Controller
 
         $checkupPrescriptionDone = Checkupprescription::where('status', 1)
             ->whereIn('patientcheckup_id', $checkupsByDoctorIds)
+            ->orderBy('id', 'DESC')
             ->paginate(20);
         $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
             $checkup = $checkupPrescription->patientcheckup;
@@ -81,6 +82,24 @@ class PatientcheckupController extends Controller
         return response()->json($checkupPrescriptionDone);
     }
 
+
+    public function getMissedPatientCheckupsByDoctor(Doctor $doctor)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('doctor') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $missedCheckups = Patientcheckup::where('doctor_id', $doctor->id)
+            ->whereDate('start_time', Carbon::now())
+            ->whereNull('end_time')
+            ->get();
+        $missedCheckups->load('patient');
+        return response()->json($missedCheckups);
+    }
 
     /**
      * _Create Patientcheckup_
@@ -141,10 +160,6 @@ class PatientcheckupController extends Controller
     }
 
 
-
-
-
-
     /**
      * _Update Checkup_
      *
@@ -188,7 +203,7 @@ class PatientcheckupController extends Controller
 
 
             $doctorappointment = Doctorappointment::where('patientcheckup_id', $patientcheckup->id)->first();
-            if($doctorappointment){
+            if ($doctorappointment) {
                 $doctorappointment->status = 1;
                 $doctorappointment->save();
             }
@@ -219,7 +234,8 @@ class PatientcheckupController extends Controller
      *
      *
      */
-    public function endCallSession(Request $request, Patientcheckup $patientcheckup){
+    public function endCallSession(Request $request, Patientcheckup $patientcheckup)
+    {
         if (!$this->user ||
             !$this->user->hasRole('patient') &&
             !$this->user->hasRole('doctor')
