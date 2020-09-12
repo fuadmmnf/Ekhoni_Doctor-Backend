@@ -1,5 +1,6 @@
 <?php
 
+namespace Database\Seeders;
 use App\Admin;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\User;

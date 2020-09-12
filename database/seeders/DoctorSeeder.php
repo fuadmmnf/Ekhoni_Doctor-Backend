@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use Illuminate\Database\Seeder;
 

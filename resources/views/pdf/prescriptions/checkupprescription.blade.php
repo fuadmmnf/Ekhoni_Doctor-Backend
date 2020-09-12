@@ -21,7 +21,7 @@
             border-spacing: 0;
         }
 
-        .horizontal-line{
+        .horizontal-line {
             display: block;
             height: 1px;
             border: 0;
@@ -70,7 +70,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td >{{$doctor->doctortype->name}}</td>
+                    <td>{{$doctor->doctortype->name}}</td>
                 </tr>
                 <tr>
                     <td>BMDC ID: {{$doctor->bmdc_number}}</td>
@@ -82,7 +82,13 @@
                     <td>{{$doctor->medical_college}}</td>
                 </tr>
                 <tr>
+                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
                     <td>{{$doctor->workplace}}</td>
+                    {{--                    <th>Dosage</th>--}}
+                    {{--                    <th>Duration</th>--}}
+                </tr>
+                <tr>
+                    <td>{{$doctor->email}}</td>
                 </tr>
 
                 </tbody>
@@ -91,17 +97,25 @@
         </td>
         <td align="right" valign="bottom">
             <table class="bordertable" style="margin-top: 30px">
-                <thead>
-                <tr>
-                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                    <th align="right">{{$doctor->workplace}}</th>
-                    {{--                    <th>Dosage</th>--}}
-                    {{--                    <th>Duration</th>--}}
-                </tr>
-                </thead>
                 <tbody>
                 <tr>
-                    <td>{{$doctor->email}}</td>
+                    <td width="80%"><span><b>Date: </b> {{ date('d F, Y', strtotime($checkup->start_time)) }}</span>
+                    </td>
+                </tr>
+                <tr align="right">
+                    <td>
+                        <span><b>Name: </b>{{$patient->name}}</span>
+                    </td>
+                </tr>
+                <tr align="right">
+                    <td>
+                        <span><b>Gender: </b>@if($patient->gender == 0) Male @else Female @endif</span>
+                    </td>
+                </tr>
+                <tr align="right">
+                    <td>
+                        <span><b>Age: </b>21</span>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -111,45 +125,54 @@
 </table>
 
 <br><br><br>
-<table >
+<table>
     <tr>
         <td width="35%" align="left" valign="top">
             <table class="bordertable">
                 <thead>
+                <tr align="left">
+                    <th  style="border: 2px solid black; border-left: 0; border-right: 0">Problem Description</th>
+                </tr>
+                <tr>
+                    <td >
+                        <span> {{$prescription['disease_description']}}</span>
+
+                    </td>
+                </tr>
                 <tr>
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
-{{--                    <th align="left" width="20%">Date</th>--}}
-                    <td width="80%" style="border: 2px solid black; border-left: 0; border-right: 0"><span><b>Date: </b> {{ date('d F, Y', strtotime($checkup->start_time)) }}</span></td>
+                    {{--                    <th align="left" width="20%">Date</th>--}}
+
                 </tr>
                 </thead>
                 <tbody>
-                <tr align="left">
-                    <td>
-                        <span><b>Name: </b>{{$patient->name}}</span>
-                    </td>
-                </tr>
-                <tr align="left">
-                    <td>
-                        <span><b>Gender: </b>@if($patient->gender == 0) Male @else Female @endif</span>
-                    </td>
-                </tr>
-                <tr align="left">
-                    <td>
-                        <span><b>Age: </b>21</span>
-                    </td>
-                </tr>
 
-                <tr align="left">
-                    <td>
-                        <span><b>Problem Description: </b> {{$prescription['disease_description']}}</span>
-                    </td>
-                    <hr class="horizontal-line" style="height: 2px">
-                </tr>
+                <table class="bordertable" style="margin-top: 30px">
+                    <thead>
+                    <tr style="border: 2px solid black; border-right: 0; border-left: 0">
+                        {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                        <th align="left">Test Name</th>
+                        {{--                    <th>Dosage</th>--}}
+                        {{--                    <th>Duration</th>--}}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($prescription['test_descriptions'] as $testDescription)
+                        <tr>
+                            {{-- <th width="9%">ক্রয় আইডি</th> --}}
+                            <td>{{ $testDescription['name'] }}</td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+
+
                 </tbody>
             </table>
 
         </td>
-        <td align="left">
+        <td align="left" valign="top">
             <table class="bordertable">
                 <thead>
                 <tr style="border: 2px solid black; border-right: 0; border-left: 0">
@@ -174,28 +197,6 @@
             <br>
             <span><b>Special Note: </b> {{$prescription['special_note']}}</span>
 
-            <br>
-            <table class="bordertable" style="margin-top: 30px">
-                <thead>
-                <tr style="border: 2px solid black; border-right: 0; border-left: 0">
-                    {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                    <th align="left">Test Name</th>
-                    {{--                    <th>Dosage</th>--}}
-                    {{--                    <th>Duration</th>--}}
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($prescription['test_descriptions'] as $testDescription)
-                    <tr>
-                        {{-- <th width="9%">ক্রয় আইডি</th> --}}
-                        <td>{{ $testDescription['name'] }}</td>
-                    </tr>
-                @endforeach
-
-                </tbody>
-            </table>
-
-
         </td>
     </tr>
 </table>
@@ -208,10 +209,10 @@
                 <small style="font-size: 12px; color: #525659;">creation time: <span
                         style="font-family: Calibri; font-size: 12px;">{{ date('F d, Y, h:i A') }}</span></small>
             </td>
-{{--            <td align="right" style="color: #525659;">--}}
-{{--                | page: {PAGENO}/{nbpg}--}}
-{{--                </small>--}}
-{{--            </td>--}}
+            {{--            <td align="right" style="color: #525659;">--}}
+            {{--                | page: {PAGENO}/{nbpg}--}}
+            {{--                </small>--}}
+            {{--            </td>--}}
         </tr>
     </table>
 </htmlpageheader>
@@ -224,11 +225,13 @@
     <hr class="horizontal-line" style="width: 90%; height: 3px">
     <br/>
     <div style="padding-left: 30px; padding-right: 30px">
-        <table >
+        <table>
             <tr align="left">
                 <td>
-                    <img src="{{public_path('images/ekhonidaktar_icon.png')}}" style="height: 35px; width: auto; border-radius: 25px">
-                    <img src="{{public_path('images/ekhonidaktar_text _bangla.png')}}" style="height: 35px; width: auto; border-radius: 25px">
+                    <img src="{{public_path('images/ekhonidaktar_icon.png')}}"
+                         style="height: 35px; width: auto; border-radius: 25px">
+                    <img src="{{public_path('images/ekhonidaktar_text _bangla.png')}}"
+                         style="height: 35px; width: auto; border-radius: 25px">
                 </td>
             </tr>
             <tr>

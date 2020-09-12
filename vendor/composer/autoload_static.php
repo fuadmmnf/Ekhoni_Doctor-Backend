@@ -215,6 +215,8 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
             'Doctrine\\Inflector\\' => 19,
             'Doctrine\\Common\\Lexer\\' => 22,
             'DeepCopy\\' => 9,
+            'Database\\Seeders\\' => 17,
+            'Database\\Factories\\' => 19,
         ),
         'C' => 
         array (
@@ -672,6 +674,14 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'Database\\Seeders\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database/seeders',
+        ),
+        'Database\\Factories\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database/factories',
+        ),
         'Cron\\' => 
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
@@ -748,6 +758,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'App\\Http\\Controllers\\Api\\DoctorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctorController.php',
         'App\\Http\\Controllers\\Api\\DoctorScheduleController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctorScheduleController.php',
         'App\\Http\\Controllers\\Api\\DoctorappointmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctorappointmentController.php',
+        'App\\Http\\Controllers\\Api\\DoctorpaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctorpaymentController.php',
         'App\\Http\\Controllers\\Api\\DoctortypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctortypeController.php',
         'App\\Http\\Controllers\\Api\\PatientController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PatientController.php',
         'App\\Http\\Controllers\\Api\\PatientcheckupController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PatientcheckupController.php',
@@ -787,7 +798,6 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack/Cors.php',
         'Asm89\\Stack\\CorsService' => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack/CorsService.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
-        'AuthorizationSeeder' => __DIR__ . '/../..' . '/database/seeds/AuthorizationSeeder.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
         'Brick\\Math\\BigNumber' => __DIR__ . '/..' . '/brick/math/src/BigNumber.php',
@@ -885,7 +895,9 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'Cron\\HoursField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/HoursField.php',
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
-        'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
+        'Database\\Seeders\\AuthorizationSeeder' => __DIR__ . '/../..' . '/database/seeders/AuthorizationSeeder.php',
+        'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
+        'Database\\Seeders\\DoctorSeeder' => __DIR__ . '/../..' . '/database/seeders/DoctorSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
         'DeepCopy\\Exception\\PropertyException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/PropertyException.php',
@@ -911,7 +923,6 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'DeepCopy\\TypeFilter\\TypeFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/TypeFilter.php',
         'DeepCopy\\TypeMatcher\\TypeMatcher' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeMatcher/TypeMatcher.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
-        'DoctorSeeder' => __DIR__ . '/../..' . '/database/seeds/DoctorSeeder.php',
         'Doctrine\\Common\\Lexer\\AbstractLexer' => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer/AbstractLexer.php',
         'Doctrine\\Inflector\\CachedWordInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/CachedWordInflector.php',
         'Doctrine\\Inflector\\GenericLanguageInflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/GenericLanguageInflectorFactory.php',
