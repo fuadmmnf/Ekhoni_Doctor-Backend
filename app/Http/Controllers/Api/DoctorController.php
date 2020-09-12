@@ -374,7 +374,7 @@ class DoctorController extends Controller
         $newDoctor->portfolio = $doctorRequest->portfolio;
         $newDoctor->password = Hash::make(($isApproved) ? $newDoctor->mobile . $newDoctor->code : $doctorRequest->password);
         $newDoctor->save();
-
+        unset($user->token);
         $user->password = $newDoctor->password;
         $user->save();
 

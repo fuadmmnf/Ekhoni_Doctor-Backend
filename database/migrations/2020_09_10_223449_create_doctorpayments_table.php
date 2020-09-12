@@ -18,6 +18,7 @@ class CreateDoctorpaymentsTable extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->integer('amount');
             $table->dateTime('date');
+            $table->string('additional_info')->default('');
             $table->timestamps();
 
 

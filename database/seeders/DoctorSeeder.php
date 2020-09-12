@@ -1,7 +1,10 @@
 <?php
+
 namespace Database\Seeders;
+
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DoctorSeeder extends Seeder
 {
@@ -12,10 +15,14 @@ class DoctorSeeder extends Seeder
      */
     public function run()
     {
-        $doctortypes = ['general practitioner', 'cardiologist', 'homeopathy'];
+        $doctortypes = ['cardiology', 'homeopathy', 'child specialist',
+            'dentist', 'diabetes', 'eye specialist', 'gastroenterology',
+            'gynecology', 'hematology', 'homeopathy', 'medicine specialist',
+            'neurology', 'orthopedics', 'psychiatry', 'rhinology', 'urology'];
         foreach ($doctortypes as $doctortype) {
             \App\Doctortype::create([
-                'name' => $doctortype
+                'name' => $doctortype,
+                'monogram' => 'images/' . str_replace(' ', '_', $doctortype) . '.png'
             ]);
         }
 
@@ -24,7 +31,7 @@ class DoctorSeeder extends Seeder
 
         $mobile = '01156572071';
         $tokenUserHandler = new TokenUserHandler();
-        $user = $tokenUserHandler->createUser($mobile);
+        $user = $tokenUserHandler->createUser($mobile, '');
         $newDoctor = new \App\Doctor();
         $newDoctor->user_id = $user->id;
         $newDoctor->doctortype_id = 1;
@@ -33,12 +40,18 @@ class DoctorSeeder extends Seeder
         $newDoctor->bmdc_number = '1111111';
         $newDoctor->payment_style = 1;
         $newDoctor->activation_status = 1;
+        $newDoctor->commission = 0.23;
         $newDoctor->rate = 100;
         $newDoctor->offer_rate = 80;
-        $newDoctor->first_appointment_rate = 150;
+        $newDoctor->followup_rate = 80;
+        $newDoctor->report_followup_rate = 50;
         $newDoctor->gender = 0;
-        $newDoctor->password = 'doctor123';
+        $newDoctor->medical_college = "dmc";
         $newDoctor->save();
+
+        $user->password = Hash::make('doctor123');
+        unset($user->token);
+        $user->save();
 
         $user->assignRole($user_role);
     }

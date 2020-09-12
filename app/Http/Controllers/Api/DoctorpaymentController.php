@@ -18,16 +18,20 @@ class DoctorpaymentController extends Controller
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         if (!$this->user ||
-            !$this->user->hasRole('super_admin')) {
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor')
+        ) {
             return response()->json('Forbidden Access', 403);
         }
 
         $this->validate($request, [
             'doctor_id' => 'required| numeric',
             'amount' => 'required| numeric',
-            'date' => 'required'
+            'date' => 'required',
+            'additional_info' => 'sometimes'
         ]);
 
         $doctor = Doctor::findOrFail($request->doctor_id);
@@ -36,6 +40,9 @@ class DoctorpaymentController extends Controller
         $newDoctorPayment->doctor_id = $doctor->id;
         $newDoctorPayment->amount = $request->amount;
         $newDoctorPayment->date = Carbon::parse($request->date);
+        if($request->has('additional_info')){
+            $newDoctorPayment->additional_info = $request->additional_info;
+        }
         $newDoctorPayment->save();
 
         $doctor->pending_amount = $doctor->pending_amount - $request->amount;

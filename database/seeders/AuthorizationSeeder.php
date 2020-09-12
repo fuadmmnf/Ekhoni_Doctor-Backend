@@ -53,7 +53,7 @@ class AuthorizationSeeder extends Seeder
         $mobile = '8801156572077';
         $user_role = 'super_admin';
         $tokenUserHandler = new TokenUserHandler();
-        $user = $tokenUserHandler->createUser($mobile);
+        $user = $tokenUserHandler->createUser($mobile, '');
         $newAdmin = new Admin();
         $newAdmin->user_id = $user->id;
         $newAdmin->name = $name;

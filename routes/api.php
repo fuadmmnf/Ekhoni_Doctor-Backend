@@ -101,6 +101,9 @@ Route::put('transactions/{transaction}/status', 'Api\TransactionController@updat
 Route::get('users/{user}/transactions/complete', 'Api\TransactionController@loadAllUserCompletedTransactions');
 
 
+
+//Doctorpayments
+Route::post('doctorpayments', 'Api\DoctorpaymentController@store');
 //twilio
 //Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');
 //twilio
