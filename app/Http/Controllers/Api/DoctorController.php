@@ -117,7 +117,7 @@ class DoctorController extends Controller
     /**
      * Fetch Paginated Doctors Currently Scheduled with free slots
      *
-     * Fetch active doctors, paginated response of doctor instances.
+     * Fetch free slotted scheduled doctors, paginated response of doctor instances.
      *
      * @urlParam  doctortype_id required The Doctortype ID of doctors.
      *
@@ -153,10 +153,10 @@ class DoctorController extends Controller
      * "updated_at": "2020-09-12T10:22:08.000000Z"
      * }
      * ],
-     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/scheduleleft?page=1",
      * "from": 1,
      * "last_page": 1,
-     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/scheduleleft?page=1",
      * "links": [
      * {
      * "url": null,
@@ -164,7 +164,7 @@ class DoctorController extends Controller
      * "active": false
      * },
      * {
-     * "url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/scheduleleft?page=1",
      * "label": 1,
      * "active": true
      * },
@@ -175,7 +175,7 @@ class DoctorController extends Controller
      * }
      * ],
      * "next_page_url": null,
-     * "path": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active",
+     * "path": "http://127.0.0.1:8000/api/doctortypes/0/doctors/scheduleleft",
      * "per_page": 10,
      * "prev_page_url": null,
      * "to": 1,

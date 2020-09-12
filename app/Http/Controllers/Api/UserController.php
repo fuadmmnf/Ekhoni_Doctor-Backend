@@ -142,10 +142,45 @@ class UserController extends Controller
      * @bodyParam mobile string required The mobile of the user. Example: 8801955555555
      * @bodyParam otp_code string required The 4 digit access otp token sent via sms. Example: 1234
      * @bodyParam is_patient boolean required The boolean representation to indicate if request in from general user. So that if user not found new user will be created. Example: true
+     * @bodyParam device_first_login boolean required The boolean representation to indicate if request in from new device, then otp is required.
+     * @bodyParam password string The password for doctor auth.
      * @bodyParam device_id string The FCM token of user device.
      *
      *
-     * @response  "4|Bgl6fz2j3RW4oMZ2mFvrxzbfbHOiScdCmb3jMwyOnhSemIf8eYVJwHnHbVSJ0l2tfG5ClsFulVBeW76A"
+     * @response  200 {
+     * "id": 1,
+     * "mobile": "8801156572077",
+     * "code": "JLel4822mGDwmHmG",
+     * "status": 0,
+     * "is_agent": 0,
+     * "agent_percentage": 0,
+     * "balance": 0,
+     * "device_ids": null,
+     * "created_at": "2020-09-12T07:27:08.000000Z",
+     * "updated_at": "2020-09-12T07:27:08.000000Z",
+     * "token": "3|aKHdR7VFP8EPXpDhGfrcBSBWKtahD30LFE4Yp6fj",
+     * "admin": {
+     * "user_id": 10,
+     * "doctortype_id": 2,
+     * "name": "doctorname",
+     * "bmdc_number": "0000000001",
+     * "rate": 100,
+     * "offer_rate": 100,
+     * "report_followup_rate": 100,
+     * "gender": 0,
+     * "email": "doctor@google.com",
+     * "workplace": "dmc",
+     * "designation": "trainee doctor",
+     * "medical_college": "dmc",
+     * "other_trainings": "sdaosdmoaismdioasmdioas",
+     * "postgrad": "dmc",
+     * "updated_at": "2020-07-10T14:57:19.000000Z",
+     * "created_at": "2020-07-10T14:57:19.000000Z",
+     * "id": 4,
+     * "activation_status": 1,
+     * "payment_style": 1
+     * }
+     * }
      * @response  201 {
      * "mobile": "8801955555555",
      * "code": "mxH8SeGHt4cjWr8R",
@@ -240,14 +275,26 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-
+    /**
+     * _Change User Password_
+     *
+     * Change the user password. Deletes all previous tokens. !! token required | super_admin, doctor
+     *
+     * @urlParam  user required The ID of the user.
+     * @bodyParam old_password string required User previous password.
+     * @bodyParam password string required User new password.
+     * @bodyParam password_confirmation string required User password confirmation.
+     *
+     *
+     * @response  401 {"error" : "Incorrect password"}
+     * @response  204 {}
+     */
     public function changePassword(Request $request, User $user)
     {
         if (!$this->user ||
             !$this->user->hasRole('super_admin') &&
-            !$this->user->hasRole('admin:doctor') &&
-            !$this->user->hasRole('doctor') &&
-            $this->user->id != $user->id
+            !$this->user->hasRole('admin:user') &&
+            !($this->user->hasRole('doctor') && $this->user->id != $user->id)
 
         ) {
             return response()->json('Forbidden Access', 403);
@@ -258,7 +305,7 @@ class UserController extends Controller
             'password' => 'required| min: 6| confirmed'
         ]);
 
-        if(Hash::check($request->old_password, $user->password)){
+        if (Hash::check($request->old_password, $user->password)) {
             $user->password = Hash::make($request->password);
             $user->save();
             $user->tokens()->delete();
@@ -267,10 +314,11 @@ class UserController extends Controller
 
             return response()->json($user);
         }
-        return response()->json('', 401);
+        return response()->json(["error" => "Incorrect password"], 401);
     }
 
-    public function handleForgottenPassword(){
+    public function handleForgottenPassword()
+    {
 
     }
 }
