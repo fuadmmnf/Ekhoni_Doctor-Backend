@@ -38,46 +38,63 @@ class DoctorController extends Controller
      *
      * Fetch active doctors, paginated response of doctor instances.
      *
-     * @urlParam  doctortype required The Doctortype ID of doctors.
+     * @urlParam  doctortype_id required The Doctortype ID of doctors.
      *
      * @response  200 {
      * "current_page": 1,
      * "data": [
      * {
-     * "id": 6,
-     * "user_id": 12,
-     * "doctortype_id": 2,
-     * "name": "doctorname",
-     * "bmdc_number": "0000000002",
+     * "id": 1,
+     * "user_id": 2,
+     * "doctortype_id": 1,
+     * "name": "fuad doctor",
+     * "bmdc_number": "1111111",
      * "payment_style": 1,
      * "activation_status": 1,
      * "status": 1,
      * "is_featured": 0,
+     * "pending_amount": 0,
+     * "commission": 0.23,
      * "rate": 100,
-     * "offer_rate": 100,
-     * "start_time": null,
-     * "end_time": null,
-     * "max_appointments_per_day": null,
+     * "offer_rate": 80,
+     * "followup_rate": 80,
+     * "report_followup_rate": 50,
      * "gender": 0,
-     * "email": "doctor@google.com",
-     * "workplace": "dmc",
-     * "designation": "trainee doctor",
-     * "postgrad": "dmc",
+     * "email": "doctor1@ekhonidoctor.com",
+     * "workplace": null,
+     * "designation": null,
+     * "postgrad": null,
      * "medical_college": "dmc",
-     * "other_trainings": "sdaosdmoaismdioasmdioas",
-     * "portfolio": "adqdi1fi1n "
-     * "device_ids": null,
-     * "booking_start_time": null,
-     * "created_at": "2020-07-10T15:49:23.000000Z",
-     * "updated_at": "2020-07-10T16:03:21.000000Z"
+     * "other_trainings": null,
+     * "portfolio": null,
+     * "image": null,
+     * "created_at": "2020-09-12T07:27:09.000000Z",
+     * "updated_at": "2020-09-12T10:22:08.000000Z"
      * }
      * ],
-     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/2/doctors/active?page=1",
+     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
      * "from": 1,
      * "last_page": 1,
-     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/2/doctors/active?page=1",
+     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "links": [
+     * {
+     * "url": null,
+     * "label": "Previous",
+     * "active": false
+     * },
+     * {
+     * "url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "label": 1,
+     * "active": true
+     * },
+     * {
+     * "url": null,
+     * "label": "Next",
+     * "active": false
+     * }
+     * ],
      * "next_page_url": null,
-     * "path": "http://127.0.0.1:8000/api/doctortypes/2/doctors/active",
+     * "path": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active",
      * "per_page": 10,
      * "prev_page_url": null,
      * "to": 1,
@@ -92,15 +109,82 @@ class DoctorController extends Controller
         if ($doctortype_id != 0) {
             $availableDoctorsByType->where('doctortype_id', $doctortype_id);
         }
-        $availableDoctorsByType->paginate(10);
+        $availableDoctorsByType = $availableDoctorsByType->paginate(10);
         return response()->json($availableDoctorsByType);
     }
 
 
+    /**
+     * Fetch Paginated Doctors Currently Scheduled with free slots
+     *
+     * Fetch active doctors, paginated response of doctor instances.
+     *
+     * @urlParam  doctortype_id required The Doctortype ID of doctors.
+     *
+     * @response  200 {
+     * "current_page": 1,
+     * "data": [
+     * {
+     * "id": 1,
+     * "user_id": 2,
+     * "doctortype_id": 1,
+     * "name": "fuad doctor",
+     * "bmdc_number": "1111111",
+     * "payment_style": 1,
+     * "activation_status": 1,
+     * "status": 1,
+     * "is_featured": 0,
+     * "pending_amount": 0,
+     * "commission": 0.23,
+     * "rate": 100,
+     * "offer_rate": 80,
+     * "followup_rate": 80,
+     * "report_followup_rate": 50,
+     * "gender": 0,
+     * "email": "doctor1@ekhonidoctor.com",
+     * "workplace": null,
+     * "designation": null,
+     * "postgrad": null,
+     * "medical_college": "dmc",
+     * "other_trainings": null,
+     * "portfolio": null,
+     * "image": null,
+     * "created_at": "2020-09-12T07:27:09.000000Z",
+     * "updated_at": "2020-09-12T10:22:08.000000Z"
+     * }
+     * ],
+     * "first_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "from": 1,
+     * "last_page": 1,
+     * "last_page_url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "links": [
+     * {
+     * "url": null,
+     * "label": "Previous",
+     * "active": false
+     * },
+     * {
+     * "url": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active?page=1",
+     * "label": 1,
+     * "active": true
+     * },
+     * {
+     * "url": null,
+     * "label": "Next",
+     * "active": false
+     * }
+     * ],
+     * "next_page_url": null,
+     * "path": "http://127.0.0.1:8000/api/doctortypes/0/doctors/active",
+     * "per_page": 10,
+     * "prev_page_url": null,
+     * "to": 1,
+     * "total": 1
+     * }
+     */
     public function getAvailableScheduleDoctorsWithSlots($doctortype_id)
     {
-        $doctorIds = Doctorschedule::where('slots_left', '>' . 0)
-            ->where('start_time', '<=', Carbon::now())
+        $doctorIds = Doctorschedule::where('start_time', '<=', Carbon::now())
             ->where('end_time', '>=', Carbon::now())
             ->where('slots_left', '>', 0)
             ->pluck('doctor_id');
@@ -112,7 +196,7 @@ class DoctorController extends Controller
             $availableScheduleDoctors->where('doctortype_id', $doctortype_id);
         }
 
-        $availableScheduleDoctors->paginate(10);
+        $availableScheduleDoctors = $availableScheduleDoctors->paginate(10);
         return response()->json($availableScheduleDoctors);
     }
 

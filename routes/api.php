@@ -32,8 +32,8 @@ Route::post('admins/authenticate', 'Api\AdminController@authenticateAdmin');
 
 
 //Doctor
-Route::get('doctortypes/{doctortype}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
-Route::get('doctortypes/{doctortype}/doctors/scheduleleft', 'Api\DoctorController@getAvailableScheduleDoctorsWithSlots');
+Route::get('doctortypes/{doctortype_id}/doctors/active', 'Api\DoctorController@getActiveDoctorsByDoctorType');
+Route::get('doctortypes/{doctortype_id}/doctors/scheduleleft', 'Api\DoctorController@getAvailableScheduleDoctorsWithSlots');
 Route::get('doctortypes/{doctortype}/doctors/approved', 'Api\DoctorController@getAllApprovedDoctorsByDoctortype');
 Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
