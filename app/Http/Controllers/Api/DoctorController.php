@@ -420,6 +420,7 @@ class DoctorController extends Controller
         }
 
         $pendingDoctorRequests = Doctor::where('activation_status', 0)
+            ->with('user')
             ->paginate(10);
 
         return response()->json($pendingDoctorRequests);
@@ -655,6 +656,11 @@ class DoctorController extends Controller
         $doctor->activation_status = $request->activation_status;
         if ($request->activation_status == 1) {
             $doctor->user->assignRole('doctor');
+            $doctor->commission = $request->commission;
+            $doctor->rate = $request->rate;
+            $doctor->offer_rate = $request->offer_rate;
+            $doctor->followup_rate = $request->followup_rate;
+            $doctor->report_followup_rate = $request->report_followup_rate;
         } else {
             $this->user->tokens()->delete();
         }
