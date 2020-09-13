@@ -56,6 +56,7 @@ use PHPUnit\Util\FileLoader;
 use PHPUnit\Util\Filesystem;
 use PHPUnit\Util\Printer;
 use PHPUnit\Util\TextTestListRenderer;
+use PHPUnit\Util\Xml\SchemaDetector;
 use PHPUnit\Util\XmlTestListRenderer;
 use ReflectionClass;
 use ReflectionException;
@@ -231,10 +232,6 @@ class Command
             $this->generateConfiguration();
         }
 
-        if ($arguments->hasMigrateConfiguration() && $arguments->migrateConfiguration()) {
-            $this->migrateConfiguration();
-        }
-
         if ($arguments->hasAtLeastVersion()) {
             if (version_compare(Version::id(), $arguments->atLeastVersion(), '>=')) {
                 exit(TestRunner::SUCCESS_EXIT);
@@ -307,26 +304,30 @@ class Command
             $this->arguments['loader'] = $this->handleLoader($this->arguments['loader']);
         }
 
-        if (isset($this->arguments['configuration']) && is_dir($this->arguments['configuration'])) {
-            $configurationFile = $this->arguments['configuration'] . '/phpunit.xml';
+        if (isset($this->arguments['configuration'])) {
+            if (is_dir($this->arguments['configuration'])) {
+                $candidate = $this->configurationFileInDirectory($this->arguments['configuration']);
 
-            if (file_exists($configurationFile)) {
-                $this->arguments['configuration'] = realpath(
-                    $configurationFile
-                );
-            } elseif (file_exists($configurationFile . '.dist')) {
-                $this->arguments['configuration'] = realpath(
-                    $configurationFile . '.dist'
-                );
+                if ($candidate !== null) {
+                    $this->arguments['configuration'] = $candidate;
+                }
             }
-        } elseif (!isset($this->arguments['configuration']) && $this->arguments['useDefaultConfiguration']) {
-            if (file_exists('phpunit.xml')) {
-                $this->arguments['configuration'] = realpath('phpunit.xml');
-            } elseif (file_exists('phpunit.xml.dist')) {
-                $this->arguments['configuration'] = realpath(
-                    'phpunit.xml.dist'
-                );
+        } elseif ($this->arguments['useDefaultConfiguration']) {
+            $candidate = $this->configurationFileInDirectory(getcwd());
+
+            if ($candidate !== null) {
+                $this->arguments['configuration'] = $candidate;
             }
+        }
+
+        if ($arguments->hasMigrateConfiguration() && $arguments->migrateConfiguration()) {
+            if (!isset($this->arguments['configuration'])) {
+                print 'No configuration file found to migrate.' . PHP_EOL;
+
+                exit(TestRunner::EXCEPTION_EXIT);
+            }
+
+            $this->migrateConfiguration(realpath($this->arguments['configuration']));
         }
 
         if (isset($this->arguments['configuration'])) {
@@ -775,16 +776,12 @@ class Command
         exit(TestRunner::SUCCESS_EXIT);
     }
 
-    private function migrateConfiguration(): void
+    private function migrateConfiguration(string $filename): void
     {
         $this->printVersionString();
 
-        if (file_exists('phpunit.xml')) {
-            $filename = realpath('phpunit.xml');
-        } elseif (file_exists('phpunit.xml.dist')) {
-            $filename = realpath('phpunit.xml.dist');
-        } else {
-            print 'No configuration file found in ' . getcwd() . PHP_EOL;
+        if (!(new SchemaDetector)->detect($filename)->detected()) {
+            print $filename . ' does not need to be migrated.' . PHP_EOL;
 
             exit(TestRunner::EXCEPTION_EXIT);
         }
@@ -882,5 +879,21 @@ class Command
         print 'done [' . $timer->stop()->asString() . ']' . PHP_EOL;
 
         exit(TestRunner::SUCCESS_EXIT);
+    }
+
+    private function configurationFileInDirectory(string $directory): ?string
+    {
+        $candidates = [
+            $directory . '/phpunit.xml',
+            $directory . '/phpunit.xml.dist',
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (file_exists($candidate)) {
+                return realpath($candidate);
+            }
+        }
+
+        return null;
     }
 }
