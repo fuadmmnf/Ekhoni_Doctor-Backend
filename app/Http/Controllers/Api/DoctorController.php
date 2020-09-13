@@ -447,10 +447,13 @@ class DoctorController extends Controller
         $newDoctor->workplace = $doctorRequest->workplace;
         $newDoctor->designation = $doctorRequest->designation;
         $newDoctor->medical_college = $doctorRequest->medical_college;
-        $newDoctor->rate = $doctorRequest->rate;
-        $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
-        $newDoctor->followup_rate = ($doctorRequest->has('followup_rate')) ? $doctorRequest->followup_rate : $doctorRequest->offer_rate;
-        $newDoctor->report_followup_rate = ($doctorRequest->has('report_followup_rate')) ? $doctorRequest->report_followup_rate : null;
+        if($doctorRequest->has('rate')){
+            $newDoctor->rate = $doctorRequest->rate;
+            $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
+            $newDoctor->followup_rate = ($doctorRequest->has('followup_rate')) ? $doctorRequest->followup_rate : $doctorRequest->offer_rate;
+            $newDoctor->report_followup_rate = ($doctorRequest->has('report_followup_rate')) ? $doctorRequest->report_followup_rate : null;
+        }
+
         $newDoctor->postgrad = $doctorRequest->postgrad;
         $newDoctor->other_trainings = $doctorRequest->other_trainings;
         $newDoctor->portfolio = $doctorRequest->portfolio;
@@ -512,9 +515,9 @@ class DoctorController extends Controller
             'doctortype_id' => 'required| numeric',
             'name' => 'required',
             'bmdc_number' => 'required| unique:doctors',
-            'rate' => 'required| numeric',
+            'rate' => 'sometimes| numeric',
             'offer_rate' => 'sometimes| numeric',
-            'first_appointment_rate' => 'sometimes| numeric',
+            'followup_rate' => 'sometimes| numeric',
             'report_followup_rate' => 'sometimes| numeric',
             'gender' => 'required| numeric',
             'mobile' => 'required| unique:users| min: 11| max: 14',
