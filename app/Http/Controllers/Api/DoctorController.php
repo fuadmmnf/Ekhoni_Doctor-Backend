@@ -446,7 +446,7 @@ class DoctorController extends Controller
         $newDoctor->email = $doctorRequest->email;
         $newDoctor->workplace = $doctorRequest->workplace;
         $newDoctor->designation = $doctorRequest->designation;
-        $newDoctor->medical_college = $doctorRequest->medical_college;
+        $newDoctor->medical_college = json_encode($doctorRequest->medical_college);
         if($doctorRequest->has('rate')){
             $newDoctor->rate = $doctorRequest->rate;
             $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
@@ -524,7 +524,7 @@ class DoctorController extends Controller
             'email' => 'required',
             'password' => 'required| min: 6| confirmed',
             'workplace' => 'required',
-            'designation' => 'required',
+            'designation' => 'present',
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'other_trainings' => 'present| nullable',
@@ -604,7 +604,7 @@ class DoctorController extends Controller
             'mobile' => 'required| unique:users| min: 11| max: 14',
             'email' => 'required',
             'workplace' => 'required',
-            'designation' => 'required',
+            'designation' => 'present',
             'medical_college' => 'required',
             'postgrad' => 'present| nullable',
             'other_trainings' => 'present| nullable',
