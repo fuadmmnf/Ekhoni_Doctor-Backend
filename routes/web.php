@@ -15,7 +15,15 @@ use niklasravnsborg\LaravelPdf\Facades\Pdf;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/clear', function (){
+    Artisan::call('optimize');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    Artisan::call('key:generate');
+    Artisan::call('config:cache');
+    Session::flush();
+    return 'Config and Route Cached. All Cache Cleared';
+});
 Route::get('/', function () {
     return view('welcome');
 });
