@@ -133,6 +133,22 @@ class UserController extends Controller
     }
 
 
+    public function validateAuthenticationToken(Request $request)
+    {
+        $this->validate($request, [
+            'mobile' => 'required| min:11| max: 14',
+            'otp_code' => 'required'
+        ]);
+
+        $otprequest = Otpcode::where('mobile', $request->mobile)->first();
+        if ($otprequest->code == $request->otp_code) {
+            Otpcode::where('mobile', $request->mobile)->delete();
+            return response()->noContent();
+        }
+        return response()->json('invalid code', 401);
+
+    }
+
     /**
      * Create/Retrieve User
      *

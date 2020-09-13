@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('users/{user}', 'Api\UserController@getUser');
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
+Route::put('users/otp/validate', 'Api\UserController@validateAuthenticationToken');
 Route::put('users/{user}/agent', 'Api\UserController@changeUserAgentPermission');
 Route::put('users/{user}/password', 'Api\UserController@changePassword');
 
