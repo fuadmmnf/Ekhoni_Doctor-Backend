@@ -208,6 +208,9 @@ class PatientcheckupController extends Controller
                 $doctorappointment->save();
             }
 
+            $pushNotificationHandler = new CheckupCallHandler();
+            $pushNotificationHandler->terminateCallSession($patientcheckup);
+            $pushNotificationHandler->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
         } else {
             if ($request->has('doctor_tags')) {
                 $patientcheckup->doctor_tags = json_encode($request->doctor_tags);
@@ -215,9 +218,7 @@ class PatientcheckupController extends Controller
         }
         $patientcheckup->status = $request->status;
         $patientcheckup->save();
-        $pushNotificationHandler = new CheckupCallHandler();
-        $pushNotificationHandler->terminateCallSession($patientcheckup);
-        $pushNotificationHandler->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
+
         return response()->noContent();
     }
 
