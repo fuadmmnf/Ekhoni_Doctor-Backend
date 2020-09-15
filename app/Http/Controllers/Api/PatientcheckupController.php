@@ -125,6 +125,7 @@ class PatientcheckupController extends Controller
         }
 
         $missedApointmentCheckupIds = Doctorappointment::where('doctor_id', $doctor->id)
+            ->whereDate('end_time', Carbon::now())
             ->where('end_time', '<', Carbon::now())
             ->where('status', 0)
             ->pluck('patientcheckup_id');
