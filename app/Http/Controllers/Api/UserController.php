@@ -238,6 +238,7 @@ class UserController extends Controller
             if (!$request->is_patient && !Hash::check($request->password, $user->password)) {
                 return response()->json("No Such User Found", 401);
             }
+
             $user = $this->getUserType($tokenUserHandler->regenerateUserToken($user, $request->has('device_id') ? $request->device_id : ""));
             return response()->json($user, 200);
         }

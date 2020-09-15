@@ -570,7 +570,6 @@ class DoctorappointmentController extends Controller
         $transaction->status = 1;
         $transaction->save();
 
-        $doctor->booking_start_time = null;
         $doctor->save();
 
 

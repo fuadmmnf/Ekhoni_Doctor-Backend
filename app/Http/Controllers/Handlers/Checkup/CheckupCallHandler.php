@@ -60,7 +60,6 @@ class CheckupCallHandler
     }
 
 
-
     public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling)
     {
         $doctor = $patientcheckup->doctor;
@@ -86,20 +85,26 @@ class CheckupCallHandler
         $receivingUser = ($isDoctorCalling) ? $patient->user : $doctor->user;
         $data['type'] = '1'; //1=> call, 2=>others
 
-        $message = CloudMessage::new()->withData($data);
-        $sendReport = $this->fcm->sendMulticast($message, json_decode($receivingUser->device_ids));
+        $deviceIds = json_decode($receivingUser->device_ids, true);
+
+        if ($deviceIds && count($deviceIds) > 0) {
+            $message = CloudMessage::new()->withData($data);
+            $sendReport = $this->fcm->sendMulticast($message, json_decode($receivingUser->device_ids));
 //        error_log($sendReport->successes()->count());
 //        error_log($sendReport->failures()->count());
-        if ($sendReport->hasFailures()) {
-            foreach ($sendReport->failures()->getItems() as $failure) {
-                Log::error($failure->error()->getMessage());
+            if ($sendReport->hasFailures()) {
+                foreach ($sendReport->failures()->getItems() as $failure) {
+                    Log::error($failure->error()->getMessage());
+                }
             }
         }
 
 
+        $now = Carbon::now();
         $callLogs = $patientcheckup->call_log ? json_decode($patientcheckup->call_log, true) : [];
-        $callLogs[] = Carbon::now();
+        $callLogs[] = $now;
         $patientcheckup->call_log = json_encode($callLogs);
+        $patientcheckup->start_time = $now;
         $patientcheckup->save();
 
         $this->createCheckupPrescription($patientcheckup);
@@ -138,7 +143,8 @@ class CheckupCallHandler
 
     }
 
-    private function createCheckupPrescription(Patientcheckup $patientcheckup){
+    private function createCheckupPrescription(Patientcheckup $patientcheckup)
+    {
         //create checkupprescription as patientcheckup endtime submitted(indicates end of checkup)
         $prescription = Checkupprescription::where('patientcheckup_id', $patientcheckup->id)->first();
         if (!$prescription) {

@@ -147,7 +147,7 @@ class CheckupprescriptionController extends Controller
      * }
      * ]
      */
-    public function getPendingPrescriptionByPatient(Patient $patient)
+    public function getPrescriptionByPatient(Patient $patient)
     {
         if (!$this->user ||
             !($this->user->hasRole('patient') && $patient->user->id == $this->user->id) &&
@@ -157,7 +157,7 @@ class CheckupprescriptionController extends Controller
             return response()->json('Forbidden Access', 403);
         }
 
-        $pendingCheckupPrescriptions = Checkupprescription::where('status', 0)->get();
+        $pendingCheckupPrescriptions = Checkupprescription::where('status', 1)->get();
         $pendingCheckupPrescriptions = $pendingCheckupPrescriptions->filter(function ($checkupPrescription) use ($patient) {
             $isPatientMatching = $checkupPrescription->patientcheckup->patient->id == $patient->id;
             if ($isPatientMatching) {

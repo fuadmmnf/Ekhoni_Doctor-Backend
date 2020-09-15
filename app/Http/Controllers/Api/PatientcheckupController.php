@@ -41,6 +41,38 @@ class PatientcheckupController extends Controller
     }
 
 
+    public function getPatientCheckupsByPatient(Patient $patient)
+    {
+//        if (!$this->user ||
+//            !$this->user->hasRole('user') &&
+//            !$this->user->hasRole('admin:user') &&
+//            !$this->user->hasRole('super_admin')) {
+//
+//            return response()->json('Forbidden Access', 403);
+//        }
+
+
+        $checkupsByPatientIds = Patientcheckup::where('patient_id', $patient->id)
+            ->whereNotNull('start_time')
+            ->pluck('id');
+
+        $checkupPrescriptionDone = Checkupprescription::where('status', 1)
+            ->whereIn('patientcheckup_id', $checkupsByPatientIds)
+            ->orderBy('id', 'DESC')
+            ->paginate(20);
+        $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
+            $checkup = $checkupPrescription->patientcheckup;
+            unset($checkupPrescription->patientcheckup);
+            return [
+                "id" => $checkup->id,
+                "start_time" => $checkup->start_time,
+                "doctor" => $checkup->doctor,
+                "amount" => $checkup->transaction->amount,
+                "checkupprescription" => $checkupPrescription
+            ];
+        });
+        return response()->json($checkupPrescriptionDone);
+    }
 
 
 //    public function getPatientCheckupsByPatient(Patient $patient)
