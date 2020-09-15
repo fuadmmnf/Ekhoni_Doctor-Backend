@@ -20,6 +20,7 @@ Route::get('/clear', function (){
     Artisan::call('cache:clear');
     Artisan::call('view:clear');
     Artisan::call('key:generate');
+    Artisan::call('config:clear');
     Artisan::call('config:cache');
     Session::flush();
     return 'Config and Route Cached. All Cache Cleared';
