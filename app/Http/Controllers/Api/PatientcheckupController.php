@@ -43,13 +43,13 @@ class PatientcheckupController extends Controller
 
     public function getPatientCheckupsByPatient(Patient $patient)
     {
-//        if (!$this->user ||
-//            !$this->user->hasRole('user') &&
-//            !$this->user->hasRole('admin:user') &&
-//            !$this->user->hasRole('super_admin')) {
-//
-//            return response()->json('Forbidden Access', 403);
-//        }
+        if (!$this->user ||
+            !$this->user->hasRole('patient') &&
+            !$this->user->hasRole('admin:user') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
 
 
         $checkupsByPatientIds = Patientcheckup::where('patient_id', $patient->id)
@@ -125,7 +125,7 @@ class PatientcheckupController extends Controller
         }
 
         $missedApointmentCheckupIds = Doctorappointment::where('doctor_id', $doctor->id)
-            ->whereDate('end_time', '<', Carbon::now())
+            ->where('end_time', '<', Carbon::now())
             ->where('status', 0)
             ->pluck('patientcheckup_id');
         $missedCheckups = Patientcheckup::where('doctor_id', $doctor->id)
