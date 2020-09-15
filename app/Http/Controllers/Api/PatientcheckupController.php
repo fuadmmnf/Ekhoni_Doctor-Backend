@@ -124,9 +124,15 @@ class PatientcheckupController extends Controller
             return response()->json('Forbidden Access', 403);
         }
 
+        $missedApointmentCheckupIds = Doctorappointment::where('doctor_id', $doctor->id)
+            ->whereDate('end_time', '<', Carbon::now())
+            ->where('status', 0)
+            ->pluck('patientcheckup_id');
         $missedCheckups = Patientcheckup::where('doctor_id', $doctor->id)
             ->whereDate('start_time', Carbon::now())
             ->whereNull('end_time')
+            ->whereNotIn('id', $missedApointmentCheckupIds)
+            ->orWhereIn('id', $missedApointmentCheckupIds)
             ->get();
         $missedCheckups->load('patient');
         return response()->json($missedCheckups);

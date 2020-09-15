@@ -476,7 +476,7 @@ class DoctorappointmentController extends Controller
         }
 
         $upcomingDoctorAppointments = Doctorappointment::where('doctor_id', $doctor->id)
-            ->where('start_time', '>=', Carbon::now())
+            ->where('start_time', '>=', Carbon::now()->subMinutes(5))
             ->orderBy('start_time', 'ASC')
             ->paginate(15);
 //        $upcomingDoctorAppointments->load('patientcheckup');
