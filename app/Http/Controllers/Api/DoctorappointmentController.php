@@ -558,7 +558,7 @@ class DoctorappointmentController extends Controller
         $newDoctorAppointment->doctor_id = $doctor->id;
         $newDoctorAppointment->patientcheckup_id = $newPatientCheckup->id;
         $newDoctorAppointment->start_time = Carbon::parse($request->start_time);
-        $newDoctorAppointment->end_time = Carbon::parse($request->end_time);
+        $newDoctorAppointment->end_time = Carbon::parse($request->start_time)->addMinutes(20);
 
         do {
             $code = Str::random(16);
