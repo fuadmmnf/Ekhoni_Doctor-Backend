@@ -56,8 +56,7 @@ class PatientcheckupController extends Controller
             ->whereNotNull('start_time')
             ->pluck('id');
 
-        $checkupPrescriptionDone = Checkupprescription::where('status', 1)
-            ->whereIn('patientcheckup_id', $checkupsByPatientIds)
+        $checkupPrescriptionDone = Checkupprescription::whereIn('patientcheckup_id', $checkupsByPatientIds)
             ->orderBy('id', 'DESC')
             ->paginate(20);
         $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
