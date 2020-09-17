@@ -218,7 +218,7 @@ class DoctorappointmentController extends Controller
             ->pluck('id');
         $completedUserAppointments = Doctorappointment::whereIn('patientcheckup_id', $userCheckupsIds)
             ->where('status', 1)
-            ->orderBy('start_time', 'ASC')
+            ->orderBy('start_time', 'DESC')
             ->paginate(20);
         $completedUserAppointments->getCollection()->transform(function ($appointment) {
             $appointment->patient = $appointment->patientcheckup->patient;

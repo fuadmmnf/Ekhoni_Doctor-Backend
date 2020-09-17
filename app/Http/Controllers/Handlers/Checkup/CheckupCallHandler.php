@@ -63,7 +63,7 @@ class CheckupCallHandler
     public function createCallRequest(Patientcheckup $patientcheckup, $isDoctorCalling)
     {
         $doctor = $patientcheckup->doctor;
-        $doctor->status = 1; // in call
+        $doctor->status = 2; // in call
         $doctor->save();
 
         $patient = $patientcheckup->patient;
@@ -115,6 +115,7 @@ class CheckupCallHandler
 
     public function terminateCallSession(Patientcheckup $patientcheckup)
     {
+
         $this->db->collection("doctorcall")
             ->document($patientcheckup->patient->user->code)
             ->delete();
@@ -123,7 +124,7 @@ class CheckupCallHandler
             ->document($patientcheckup->doctor->user->code)
             ->delete();
 
-
+        $this->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
     }
 
 
