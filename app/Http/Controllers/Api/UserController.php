@@ -91,7 +91,8 @@ class UserController extends Controller
     }
 
 
-    public function getAgents(){
+    public function getPatientUsers($is_agent)
+    {
         if (!$this->user ||
             !$this->user->hasRole('super_admin') &&
             !$this->user->hasRole('admin:user')
@@ -99,9 +100,13 @@ class UserController extends Controller
             return response()->json('Forbidden Access', 403);
         }
 
-        $agents = User::where('is_agent', true)->paginate(20);
-        return response()->json($agents);
+        $patientUsers = User::where('is_agent', $is_agent)->whereHas("roles", function ($q) {
+            $q->where("name", "patient");
+        })->paginate(20);
+
+        return response()->json($patientUsers);
     }
+
 
     /**
      * Send OTP to user mobile
