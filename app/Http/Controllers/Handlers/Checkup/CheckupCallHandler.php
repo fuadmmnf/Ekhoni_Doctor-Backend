@@ -124,7 +124,6 @@ class CheckupCallHandler
             ->document($patientcheckup->doctor->user->code)
             ->delete();
 
-        $this->checkDoctorSchedulesAndSetActiveStatus($patientcheckup->doctor);
     }
 
 
