@@ -91,6 +91,18 @@ class UserController extends Controller
     }
 
 
+    public function getAgents(){
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $agents = User::where('is_agent', true)->paginate(20);
+        return response()->json($agents);
+    }
+
     /**
      * Send OTP to user mobile
      *

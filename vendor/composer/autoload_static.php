@@ -707,6 +707,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
 
     public static $classMap = array (
         'App\\Admin' => __DIR__ . '/../..' . '/app/Admin.php',
+        'App\\Agentpayments' => __DIR__ . '/../..' . '/app/Agentpayments.php',
         'App\\Checkupprescription' => __DIR__ . '/../..' . '/app/Checkupprescription.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Doctor' => __DIR__ . '/../..' . '/app/Doctor.php',
@@ -753,7 +754,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
-        'App\\Schedulers\\DoctorDailychecker' => __DIR__ . '/../..' . '/app/Schedulers/DoctorDailychecker.php',
+        'App\\Schedulers\\DailyPendingAmountUpdater' => __DIR__ . '/../..' . '/app/Schedulers/DailyPendingAmountUpdater.php',
         'App\\Transaction' => __DIR__ . '/../..' . '/app/Transaction.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',

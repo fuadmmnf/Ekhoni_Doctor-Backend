@@ -54,7 +54,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Patient');
     }
 
-
+    public  function agentpayments(){
+        return $this->hasMany('App\Agentpayments');
+    }
 //    public function isSuperAdmin(){
 //        return $this->permissions()->count() == Permission::count();
 //    }

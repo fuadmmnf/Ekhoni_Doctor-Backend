@@ -131,16 +131,12 @@ class CheckupCallHandler
     {
         $currentTime = Carbon::now();
         $doctorSchedule = Doctorschedule::where('doctor_id', $doctor->id)
+            ->where('type', 0)
             ->where('end_time', '>', $currentTime)
             ->where('start_time', '<', $currentTime)
             ->first();
         $doctor->status = $doctorSchedule != null;
         $doctor->save();
-    }
-
-    private function sendCallNotification($data, $receiver)
-    {
-
     }
 
     private function createCheckupPrescription(Patientcheckup $patientcheckup)

@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Schedulers\DoctorDailychecker;
+use App\Schedulers\DailyPendingAmountUpdater;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(new DoctorDailychecker)->daily();
+        $schedule->call(new DailyPendingAmountUpdater)->daily();
     }
 
     /**

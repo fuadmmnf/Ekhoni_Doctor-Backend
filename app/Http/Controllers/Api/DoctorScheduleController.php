@@ -142,6 +142,9 @@ class DoctorScheduleController extends Controller
         $newDoctorSchedule = new Doctorschedule();
         $newDoctorSchedule->doctor_id = $doctor->id;
         $newDoctorSchedule->start_time = $startTime;
+        if($startTime->diffInMinutes(Carbon::now()) > 15){
+            $newDoctorSchedule->type = 1;
+        }
         $newDoctorSchedule->end_time = $endTime;
 
 //  ->default(0)      $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
