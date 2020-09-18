@@ -303,7 +303,7 @@ class UserController extends Controller
         }
 
         $user->is_agent = $request->is_agent;
-        $user->agent_percentage = ($request->is_agent) ? $request->agent_percentage : 0.0;
+        $user->agent_percentage = ($request->is_agent) ? $request->agent_percentage/100 : 0.0;
         $user->save();
 
         return response()->noContent();

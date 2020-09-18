@@ -207,7 +207,7 @@ class DoctorappointmentController extends Controller
     {
         if (!$this->user ||
             !($this->user->hasRole('patient') && $this->user->id == $user->id) &&
-            !$this->user->hasRole('admin:patient') &&
+            !$this->user->hasRole('admin:user') &&
             !$this->user->hasRole('super_admin')) {
 
             return response()->json('Forbidden Access', 403);
