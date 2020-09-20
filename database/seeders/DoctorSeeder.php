@@ -15,14 +15,14 @@ class DoctorSeeder extends Seeder
      */
     public function run()
     {
-        $doctortypes = ['cardiology', 'homeopathy', 'child specialist',
-            'dentist', 'diabetes', 'eye specialist', 'gastroenterology',
-            'gynecology', 'hematology', 'homeopathy', 'medicine specialist',
-            'neurology', 'orthopedics', 'psychiatry', 'rhinology', 'urology'];
+        $doctortypes = ['General Practitioner', 'Cardiology', 'Child Specialist',
+            'Dentist', 'Diabetes', 'Eye Specialist', 'Gastroenterology',
+            'Gynecology', 'Hematology', 'Homeopathy', 'Medicine Specialist',
+            'Neurology', 'Orthopedics', 'Psychiatry', 'Rhinology', 'Urology'];
         foreach ($doctortypes as $doctortype) {
             \App\Doctortype::create([
                 'name' => $doctortype,
-                'monogram' => 'images/' . str_replace(' ', '_', $doctortype) . '.png'
+                'monogram' => 'images/' . str_replace(' ', '_', strtolower($doctortype)) . '.png'
             ]);
         }
 
