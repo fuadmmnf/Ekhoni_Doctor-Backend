@@ -327,8 +327,8 @@ class UserController extends Controller
     {
         if (!$this->user ||
             !$this->user->hasRole('super_admin') &&
-            !$this->user->hasRole('admin:user') &&
-            !($this->user->hasRole('doctor') && $this->user->id != $user->id)
+            !$this->user->hasRole('admin:doctor') &&
+            !($this->user->hasRole('doctor') && $this->user->id == $user->id)
 
         ) {
             return response()->json('Forbidden Access', 403);
