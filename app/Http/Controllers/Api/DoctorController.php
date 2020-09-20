@@ -356,7 +356,11 @@ class DoctorController extends Controller
      */
     public function getAllFeaturedDoctors()
     {
-        $featuredDoctors = Doctor::where('is_featured', 1)->get();
+        $featuredDoctors = Doctor::select()
+            ->where('activation_status', 1)
+            ->where('is_featured', 1)->get();
+        $featuredDoctors->makeHidden(['commission','balance','pending_amount', 'mobile', 'email', 'bmdc_number', 'payment_style']);
+
         return response()->json($featuredDoctors);
     }
 
@@ -448,7 +452,7 @@ class DoctorController extends Controller
         $newDoctor->workplace = $doctorRequest->workplace;
         $newDoctor->designation = $doctorRequest->designation;
         $newDoctor->medical_college = json_encode($doctorRequest->medical_college);
-        if($doctorRequest->has('rate')){
+        if ($doctorRequest->has('rate')) {
             $newDoctor->rate = $doctorRequest->rate;
             $newDoctor->offer_rate = ($doctorRequest->has('offer_rate')) ? $doctorRequest->offer_rate : $doctorRequest->rate;
             $newDoctor->followup_rate = ($doctorRequest->has('followup_rate')) ? $doctorRequest->followup_rate : $doctorRequest->offer_rate;

@@ -26,6 +26,7 @@ Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
 Route::put('users/otp/validate', 'Api\UserController@validateAuthenticationToken');
 Route::put('users/{user}/agent', 'Api\UserController@changeUserAgentPermission');
 Route::put('users/{user}/password', 'Api\UserController@changePassword');
+Route::put('users/password_forget', 'Api\UserController@handleForgottenPassword');
 
 //Admin
 Route::post('admins', 'Api\AdminController@store');

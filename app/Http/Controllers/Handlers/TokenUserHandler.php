@@ -29,7 +29,7 @@ class TokenUserHandler
             $newUser->device_ids = json_encode(array($deviceId));
         }
         $newUser->save();
-        $newUser->token = $newUser->createToken($newUser->mobile . $newUser->code)->plainTextToken;
+        $newUser->token = $newUser->createToken($newUser->mobile . $newUser->password)->plainTextToken;
         return $newUser;
     }
 
@@ -46,7 +46,7 @@ class TokenUserHandler
 
         }
 
-        $user->token = $user->createToken($user->mobile . $user->code)->plainTextToken;
+        $user->token = $user->createToken($user->mobile . $user->password)->plainTextToken;
         return $user;
     }
 

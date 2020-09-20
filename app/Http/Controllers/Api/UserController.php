@@ -303,7 +303,7 @@ class UserController extends Controller
         }
 
         $user->is_agent = $request->is_agent;
-        $user->agent_percentage = ($request->is_agent) ? $request->agent_percentage/100 : 0.0;
+        $user->agent_percentage = ($request->is_agent) ? $request->agent_percentage / 100 : 0.0;
         $user->save();
 
         return response()->noContent();
@@ -351,8 +351,37 @@ class UserController extends Controller
         return response()->json(["error" => "Incorrect password"], 401);
     }
 
-    public function handleForgottenPassword()
+    public function handleForgottenPassword(Request $request)
     {
+        $this->validate($request, [
+            'mobile' => 'required',
+            'otp_code' => 'required'
+        ]);
 
+        $user = User::where('mobile', $request->mobile)->firstOrFail();
+
+
+        $otprequest = Otpcode::where('mobile', $request->mobile)
+            ->where('code', $request->otp_code)
+            ->first();
+        if (!$otprequest) {
+            return response()->json('otp verification code mismatch', 401);
+        }
+        Otpcode::where('mobile', $request->mobile)->delete();
+
+        $code = '';
+        for ($i = 0; $i < 8; $i++) {
+            $code .= mt_rand(0, 9);
+        }
+        $user->password = Hash::make($code);
+        $user->save();
+
+
+        $smsHandler = new SmsHandler();
+        $message = "'Ekhoni Daktar' new access password code: {$code}.";
+
+        $smsHandler->send_sms($user->mobile, $message);
+        $user->tokens()->delete();
+        return response()->noContent();
     }
 }
