@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 //User
 Route::get('users/{user}', 'Api\UserController@getUser');
+Route::get('users/{user:code}/detail', 'Api\UserController@getUserForAdmin');
 Route::get('users/agents/{is_agent}', 'Api\UserController@getPatientUsers');
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
@@ -58,6 +59,7 @@ Route::post('doctortypes', 'Api\DoctortypeController@store');
 Route::get('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupController@getDetailsFromCode');
 Route::get('doctors/{doctor}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByDoctor');
 Route::get('patients/{patient}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByPatient');
+Route::get('user/{user}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByUser');
 Route::get('doctors/{doctor}/patientcheckups/missed/today', 'Api\PatientcheckupController@getMissedPatientCheckupsByDoctor');
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::post('patientcheckups/call', 'Api\PatientcheckupController@sendCheckupCallNotification');

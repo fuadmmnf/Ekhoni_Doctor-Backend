@@ -39,6 +39,19 @@ class UserController extends Controller
         return $user;
     }
 
+    public function getUserForAdmin(User $user)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user') &&
+            !$this->user->hasRole('admin:doctor')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $user = $this->getUserType($user);
+        return response()->json($user);
+    }
 
     /**
      * _Fetch User_

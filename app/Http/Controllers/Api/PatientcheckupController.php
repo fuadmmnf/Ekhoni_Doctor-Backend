@@ -10,6 +10,7 @@ use App\Http\Controllers\Handlers\Checkup\CheckupCallHandler;
 use App\Http\Controllers\Handlers\Checkup\CheckupTransactionHandler;
 use App\Patient;
 use App\Patientcheckup;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -41,6 +42,40 @@ class PatientcheckupController extends Controller
     }
 
 
+    public function getPatientCheckupsByUser(User $user)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('patient') &&
+            !$this->user->hasRole('admin:user') &&
+            !$this->user->hasRole('super_admin')) {
+
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $userPatientIds = Patient::where('user_id', $user->id)->pluck('id');
+        $checkupsByPatientIds = Patientcheckup::whereIn('patient_id', $userPatientIds)
+            ->whereNotNull('start_time')
+            ->pluck('id');
+
+        $checkupPrescriptionDone = Checkupprescription::whereIn('patientcheckup_id', $checkupsByPatientIds)
+            ->orderBy('id', 'DESC')
+            ->paginate(20);
+        $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
+            $checkup = $checkupPrescription->patientcheckup;
+            $patient = $checkup->patient;
+            unset($checkup->patient);
+            unset($checkupPrescription->patientcheckup);
+            return [
+                "id" => $checkup->id,
+                "start_time" => $checkup->start_time,
+                "doctor" => $checkup->doctor,
+                "amount" => $checkup->transaction->amount,
+                "patientcheckup" => $checkup,
+                "checkupprescription" => $checkupPrescription
+            ];
+        });
+        return response()->json($checkupPrescriptionDone);
+    }
     public function getPatientCheckupsByPatient(Patient $patient)
     {
         if (!$this->user ||
@@ -61,12 +96,15 @@ class PatientcheckupController extends Controller
             ->paginate(20);
         $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
             $checkup = $checkupPrescription->patientcheckup;
+            $patient = $checkup->patient;
+            unset($checkup->patient);
             unset($checkupPrescription->patientcheckup);
             return [
                 "id" => $checkup->id,
                 "start_time" => $checkup->start_time,
                 "doctor" => $checkup->doctor,
                 "amount" => $checkup->transaction->amount,
+                "patientcheckup" => $checkup,
                 "checkupprescription" => $checkupPrescription
             ];
         });
@@ -101,12 +139,15 @@ class PatientcheckupController extends Controller
             ->paginate(20);
         $checkupPrescriptionDone->getCollection()->transform(function ($checkupPrescription) {
             $checkup = $checkupPrescription->patientcheckup;
+            $patient = $checkup->patient;
+            unset($checkup->patient);
             unset($checkupPrescription->patientcheckup);
             return [
                 "id" => $checkup->id,
                 "start_time" => $checkup->start_time,
-                "patient" => $checkup->patient,
+                "patient" => $patient,
                 "amount" => $checkup->transaction->amount,
+                "patientcheckup" => $checkup,
                 "checkupprescription" => $checkupPrescription
             ];
         });

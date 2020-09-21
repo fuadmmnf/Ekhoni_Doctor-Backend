@@ -29,6 +29,8 @@ class CreatePatientsTable extends Migration
             $table->string('weight')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
+
+            $table->index('user_id');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

@@ -40,6 +40,7 @@ class CreateDoctorsTable extends Migration
             $table->string('image')->nullable();
             $table->timestamps();
 
+            $table->index('user_id', 'status');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('doctortype_id')->references('id')->on('doctortypes');
         });
