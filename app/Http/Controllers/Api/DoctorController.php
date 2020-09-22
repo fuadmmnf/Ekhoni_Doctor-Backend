@@ -312,7 +312,7 @@ class DoctorController extends Controller
      */
     public function getAllApprovedDoctors()
     {
-        $approvedDoctors = Doctor::where('activation_status', 1)->paginate(10);
+        $approvedDoctors = Doctor::where('activation_status', 1)->with('user', 'doctortype')->paginate(10);
         return response()->json($approvedDoctors);
     }
 

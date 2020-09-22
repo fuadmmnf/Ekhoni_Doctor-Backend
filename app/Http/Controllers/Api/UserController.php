@@ -31,7 +31,7 @@ class UserController extends Controller
     private function getUserType(User $user)
     {
         if ($user->hasRole('doctor')) {
-            $user->doctor;
+            $user->doctor->doctortype;
         } elseif (!$user->hasRole('patient')) {
             $user->admin;
         }
