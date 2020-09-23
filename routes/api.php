@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('users/{user}', 'Api\UserController@getUser');
 Route::get('users/{user}/detail', 'Api\UserController@getUserForAdmin');
 Route::get('users/agents/{is_agent}', 'Api\UserController@getPatientUsers');
+Route::get('users/search?agent={is_agent}&query={query}', 'Api\UserController@searchUsers');
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
 Route::put('users/otp/validate', 'Api\UserController@validateAuthenticationToken');
@@ -42,6 +43,7 @@ Route::get('doctortypes/{doctortype}/doctors/approved', 'Api\DoctorController@ge
 Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
 Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
+Route::get('doctors/search?query={query}', 'Api\DoctorController@searchDoctor');
 Route::post('doctors', 'Api\DoctorController@store');
 Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');
 Route::post('doctors/{doctor}/image', 'Api\DoctorController@changeDoctorMonogram');

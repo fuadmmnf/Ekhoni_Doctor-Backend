@@ -120,6 +120,15 @@ class UserController extends Controller
         return response()->json($patientUsers);
     }
 
+    public function searchUser($is_agent, $query)
+    {
+        $users = User::select('users.*')
+            ->where('is_agent', $is_agent)
+            ->orWhere('users.mobile', 'LIKE', '%' . $query . '%')
+            ->paginate(15);
+
+        return response()->json($users);
+    }
 
     /**
      * Send OTP to user mobile

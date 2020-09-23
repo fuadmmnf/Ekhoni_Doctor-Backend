@@ -7,8 +7,10 @@ use App\Doctorschedule;
 use App\Doctortype;
 use App\Http\Controllers\Handlers\TokenUserHandler;
 use App\Http\Controllers\Controller;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -30,6 +32,20 @@ class DoctorController extends Controller
 
     public function index()
     {
+    }
+
+    public function searchDoctor($query)
+    {
+        $doctors = Doctor::select('doctors.*')
+            ->where('doctors.name', 'LIKE', '%' . $query . '%')
+            ->orWhere('doctors.bmdc_number', 'LIKE', '%' . $query . '%')
+            ->orWhere('doctors.designation', 'LIKE', '%' . $query . '%')
+            ->orWhere('doctors.workplace', 'LIKE', '%' . $query . '%')
+            ->join('users','user.id','=','doctors.user_id')
+            ->orWhere('users.mobile', 'LIKE', '%' . $query . '%')
+            ->paginate(15);
+
+        return response()->json($doctors);
     }
 
 
@@ -359,7 +375,7 @@ class DoctorController extends Controller
         $featuredDoctors = Doctor::select()
             ->where('activation_status', 1)
             ->where('is_featured', 1)->get();
-        $featuredDoctors->makeHidden(['commission','balance','pending_amount', 'mobile', 'email', 'bmdc_number', 'payment_style']);
+        $featuredDoctors->makeHidden(['commission', 'balance', 'pending_amount', 'mobile', 'email', 'bmdc_number', 'payment_style']);
 
         return response()->json($featuredDoctors);
     }
