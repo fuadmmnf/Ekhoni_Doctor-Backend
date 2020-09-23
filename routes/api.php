@@ -43,7 +43,7 @@ Route::get('doctortypes/{doctortype}/doctors/approved', 'Api\DoctorController@ge
 Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
 Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
-Route::get('doctors/search?query={query}', 'Api\DoctorController@searchDoctor');
+Route::get('doctors/search/approved', 'Api\DoctorController@searchDoctor');
 Route::post('doctors', 'Api\DoctorController@store');
 Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');
 Route::post('doctors/{doctor}/image', 'Api\DoctorController@changeDoctorMonogram');

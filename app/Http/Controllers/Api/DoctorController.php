@@ -34,15 +34,18 @@ class DoctorController extends Controller
     {
     }
 
-    public function searchDoctor($query)
+    public function searchDoctor(Request $request)
     {
+        $query = $request['searchquery'];
         $doctors = Doctor::select('doctors.*')
+            ->where('activation_status', 1)
             ->where('doctors.name', 'LIKE', '%' . $query . '%')
             ->orWhere('doctors.bmdc_number', 'LIKE', '%' . $query . '%')
             ->orWhere('doctors.designation', 'LIKE', '%' . $query . '%')
             ->orWhere('doctors.workplace', 'LIKE', '%' . $query . '%')
-            ->join('users','user.id','=','doctors.user_id')
+            ->join('users', 'users.id', '=', 'doctors.user_id')
             ->orWhere('users.mobile', 'LIKE', '%' . $query . '%')
+            ->with('user')
             ->paginate(15);
 
         return response()->json($doctors);
