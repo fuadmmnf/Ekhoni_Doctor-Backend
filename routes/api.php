@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 //User
 Route::get('users/{user}', 'Api\UserController@getUser');
-Route::get('users/{user:code}/detail', 'Api\UserController@getUserForAdmin');
+Route::get('users/{user}/detail', 'Api\UserController@getUserForAdmin');
 Route::get('users/agents/{is_agent}', 'Api\UserController@getPatientUsers');
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
