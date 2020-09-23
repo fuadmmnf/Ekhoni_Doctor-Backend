@@ -120,12 +120,15 @@ class UserController extends Controller
         return response()->json($patientUsers);
     }
 
-    public function searchUser($is_agent, $query)
+    public function searchUser(Request $request)
     {
+        $is_agent = $request['is_agent'];
+        $query = $request['searchquery'];
         $users = User::select('users.*')
             ->where('is_agent', $is_agent)
             ->orWhere('users.mobile', 'LIKE', '%' . $query . '%')
-            ->paginate(15);
+            ->take(20)
+            ->get();
 
         return response()->json($users);
     }

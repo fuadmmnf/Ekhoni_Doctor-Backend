@@ -46,7 +46,8 @@ class DoctorController extends Controller
             ->join('users', 'users.id', '=', 'doctors.user_id')
             ->orWhere('users.mobile', 'LIKE', '%' . $query . '%')
             ->with('user')
-            ->paginate(15);
+            ->take(20)
+            ->get();
 
         return response()->json($doctors);
     }

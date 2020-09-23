@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('users/{user}', 'Api\UserController@getUser');
 Route::get('users/{user}/detail', 'Api\UserController@getUserForAdmin');
 Route::get('users/agents/{is_agent}', 'Api\UserController@getPatientUsers');
-Route::get('users/search?agent={is_agent}&query={query}', 'Api\UserController@searchUsers');
+Route::get('users/search', 'Api\UserController@searchUsers');
 Route::post('users', 'Api\UserController@store');
 Route::post('users/otp', 'Api\UserController@sendAuthenticationToken');
 Route::put('users/otp/validate', 'Api\UserController@validateAuthenticationToken');
