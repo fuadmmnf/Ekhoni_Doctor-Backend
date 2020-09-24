@@ -717,6 +717,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'App\\Doctortype' => __DIR__ . '/../..' . '/app/Doctortype.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Api\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/AdminController.php',
+        'App\\Http\\Controllers\\Api\\AgentpaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/AgentpaymentController.php',
         'App\\Http\\Controllers\\Api\\CheckupprescriptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/CheckupprescriptionController.php',
         'App\\Http\\Controllers\\Api\\DoctorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctorController.php',
         'App\\Http\\Controllers\\Api\\DoctorScheduleController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DoctorScheduleController.php',
