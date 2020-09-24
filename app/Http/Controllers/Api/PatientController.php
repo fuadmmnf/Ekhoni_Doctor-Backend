@@ -62,6 +62,7 @@ class PatientController extends Controller
     public function getUserDefaultPatientProfile(User $user)
     {
         if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
             !$this->user->hasRole('admin:user') &&
             !($this->user->hasRole('patient') && $this->user->id == $user->id)
         ) {
@@ -102,6 +103,7 @@ class PatientController extends Controller
     public function getPatientsByUser(User $user)
     {
         if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
             !$this->user->hasRole('admin:user') &&
             !($this->user->hasRole('patient') && $this->user->id == $user->id)
         ) {
@@ -160,6 +162,8 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user') &&
             !$this->user->hasRole('patient')) {
             return response()->json('Forbidden Access', 403);
         }
@@ -250,6 +254,8 @@ class PatientController extends Controller
     public function update(Request $request, Patient $patient)
     {
         if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user') &&
             !$this->user->hasRole('patient')) {
             return response()->json('Forbidden Access', 403);
         }
