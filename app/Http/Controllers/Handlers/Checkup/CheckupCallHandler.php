@@ -35,9 +35,9 @@ class CheckupCallHandler
     private function generate_token($room)
     {
         // Substitute your Twilio Account SID and API Key details
-        $accountSid = env('TWILIO_ACCOUNT_SID');
-        $apiKeySid = env('TWILIO_API_KEY_SID');
-        $apiKeySecret = env('TWILIO_API_KEY_SECRET');
+        $accountSid = config('twilio.account_sid');
+        $apiKeySid = config('twilio.api_sid');
+        $apiKeySecret = config('twilio.api_secret');
 
         $identity = uniqid();
 
