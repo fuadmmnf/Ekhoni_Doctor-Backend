@@ -705,6 +705,8 @@ class DoctorController extends Controller
     public function changeActiveStatus(Request $request)
     {
         if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
             !$this->user->hasRole('doctor')) {
             return response()->json('Forbidden Access', 403);
         }
