@@ -61,7 +61,7 @@ Route::post('doctortypes', 'Api\DoctortypeController@store');
 Route::get('patientcheckups/{patientcheckup:code}', 'Api\PatientcheckupController@getDetailsFromCode');
 Route::get('doctors/{doctor}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByDoctor');
 Route::get('patients/{patient}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByPatient');
-Route::get('user/{user}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByUser');
+Route::get('users/{user}/patientcheckups/history', 'Api\PatientcheckupController@getPatientCheckupsByUser');
 Route::get('doctors/{doctor}/patientcheckups/missed/today', 'Api\PatientcheckupController@getMissedPatientCheckupsByDoctor');
 Route::post('patientcheckups', 'Api\PatientcheckupController@store');
 Route::post('patientcheckups/call', 'Api\PatientcheckupController@sendCheckupCallNotification');
