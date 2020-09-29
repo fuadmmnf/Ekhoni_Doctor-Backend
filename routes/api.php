@@ -72,6 +72,7 @@ Route::put('patientcheckups/{patientcheckup:code}/call/end', 'Api\Patientcheckup
 //DoctorSchedule
 Route::get('doctors/{doctor}/doctorschedules', "Api\DoctorScheduleController@getDoctorSchedulesByDoctorFromPresentDate");
 Route::post('doctorschedules', "Api\DoctorScheduleController@store");
+Route::delete('doctorschedules/{doctorschedule}', "Api\DoctorScheduleController@delete");
 
 //DoctorAppointment
 Route::get('users/{user}/doctorappointments/upcoming', "Api\DoctorappointmentController@getUpcomingAppointmentsByUser");

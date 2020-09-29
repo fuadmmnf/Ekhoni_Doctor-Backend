@@ -142,7 +142,7 @@ class DoctorScheduleController extends Controller
         $newDoctorSchedule = new Doctorschedule();
         $newDoctorSchedule->doctor_id = $doctor->id;
         $newDoctorSchedule->start_time = $startTime;
-        if($startTime->diffInMinutes(Carbon::now()) > 15){
+        if ($startTime->diffInMinutes(Carbon::now()) > 15) {
             $newDoctorSchedule->type = 1;
         }
         $newDoctorSchedule->end_time = $endTime;
@@ -171,5 +171,12 @@ class DoctorScheduleController extends Controller
         return response()->json($newDoctorSchedule, 201);
     }
 
-
+    public function delete(Doctorschedule $doctorschedule)
+    {
+        if ($doctorschedule->max_appintments_per_day != $doctorschedule->slots_left) {
+            return response()->json(["status" => "schedule booking has been made"], 400);
+        }
+        $doctorschedule->delete();
+        return response()->noContent();
+    }
 }
