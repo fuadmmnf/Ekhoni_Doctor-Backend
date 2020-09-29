@@ -72,6 +72,7 @@ class CheckupCallHandler
         $data = [
             'access_token' => $this->generate_token($room),
             'room_name' => $room,
+            'caller_role' => ($isDoctorCalling)? 'doctor': 'patient',
             'caller_name' => ($isDoctorCalling) ? $doctor->name : $patient->name,
             'checkup_code' => $patientcheckup->code,
             'time' => Carbon::now()->toDateTimeString()

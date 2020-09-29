@@ -91,7 +91,7 @@ Route::get('users/{user}/patients', 'Api\PatientController@getPatientsByUser');
 Route::post('patients', 'Api\PatientController@store');
 Route::post('patients/{patient}/image', 'Api\PatientController@changePatientImage');
 Route::put('patients/{patient}', 'Api\PatientController@update');
-
+Route::delete('patients/{patient}', 'Api\PatientController@delete');
 
 //PatientPrescription
 Route::get('patients/{patient}/prescriptions', 'Api\PatientprescriptionController@getPatientPrescriptionByPatient');

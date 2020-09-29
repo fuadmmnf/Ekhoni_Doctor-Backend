@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Patient;
+use App\Patientcheckup;
+use App\Patientprescription;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -180,6 +182,13 @@ class PatientController extends Controller
             'weight' => 'sometimes| nullable',
         ]);
 
+        $userPatient = Patient::where('user_id', $this->user->id)
+            ->where('name', $request->name)
+            ->first();
+        if ($userPatient) {
+            return response()->json(["message" => "Patient with name: " . $request->name . " already exists for user"], 400);
+        }
+
         $newPatient = new Patient();
         $newPatient->user_id = $this->user->id;
         $newPatient->name = $request->name;
@@ -271,6 +280,12 @@ class PatientController extends Controller
         ]);
 
         if ($request->has('name')) {
+            $userPatient = Patient::where('user_id', $this->user->id)
+                ->where('name', $request->name)
+                ->first();
+            if ($userPatient) {
+                return response()->json(["message" => "Patient with name: " . $request->name . " already exists for user"], 400);
+            }
             $patient->name = $request->name;
         }
         if ($request->has('age')) {
@@ -344,12 +359,39 @@ class PatientController extends Controller
         }
         $image = $request->file('image');
         $filename = $patient->code . '_' . time() . '.' . $image->getClientOriginalExtension();
-        $location = public_path('/images/users/patients/' ) . $filename;
+        $location = public_path('/images/users/patients/') . $filename;
         Image::make($image)->resize(250, 250)->save($location);
         $patient->image = 'images/users/patients/' . $filename;
 
         $patient->save();
         return response()->json($patient);
+    }
+
+
+    public function delete(Patient $patient)
+    {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:user') &&
+            !($this->user->hasRole('patient') && $this->user->id == $patient->user->id)) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $patientCheckup = Patientcheckup::where('patient_id', $patient->id)->where('status', 1)->first();
+        if ($patientCheckup) {
+            return response()->json(["message" => "Cannot delete patient, checkup exists"], 400);
+        }
+
+        $patientPrescriptions = Patientprescription::where('patient_id', $patient->id)->get();
+        foreach ($patientPrescriptions as $patientPrescription) {
+            if (File::exists(app_path($patientPrescription->prescription_path))) {
+                File::delete(app_path($patientPrescription->prescription_path));
+            }
+            $patientPrescription->delete();
+        }
+        $patient->delete();
+
+        return response()->noContent();
     }
 
 }

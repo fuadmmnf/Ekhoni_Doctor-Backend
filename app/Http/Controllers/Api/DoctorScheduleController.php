@@ -173,6 +173,13 @@ class DoctorScheduleController extends Controller
 
     public function delete(Doctorschedule $doctorschedule)
     {
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('doctor')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
         if ($doctorschedule->max_appintments_per_day != $doctorschedule->slots_left) {
             return response()->json(["status" => "schedule booking has been made"], 400);
         }
