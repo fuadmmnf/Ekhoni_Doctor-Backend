@@ -255,11 +255,10 @@ class UserController extends Controller
             'otp_code' => 'sometimes',
             'password' => 'sometimes| min: 6',
             'is_patient' => 'required| boolean',
-            'device_first_login' => 'required| boolean',
             'device_id' => 'sometimes'
         ]);
 
-        if ($request->is_patient || $request->device_first_login) {
+        if ($request->is_patient) {
             $otprequest = Otpcode::where('mobile', $request->mobile)
                 ->where('code', $request->otp_code)
                 ->first();

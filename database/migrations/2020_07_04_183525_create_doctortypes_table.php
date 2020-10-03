@@ -17,6 +17,7 @@ class CreateDoctortypesTable extends Migration
             $table->id();
 //            $table->integer('type'); // 0 => emergency, 1 => specialist
             $table->string('name');
+            $table->string('name_bangla');
             $table->string('monogram');
             $table->timestamps();
         });

@@ -15,14 +15,20 @@ class DoctorSeeder extends Seeder
      */
     public function run()
     {
-        $doctortypes = ['General Practitioner', 'Cardiology', 'Child Specialist',
-            'Dentist', 'Diabetes', 'Eye Specialist', 'Gastroenterology',
-            'Gynecology', 'Hematology', 'Homeopathy', 'Medicine Specialist',
-            'Neurology', 'Orthopedics', 'Psychiatry', 'Rhinology', 'Urology'];
-        foreach ($doctortypes as $doctortype) {
+        $doctortypes = ['General Practitioner', 'Cardiologist', 'Child Specialist',
+            'Dentist', 'Dermatologist & Venereologist', 'Diabetes', 'Dietitian & Nutritionist', 'Ear, Nose & Throat (ENT) Specialist', 'Eye Specialist', 'Gastroenterologist',
+            'Gynecologist', 'Homeopathy', 'Medicine Specialist',
+            'Nephrologist', 'Neurologist', 'Orthopedics', 'Psychiatrist',];
+
+        $doctortypesBangla = ['সাধারণ ডাক্তার', 'হৃদরোগ বিশেষজ্ঞ', 'শিশু বিশেষজ্ঞ',
+            'দন্ত চিকিৎসক', 'চর্ম ও যৌন রোগ বিশেষজ্ঞ', 'ডাইবেটিস', 'পুস্টিবিদ এবং ডাইটেশিয়ান', 'ইএনটি (নাক, কান, গলা) বিশেষজ্ঞ', 'চক্ষু বিশেষজ্ঞ', 'পেট ও অন্ত্র বিশেষজ্ঞ',
+            'গায়নোকোলজিস্ট / স্ত্রী রোগ বিশেষজ্ঞ', 'হোমিওপ্যাথি', 'মেডিসন বিশেষজ্ঞ', 'কিডনী বিশেষজ্ঞ',
+            'নিউরোলজিস্ট / স্নায়ু রোগ বিশেষজ্ঞ', 'অর্থোপেডিক সার্জন', 'মনরোগ বিশেষজ্ঞ',];
+        for($i=0; $i<count($doctortypes); $i++){
             \App\Doctortype::create([
-                'name' => $doctortype,
-                'monogram' => 'images/' . str_replace(' ', '_', strtolower($doctortype)) . '.png'
+                'name' => $doctortypes[$i],
+                'name_bangla' => $doctortypesBangla[$i],
+                'monogram' => 'images/' . str_replace(' ', '_', strtolower($doctortypes[$i])) . '.png'
             ]);
         }
 
