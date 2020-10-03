@@ -10,6 +10,7 @@ return array(
     'App\\Agentpayments' => $baseDir . '/app/Agentpayments.php',
     'App\\Checkupprescription' => $baseDir . '/app/Checkupprescription.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
+    'App\\Dailycommission' => $baseDir . '/app/Dailycommission.php',
     'App\\Doctor' => $baseDir . '/app/Doctor.php',
     'App\\Doctorappointment' => $baseDir . '/app/Doctorappointment.php',
     'App\\Doctorpayments' => $baseDir . '/app/Doctorpayments.php',

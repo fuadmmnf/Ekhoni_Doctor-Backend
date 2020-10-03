@@ -710,6 +710,7 @@ class ComposerStaticInit142b6ae552954911b47a5a02c1b4299c
         'App\\Agentpayments' => __DIR__ . '/../..' . '/app/Agentpayments.php',
         'App\\Checkupprescription' => __DIR__ . '/../..' . '/app/Checkupprescription.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
+        'App\\Dailycommission' => __DIR__ . '/../..' . '/app/Dailycommission.php',
         'App\\Doctor' => __DIR__ . '/../..' . '/app/Doctor.php',
         'App\\Doctorappointment' => __DIR__ . '/../..' . '/app/Doctorappointment.php',
         'App\\Doctorpayments' => __DIR__ . '/../..' . '/app/Doctorpayments.php',
