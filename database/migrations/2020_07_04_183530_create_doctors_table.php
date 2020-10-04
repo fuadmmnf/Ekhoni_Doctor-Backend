@@ -22,6 +22,7 @@ class CreateDoctorsTable extends Migration
             $table->boolean('payment_style')->default(0); // 0 => paid by customer transactions, 1 => paid by organization
             $table->integer('activation_status')->default(0); //0 pending, 1 activated
             $table->integer('status')->default(0); //0 unavailable, 1 available, 2 in call
+            $table->dateTime('active_start');
             $table->integer('is_featured')->default(0); //0 no, 1 yes
             $table->double('pending_amount')->default(0);
             $table->double('commission')->default(0.0);

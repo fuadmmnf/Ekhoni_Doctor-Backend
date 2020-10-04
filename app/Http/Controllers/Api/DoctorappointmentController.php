@@ -30,6 +30,23 @@ class DoctorappointmentController extends Controller
         $this->user = $request->user('sanctum');
     }
 
+    public function getUpcomingAppointmentsTodayForAdmin(){
+        if (!$this->user ||
+            !$this->user->hasRole('admin:doctor') &&
+            !$this->user->hasRole('super_admin')) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+        $upcomingAppointments = Doctorappointment::whereDate('start_time', Carbon::now())
+            ->where('status', 0)
+            ->paginate(20);
+
+        $upcomingAppointments->load('patientcheckup', 'patientcheckup.doctor', 'patientcheckup.doctor.user', 'patientcheckup.patient', 'patientcheckup.patient.user', 'patientcheckup.transaction');
+
+        return response()->json($upcomingAppointments);
+    }
+
+
     /**
      * _Fetch Upcoming Appointments For User_
      *

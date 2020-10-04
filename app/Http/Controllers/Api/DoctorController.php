@@ -716,6 +716,11 @@ class DoctorController extends Controller
         ]);
         $doctor = $this->user->doctor;
         $doctor->status = $request->status;
+        if($doctor->status == 1){
+            $doctor->active_time = Carbon::now();
+        } else if($doctor->status == 0){
+            $doctor->active_time = null;
+        }
         $doctor->save();
         return response()->noContent();
     }

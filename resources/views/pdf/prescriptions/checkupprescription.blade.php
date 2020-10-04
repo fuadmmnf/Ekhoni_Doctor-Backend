@@ -12,7 +12,7 @@
 
         th, td {
             padding: 5px;
-            /*font-family: 'kalpurush', sans-serif;*/
+            font-family: 'kalpurush', sans-serif;
             font-size: 14px;
         }
 
@@ -77,9 +77,6 @@
                 </tr>
                 <tr>
                     <td>{{$doctor->postgrad}}</td>
-                </tr>
-                <tr>
-                    <td>{{$doctor->medical_college}}</td>
                 </tr>
                 <tr>
                     {{-- <th width="9%">ক্রয় আইডি</th> --}}
