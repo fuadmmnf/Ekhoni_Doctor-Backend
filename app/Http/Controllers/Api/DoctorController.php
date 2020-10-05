@@ -768,7 +768,7 @@ class DoctorController extends Controller
         ]);
 
         if ($request->has('commission')) {
-            $doctor->commission = $request->commission;
+            $doctor->commission = $request->commission / 100.0;
         }
 
         if ($request->has('rate')) {
