@@ -318,13 +318,10 @@ class UserController extends Controller
         ) {
             return response()->json('Forbidden Access', 403);
         }
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'is_agent' => 'required',
             'agent_percentage' => 'required| numeric| min: 0| max: 100',
         ]);
-        if ($validator->fails()) {
-            return response()->json('validation error', 400);
-        }
 
         $user->is_agent = $request->is_agent;
         $user->agent_percentage = ($request->is_agent) ? $request->agent_percentage / 100 : 0.0;
