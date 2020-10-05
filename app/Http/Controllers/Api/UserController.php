@@ -320,7 +320,7 @@ class UserController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'is_agent' => 'required',
-            'agent_percentage' => 'required',
+            'agent_percentage' => 'required| numeric| min: 0| max: 100',
         ]);
         if ($validator->fails()) {
             return response()->json('validation error', 400);
