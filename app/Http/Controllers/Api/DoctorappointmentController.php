@@ -546,7 +546,7 @@ class DoctorappointmentController extends Controller
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
             'end_time' => 'required',
-            'is_free' => 'required| boolean'
+            'type' => 'required| numeric' // 0=>free, 1=>normal
         ]);
 
         $patient = Patient::where('id', $request->patient_id)
@@ -561,7 +561,7 @@ class DoctorappointmentController extends Controller
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = (!$request->is_free)?
+        $newPatientCheckup = (!$request->type)?
             $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null)
             : $checkupTransactionHandler->createFreeCheckup($patient, $doctor);
         if (!$newPatientCheckup) {
@@ -581,6 +581,7 @@ class DoctorappointmentController extends Controller
         $newDoctorAppointment = new Doctorappointment();
         $newDoctorAppointment->doctor_id = $doctor->id;
         $newDoctorAppointment->patientcheckup_id = $newPatientCheckup->id;
+        $newDoctorAppointment->type = $request->type;
         $newDoctorAppointment->start_time = Carbon::parse($request->start_time);
         $newDoctorAppointment->end_time = Carbon::parse($request->start_time)->addMinutes(20);
 

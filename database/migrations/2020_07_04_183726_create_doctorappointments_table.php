@@ -17,6 +17,7 @@ class CreateDoctorappointmentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('patientcheckup_id');
+            $table->integer('type')->default(1); // 0 => free, 1 => normal
             $table->string('code')->unique();
             $table->integer('status')->default(0); // 0 => active,  1 => canceled, 2 => finished
             $table->dateTime('start_time');
