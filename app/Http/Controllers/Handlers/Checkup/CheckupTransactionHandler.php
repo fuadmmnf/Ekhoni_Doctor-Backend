@@ -72,7 +72,7 @@ class CheckupTransactionHandler
         $newPatientcheckup->start_time = $start_time;
         $newPatientcheckup->end_time = $end_time;
 
-        $transaction = $this->checkUserAccountBalanceAndProceedTransaction($patient, $doctor, $start_time == null);
+        $transaction = $this->createUserDebitTransaction($patient->user, 0);
 
         if ($transaction) {
             $newPatientcheckup->transaction_id = $transaction->id;
@@ -92,6 +92,27 @@ class CheckupTransactionHandler
 
     public function createFreeCheckup($patient, $doctor): ?Patientcheckup
     {
+        $newPatientcheckup = new Patientcheckup();
+        $newPatientcheckup->patient_id = $patient->id;
+        $newPatientcheckup->doctor_id = $doctor->id;
+        $newPatientcheckup->start_time = null;
+        $newPatientcheckup->end_time = null;
 
+        $transaction = $this->checkUserAccountBalanceAndProceedTransaction($patient, $doctor, $start_time == null);
+
+        if ($transaction) {
+            $newPatientcheckup->transaction_id = $transaction->id;
+        } else {
+            return null;
+        }
+
+        do {
+            $code = Str::random(16);
+            $patientCheckup = Patientcheckup::where('code', $code)->first();
+        } while ($patientCheckup);
+        $newPatientcheckup->code = $code;
+
+        $newPatientcheckup->save();
+        return $newPatientcheckup;
     }
 }
