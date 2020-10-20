@@ -448,6 +448,27 @@ class DoctorController extends Controller
         return response()->json($pendingDoctorRequests);
     }
 
+    public function getAvaialbleFreeDoctors(){
+        $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::whereDate('start_time', '>=', Carbon::now())
+            ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
+            ->where('type', 2)
+            ->get();
+
+        $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
+            $scheduleSlots = json_decode($doctorSchedule->schedule_slots, true);
+            foreach ($scheduleSlots as $scheduleSlot) {
+                if ($scheduleSlot['status'] == 0) {
+                    return true;
+                }
+            }
+            return false;
+        })->values();
+
+        $freeDoctors = Doctor::whereIn('id', $doctorSchedulesByDoctorFromPresentDate->pluck('id'))->get();
+
+        return response()->json($freeDoctors);
+    }
+
 
     private function createDoctor(Request $doctorRequest, $isApproved): Doctor
     {

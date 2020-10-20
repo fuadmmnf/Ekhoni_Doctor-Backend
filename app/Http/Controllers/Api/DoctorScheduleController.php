@@ -59,11 +59,12 @@ class DoctorScheduleController extends Controller
      * }
      * ]
      */
-    public function getDoctorSchedulesByDoctorFromPresentDate(Doctor $doctor)
+    public function getDoctorSchedulesByDoctorFromPresentDate(Doctor $doctor, $type)
     {
         $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::where('doctor_id', $doctor->id)
             ->whereDate('start_time', '>=', Carbon::now())
             ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
+            ->where('type', $type)
             ->get();
 
         $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
@@ -116,6 +117,7 @@ class DoctorScheduleController extends Controller
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
             'end_time' => 'required',
+            'type' => 'required| numeric'
 //            'max_appointments_per_day' => 'required| numeric',
         ]);
 
@@ -141,14 +143,15 @@ class DoctorScheduleController extends Controller
 
         $newDoctorSchedule = new Doctorschedule();
         $newDoctorSchedule->doctor_id = $doctor->id;
+        $newDoctorSchedule->type = $request->type;
         $newDoctorSchedule->start_time = $startTime;
-        if ($startTime->diffInMinutes(Carbon::now()) > 15) {
-            $newDoctorSchedule->type = 1;
-        }
         $newDoctorSchedule->end_time = $endTime;
 
 //  ->default(0)      $scheduleInterval = floor(($newDoctorSchedule->end_time->diffInMinutes($newDoctorSchedule->start_time)) / $newDoctorSchedule->max_appointments_per_day);
-        $scheduleInterval = 20;
+        $scheduleInterval = 10;
+        if($newDoctorSchedule->type == 1){
+            $scheduleInterval = 15;
+        }
         $time = $newDoctorSchedule->start_time->copy();
         $isTimeLeftForAppointment = $newDoctorSchedule->start_time->copy()->addMinutes($scheduleInterval);
         $appointmentSchedules = array();

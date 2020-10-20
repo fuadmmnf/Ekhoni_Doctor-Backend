@@ -17,6 +17,7 @@ return array(
     'App\\Doctorschedule' => $baseDir . '/app/Doctorschedule.php',
     'App\\Doctortype' => $baseDir . '/app/Doctortype.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Freerequest' => $baseDir . '/app/Freerequest.php',
     'App\\Http\\Controllers\\Api\\AdminController' => $baseDir . '/app/Http/Controllers/Api/AdminController.php',
     'App\\Http\\Controllers\\Api\\AgentpaymentController' => $baseDir . '/app/Http/Controllers/Api/AgentpaymentController.php',
     'App\\Http\\Controllers\\Api\\CheckupprescriptionController' => $baseDir . '/app/Http/Controllers/Api/CheckupprescriptionController.php',

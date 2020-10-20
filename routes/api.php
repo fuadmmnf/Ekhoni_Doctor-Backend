@@ -44,6 +44,7 @@ Route::get('doctors/approved', 'Api\DoctorController@getAllApprovedDoctors');
 Route::get('doctors/featured', 'Api\DoctorController@getAllFeaturedDoctors');
 Route::get('doctors/pending', 'Api\DoctorController@getAllPendingDoctorRequest');
 Route::get('doctors/search/approved', 'Api\DoctorController@searchDoctor');
+Route::get('doctors/free', [\App\Http\Controllers\Api\DoctorController::class, 'getAvaialbleFreeDoctors']);
 Route::post('doctors', 'Api\DoctorController@store');
 Route::post('doctors/approve', 'Api\DoctorController@createApprovedDoctor');
 Route::post('doctors/{doctor}/image', 'Api\DoctorController@changeDoctorMonogram');
@@ -70,7 +71,7 @@ Route::put('patientcheckups/{patientcheckup:code}/call/end', 'Api\Patientcheckup
 
 
 //DoctorSchedule
-Route::get('doctors/{doctor}/doctorschedules', "Api\DoctorScheduleController@getDoctorSchedulesByDoctorFromPresentDate");
+Route::get('doctors/{doctor}/doctorschedules/type/{type}', "Api\DoctorScheduleController@getDoctorSchedulesByDoctorFromPresentDate");
 Route::post('doctorschedules', "Api\DoctorScheduleController@store");
 Route::delete('doctorschedules/{doctorschedule}', "Api\DoctorScheduleController@delete");
 
@@ -119,3 +120,8 @@ Route::post('doctorpayments', 'Api\DoctorpaymentController@store');
 //twilio
 //Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');
 //twilio
+
+
+//FreeRequests
+Route::get('doctorschedules/{doctorschedule}/freerequests', [\App\Http\Controllers\Api\FreeRequestController::class. 'fetchRequestsBySchedule']);
+Route::post('freerequests', [\App\Http\Controllers\Api\FreeRequestController::class, 'store']);
