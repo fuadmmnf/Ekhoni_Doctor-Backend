@@ -1,7 +1,9 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,7 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(AuthorizationSeeder::class);
-         $this->call(DoctorSeeder::class);
+        Artisan::call('migrate:fresh');
+        $this->call(AuthorizationSeeder::class);
+        $this->call(DoctorSeeder::class);
     }
 }

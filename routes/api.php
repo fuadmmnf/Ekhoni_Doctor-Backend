@@ -123,5 +123,5 @@ Route::post('doctorpayments', 'Api\DoctorpaymentController@store');
 
 
 //FreeRequests
-Route::get('doctorschedules/{doctorschedule}/freerequests', [\App\Http\Controllers\Api\FreeRequestController::class. 'fetchRequestsBySchedule']);
+Route::get('doctorschedules/{doctorschedule}/freerequests', [\App\Http\Controllers\Api\FreeRequestController::class, 'fetchRequestsBySchedule']);
 Route::post('freerequests', [\App\Http\Controllers\Api\FreeRequestController::class, 'store']);

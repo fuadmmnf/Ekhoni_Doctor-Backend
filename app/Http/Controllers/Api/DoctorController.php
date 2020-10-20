@@ -452,7 +452,7 @@ class DoctorController extends Controller
         $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::whereDate('start_time', '>=', Carbon::now())
             ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
             ->where('type', 2)
-            ->get();
+            ->paginate(30);
 
         $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
             $scheduleSlots = json_decode($doctorSchedule->schedule_slots, true);
