@@ -74,6 +74,15 @@ class FreeRequestController extends Controller
         $doctorSchedule = Doctorschedule::where('id', $request->doctorschedule_id)
             ->where('type', 2)
             ->firstOrFail();
+
+        $existingRequest = Freerequest::where('patient_id', $patient->id)
+            ->where('doctorschedule_id', $doctorSchedule->id)
+            ->first();
+
+        if($existingRequest){
+            return response()->json(['message' => 'free request present for schedule'], 400);
+        }
+
         $newFreeRequest = new Freerequest();
         $newFreeRequest->patient_id = $patient->id;
         $newFreeRequest->doctorschedule_id = $doctorSchedule->id;

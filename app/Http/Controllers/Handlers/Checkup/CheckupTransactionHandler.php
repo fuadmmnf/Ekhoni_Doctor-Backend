@@ -89,4 +89,9 @@ class CheckupTransactionHandler
         $newPatientcheckup->save();
         return $newPatientcheckup;
     }
+
+    public function createFreeCheckup($patient, $doctor): ?Patientcheckup
+    {
+
+    }
 }

@@ -536,7 +536,9 @@ class DoctorappointmentController extends Controller
         if (!$this->user ||
             !$this->user->hasRole('super_admin') &&
             !$this->user->hasRole('admin:patientcheckup') &&
-            !$this->user->hasRole('patient')) {
+            !($this->user->hasRole('patient') && $request->is_free) &&
+        !$this->user->hasRole('patient')
+        ) {
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
@@ -544,6 +546,7 @@ class DoctorappointmentController extends Controller
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
             'end_time' => 'required',
+            'is_free' => 'required| boolean'
         ]);
 
         $patient = Patient::where('id', $request->patient_id)
@@ -558,7 +561,9 @@ class DoctorappointmentController extends Controller
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
+        $newPatientCheckup = (!$request->is_free)?
+            $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null)
+            : $checkupTransactionHandler->createFreeCheckup($patient, $doctor);
         if (!$newPatientCheckup) {
             return response()->json('Insufficient Balance', 400);
         }
