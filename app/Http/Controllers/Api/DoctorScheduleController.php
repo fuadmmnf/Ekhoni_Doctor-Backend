@@ -48,11 +48,14 @@ class DoctorScheduleController extends Controller
 
 
         $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::whereDate('start_time', '>=', Carbon::now())
-            ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
+            ->where('end_time', '>', Carbon::now())
+            ->where('end_time', '<=', Carbon::now()->addDays(7))
             ->where('type', 2)
+            ->with('doctor')
+            ->with('doctor.user')
             ->paginate(30);
 
-        $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
+        $doctorSchedulesByDoctorFromPresentDate->data = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
             $scheduleSlots = json_decode($doctorSchedule->schedule_slots, true);
             foreach ($scheduleSlots as $scheduleSlot) {
                 if ($scheduleSlot['status'] == 0) {
@@ -62,7 +65,6 @@ class DoctorScheduleController extends Controller
             return false;
         })->values();
 
-        $doctorSchedulesByDoctorFromPresentDate->load('doctor');
         return response()->json($doctorSchedulesByDoctorFromPresentDate);
     }
 
@@ -90,7 +92,7 @@ class DoctorScheduleController extends Controller
     {
         $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::where('doctor_id', $doctor->id)
             ->whereDate('start_time', '>=', Carbon::now())
-            ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
+            ->whereDate('end_time', '<=', Carbon::now()->addDays(30))
             ->where('type', $type)
             ->get();
 

@@ -545,18 +545,15 @@ class DoctorappointmentController extends Controller
             'patient_id' => 'required| numeric',
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
-            'end_time' => 'required',
+            'end_time' => 'present',
             'type' => 'required| numeric' // 0=>free, 1=>normal
         ]);
 
-        $patient = Patient::where('id', $request->patient_id)
-            ->where('user_id', $this->user->id)->first();
+        $patient = Patient::findOrFail($request->patient_id);
         if (!$patient) {
             return response()->json('No patient selected associated with user', 400);
         }
-        if ($this->user->id != $patient->user->id) {
-            return response()->json('User associated with token does not have patient associated with checkup', 400);
-        }
+
 
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
