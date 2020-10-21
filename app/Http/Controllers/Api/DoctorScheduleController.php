@@ -38,6 +38,33 @@ class DoctorScheduleController extends Controller
     {
     }
 
+    public function getAvaialbleFreeDoctorSchedules(){
+        if (!$this->user ||
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:patietcheckup')
+        ) {
+            return response()->json('Forbidden Access', 403);
+        }
+
+
+        $doctorSchedulesByDoctorFromPresentDate = Doctorschedule::whereDate('start_time', '>=', Carbon::now())
+            ->whereDate('start_time', '<=', Carbon::now()->addDays(30))
+            ->where('type', 2)
+            ->paginate(30);
+
+        $doctorSchedulesByDoctorFromPresentDate = $doctorSchedulesByDoctorFromPresentDate->filter(function ($doctorSchedule) {
+            $scheduleSlots = json_decode($doctorSchedule->schedule_slots, true);
+            foreach ($scheduleSlots as $scheduleSlot) {
+                if ($scheduleSlot['status'] == 0) {
+                    return true;
+                }
+            }
+            return false;
+        })->values();
+
+        $doctorSchedulesByDoctorFromPresentDate->load('doctor');
+        return response()->json($doctorSchedulesByDoctorFromPresentDate);
+    }
 
     /**
      * Fetch Doctor Schedules By Doctor
