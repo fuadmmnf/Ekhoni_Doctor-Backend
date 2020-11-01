@@ -39,10 +39,7 @@ class DoctorScheduleController extends Controller
     }
 
     public function getAvaialbleFreeDoctorSchedules(){
-        if (!$this->user ||
-            !$this->user->hasRole('super_admin') &&
-            !$this->user->hasRole('admin:patietcheckup')
-        ) {
+        if (!$this->user) {
             return response()->json('Forbidden Access', 403);
         }
 
