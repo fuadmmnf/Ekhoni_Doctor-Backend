@@ -11,6 +11,10 @@ class Patient extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function freerequests(){
+        return $this->hasMany('App\Freerequest');
+    }
+
     public function patientcheckups(){
         return $this->hasMany('App\Patientcheckup');
     }

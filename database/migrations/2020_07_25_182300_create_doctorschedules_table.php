@@ -16,7 +16,7 @@ class CreateDoctorschedulesTable extends Migration
         Schema::create('doctorschedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('doctor_id');
-            $table->integer('type')->default(0); // 0=> live, 1=>appointment
+            $table->integer('type')->default(0); // 0=> live, 1=>appointment, 2=> free call
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
             $table->integer('max_appointments_per_day');

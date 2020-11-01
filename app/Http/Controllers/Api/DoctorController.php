@@ -449,6 +449,7 @@ class DoctorController extends Controller
     }
 
 
+
     private function createDoctor(Request $doctorRequest, $isApproved): Doctor
     {
         $tokenUserHandler = new TokenUserHandler();
@@ -636,7 +637,7 @@ class DoctorController extends Controller
         Doctortype::findOrFail($request->doctortype_id);
         $newDoctor = $this->createDoctor($request, true);
         $newDoctor->activation_status = 1;
-        $newDoctor->commission = $request->commission;
+        $newDoctor->commission = $request->commission / 100.0;
         $newDoctor->payment_style = $request->payment_style;
         $newDoctor->save();
 
@@ -678,7 +679,7 @@ class DoctorController extends Controller
         $doctor->activation_status = $request->activation_status;
         if ($request->activation_status == 1) {
             $doctor->user->assignRole('doctor');
-            $doctor->commission = $request->commission;
+            $doctor->commission = $request->commission / 100.0;
             $doctor->rate = $request->rate;
             $doctor->offer_rate = $request->offer_rate;
             $doctor->followup_rate = $request->followup_rate;

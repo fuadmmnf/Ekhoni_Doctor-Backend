@@ -70,7 +70,8 @@ Route::put('patientcheckups/{patientcheckup:code}/call/end', 'Api\Patientcheckup
 
 
 //DoctorSchedule
-Route::get('doctors/{doctor}/doctorschedules', "Api\DoctorScheduleController@getDoctorSchedulesByDoctorFromPresentDate");
+Route::get('doctorschedules/free', [\App\Http\Controllers\Api\DoctorScheduleController::class, 'getAvaialbleFreeDoctorSchedules']);
+Route::get('doctors/{doctor}/doctorschedules/type/{type}', "Api\DoctorScheduleController@getDoctorSchedulesByDoctorFromPresentDate");
 Route::post('doctorschedules', "Api\DoctorScheduleController@store");
 Route::delete('doctorschedules/{doctorschedule}', "Api\DoctorScheduleController@delete");
 
@@ -119,3 +120,8 @@ Route::post('doctorpayments', 'Api\DoctorpaymentController@store');
 //twilio
 //Route::get('access_token', 'Api\TwilioAccessTokenController@generate_token');
 //twilio
+
+
+//FreeRequests
+Route::get('doctorschedules/{doctorschedule}/freerequests', [\App\Http\Controllers\Api\FreeRequestController::class, 'fetchRequestsBySchedule']);
+Route::post('freerequests', [\App\Http\Controllers\Api\FreeRequestController::class, 'store']);

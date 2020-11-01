@@ -534,29 +534,33 @@ class DoctorappointmentController extends Controller
     public function store(Request $request)
     {
         if (!$this->user ||
-            !$this->user->hasRole('patient')) {
+            !$this->user->hasRole('super_admin') &&
+            !$this->user->hasRole('admin:patientcheckup') &&
+            !($this->user->hasRole('patient') && $request->is_free) &&
+        !$this->user->hasRole('patient')
+        ) {
             return response()->json('Forbidden Access', 403);
         }
         $this->validate($request, [
             'patient_id' => 'required| numeric',
             'doctor_id' => 'required| numeric',
             'start_time' => 'required',
-            'end_time' => 'required',
+            'end_time' => 'present',
+            'type' => 'required| numeric' // 0=>free, 1=>normal
         ]);
 
-        $patient = Patient::where('id', $request->patient_id)
-            ->where('user_id', $this->user->id)->first();
+        $patient = Patient::findOrFail($request->patient_id);
         if (!$patient) {
             return response()->json('No patient selected associated with user', 400);
         }
-        if ($this->user->id != $patient->user->id) {
-            return response()->json('User associated with token does not have patient associated with checkup', 400);
-        }
+
 
         $doctor = Doctor::findOrFail($request->doctor_id);
         $checkupTransactionHandler = new CheckupTransactionHandler();
 
-        $newPatientCheckup = $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null);
+        $newPatientCheckup = (!$request->type)?
+            $checkupTransactionHandler->createNewCheckup($patient, $doctor, null, null)
+            : $checkupTransactionHandler->createFreeCheckup($patient, $doctor);
         if (!$newPatientCheckup) {
             return response()->json('Insufficient Balance', 400);
         }
@@ -574,6 +578,7 @@ class DoctorappointmentController extends Controller
         $newDoctorAppointment = new Doctorappointment();
         $newDoctorAppointment->doctor_id = $doctor->id;
         $newDoctorAppointment->patientcheckup_id = $newPatientCheckup->id;
+        $newDoctorAppointment->type = $request->type;
         $newDoctorAppointment->start_time = Carbon::parse($request->start_time);
         $newDoctorAppointment->end_time = Carbon::parse($request->start_time)->addMinutes(20);
 
